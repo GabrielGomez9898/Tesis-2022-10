@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:vision_civil/src/screens/home.dart';
+import 'package:vision_civil/src/screens/register.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -23,7 +24,7 @@ class _LoginScreenState extends State<Login> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(hintText: 'email'),
+              decoration: InputDecoration(hintText: 'Email'),
               onChanged: (value) {
                 setState(() {
                   _email = value.trim();
@@ -35,7 +36,7 @@ class _LoginScreenState extends State<Login> {
             padding: const EdgeInsets.all(8.0),
             child: TextField(
               obscureText: true,
-              decoration: InputDecoration(hintText: 'password'),
+              decoration: InputDecoration(hintText: 'Contraseña'),
               onChanged: (value) {
                 setState(() {
                   _password = value.trim();
@@ -47,17 +48,15 @@ class _LoginScreenState extends State<Login> {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               ElevatedButton(
-                  child: Text('Sign in'),
+                  child: Text('Iniciar Sesión'),
                   onPressed: () {
                     signIn(auth, _email, _password, context);
                   }),
               ElevatedButton(
-                  child: Text('Sign up'),
+                  child: Text('Crear cuenta'),
                   onPressed: () {
-                    auth.createUserWithEmailAndPassword(
-                        email: _email, password: _password);
                     Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => HomePage()));
+                        MaterialPageRoute(builder: (context) => Register()));
                   })
             ],
           ),
