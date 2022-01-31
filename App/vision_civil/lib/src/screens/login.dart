@@ -16,6 +16,7 @@ class _LoginScreenState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text("Login"),
       ),
       body: Column(
@@ -72,8 +73,8 @@ Future<void> signIn(auth, email, password, BuildContext context) async {
       email: email,
       password: password,
     );
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
+    Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => HomePage(currentUser: email)));
   } on FirebaseAuthException catch (e) {
     showAlertDialog(context, e);
   }

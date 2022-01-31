@@ -69,6 +69,7 @@ class _RegisterState extends State<Register> {
                     onChanged: (date) {}, onConfirm: (date) {
                   setState(() {
                     _dateView = date.toString();
+                    _birthDate = _dateView;
                   });
                 }, currentTime: DateTime.now(), locale: LocaleType.es);
               },
@@ -111,8 +112,8 @@ class _RegisterState extends State<Register> {
                     .then((value) => print("Usuario agregado"))
                     .catchError(
                         (error) => print("Error al crear el usuario: $error"));
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (context) => HomePage(currentUser: _email)));
               }),
           ElevatedButton(
               child: Text('Cancelar'),
