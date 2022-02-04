@@ -7,6 +7,7 @@ import 'package:vision_civil/src/screens/home.dart';
 class Profile extends StatefulWidget {
   Profile({Key? key, required this.currentUser}) : super(key: key);
   final String currentUser;
+
   @override
   ProfileState createState() => ProfileState();
 }
@@ -14,16 +15,15 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   final auth = FirebaseAuth.instance;
   CollectionReference users = FirebaseFirestore.instance.collection('users');
-  final Stream<QuerySnapshot> Queryusers =
+  final Stream<QuerySnapshot> queryusers =
       FirebaseFirestore.instance.collection("users").snapshots();
 
-  String _email = "",
-      _name = "",
+  String _name = "",
       _birthDate = "",
       _gender = "",
-      _password = "",
       _listView = "Seleccione su género",
-      _dateView = "Fecha de nacimiento";
+      _dateView = "Fecha de nacimiento",
+      _iduser = "";
   double _phone = 0;
 
   var _genders = ["Masculino", "Femenino"];
@@ -38,7 +38,7 @@ class ProfileState extends State<Profile> {
             height: 700,
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: StreamBuilder<QuerySnapshot>(
-                stream: Queryusers,
+                stream: queryusers,
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
@@ -54,55 +54,59 @@ class ProfileState extends State<Profile> {
                     itemCount: data.size,
                     itemBuilder: (context, index) {
                       if (data.docs[index]['email'] == widget.currentUser) {
+                        _iduser = data.docs[index].id;
+                        _name = data.docs[index]['name'];
+                        _phone = data.docs[index]['phone'];
+                        _birthDate = data.docs[index]['birth_date'];
+                        _gender = data.docs[index]['gender'];
                         return Column(
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Text("Modifica tu datos"),
                             ),
+                            Text(
+                                "NOTA: No puedes modificar tu email ni tu rol"),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextField(
+                              child: TextFormField(
+                                enabled: false,
+                                initialValue: data.docs[index]['role'],
+                                onChanged: (value) {},
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextFormField(
+                                initialValue: data.docs[index]['name'],
                                 keyboardType: TextInputType.name,
-                                decoration: InputDecoration(
-                                    hintText: data.docs[index]['name']),
                                 onChanged: (value) {
-                                  setState(() {
-                                    _name = value.trim();
-                                    print(_name);
-                                  });
+                                  _name = value.trim();
+                                  print(_name);
                                 },
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextField(
-                                keyboardType: TextInputType.emailAddress,
-                                decoration: InputDecoration(
-                                    hintText: data.docs[index]['email']),
-                                onChanged: (value) {
-                                  setState(() {
-                                    _email = value.trim();
-                                    print(_email);
-                                  });
-                                },
+                              child: TextFormField(
+                                enabled: false,
+                                initialValue: data.docs[index]['email'],
+                                onChanged: (value) {},
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: TextField(
+                              child: TextFormField(
+                                initialValue:
+                                    data.docs[index]['phone'].toString(),
                                 keyboardType: TextInputType.phone,
-                                decoration: InputDecoration(
-                                    hintText:
-                                        data.docs[index]['phone'].toString()),
                                 onChanged: (value) {
-                                  setState(() {
-                                    _phone = double.parse(value.trim());
-                                    print(_phone);
-                                  });
+                                  _phone = double.parse(value.trim());
                                 },
                               ),
                             ),
+                            Text("Fecha actual: " +
+                                data.docs[index]['birth_date']),
                             Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: TextButton(
@@ -113,40 +117,55 @@ class ProfileState extends State<Profile> {
                                         maxTime: DateTime(2019, 6, 7),
                                         onChanged: (date) {},
                                         onConfirm: (date) {
-                                      setState(() {
-                                        _dateView = date.toString();
-                                        _birthDate = _dateView;
-                                        print(_birthDate);
-                                      });
+                                      _dateView = date.toString();
+                                      _birthDate = _dateView;
+                                      showDateAlertDialog(
+                                          context,
+                                          data.docs[index]['birth_date'],
+                                          _birthDate);
                                     },
                                         currentTime: DateTime.now(),
                                         locale: LocaleType.es);
                                   },
                                   child: Text(_dateView)),
                             ),
+                            Text(
+                                "Género actual: " + data.docs[index]['gender']),
                             DropdownButton(
                               items: _genders.map((String gender) {
                                 return DropdownMenuItem(
                                     child: Text(gender), value: gender);
                               }).toList(),
                               onChanged: (_value) {
-                                setState(() {
-                                  _gender = _value.toString();
-                                  _listView = _gender;
-                                });
+                                _gender = _value.toString();
+                                _listView = _gender;
+                                showGenderAlertDialog(context,
+                                    data.docs[index]['gender'], _gender);
                               },
                               hint: Text(_listView),
                             ),
-                            TextField(
-                              obscureText: true,
-                              decoration:
-                                  InputDecoration(hintText: 'Contraseña'),
-                              onChanged: (value) {
-                                setState(() {
-                                  _password = value.trim();
-                                });
-                              },
-                            ),
+                            ElevatedButton(
+                                child: Text("Actualizar datos"),
+                                onPressed: () {
+                                  print(_name);
+                                  print(_phone);
+                                  users
+                                      .doc(_iduser)
+                                      .update({
+                                        'name': _name,
+                                        'phone': _phone,
+                                        'birth_date': _birthDate,
+                                        'gender': _gender
+                                      })
+                                      .then((value) => print("User updated"))
+                                      .catchError((error) =>
+                                          print("Failed to update user"));
+                                  Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                          builder: (context) => HomePage(
+                                              currentUser:
+                                                  widget.currentUser)));
+                                }),
                             ElevatedButton(
                                 child: Text('Atrás'),
                                 onPressed: () {
@@ -169,4 +188,66 @@ class ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+showDateAlertDialog(BuildContext context, currentDate, updateDate) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text('Se actualizará su fecha de nacimiento'),
+    content: Text('Fecha a actualizar: ' +
+        updateDate +
+        '\n' +
+        'Fecha actual: ' +
+        currentDate),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+showGenderAlertDialog(BuildContext context, currentGender, updateGender) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text('Se actualizará su género'),
+    content: Text('Género a actualizar: ' +
+        updateGender +
+        '\n' +
+        'Género actual: ' +
+        currentGender),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
