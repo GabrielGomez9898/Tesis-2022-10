@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:vision_civil/src/screens/login.dart';
-import 'package:vision_civil/src/screens/profile.dart';
+import 'package:vision_civil/src/ui/login.dart';
+import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key, required this.currentUser}) : super(key: key);

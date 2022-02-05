@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:vision_civil/src/screens/home.dart';
-import 'package:vision_civil/src/screens/register.dart';
+import 'package:vision_civil/src/ui/home.dart';
+import 'package:vision_civil/src/ui/register.dart';
 
 class Login extends StatefulWidget {
   @override

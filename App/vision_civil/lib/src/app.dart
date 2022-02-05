@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vision_civil/src/screens/login.dart';
+import 'package:vision_civil/src/ui/login.dart';
 
 class App extends StatelessWidget {
   @override
@@ -7,7 +7,9 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Login App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: Login(),
+      home: Scaffold(
+        body: Login(),
+      ),
     );
   }
 }

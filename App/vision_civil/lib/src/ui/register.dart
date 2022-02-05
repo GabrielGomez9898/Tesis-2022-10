@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:vision_civil/src/screens/home.dart';
-import 'package:vision_civil/src/screens/login.dart';
+import 'package:vision_civil/src/ui/home.dart';
+import 'package:vision_civil/src/ui/login.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
