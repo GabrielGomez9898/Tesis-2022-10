@@ -1,9 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:vision_civil/src/blocs/register_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/login.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Register extends StatefulWidget {
   @override
@@ -11,8 +10,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  final auth = FirebaseAuth.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
+  RegisterBloc bloc = RegisterBloc();
   String _email = "",
       _name = "",
       _birthDate = "",
@@ -98,20 +96,9 @@ class _RegisterState extends State<Register> {
           ElevatedButton(
               child: Text('Registrarme'),
               onPressed: () {
-                auth.createUserWithEmailAndPassword(
-                    email: _email, password: _password);
-                users
-                    .add({
-                      'name': _name,
-                      'email': _email,
-                      'phone': _phone,
-                      'birth_date': _birthDate,
-                      'gender': _gender,
-                      'role': "CIUDADANO"
-                    })
-                    .then((value) => print("Usuario agregado"))
-                    .catchError(
-                        (error) => print("Error al crear el usuario: $error"));
+                bloc.createUser(
+                    _email, _password, _name, _gender, _phone, _birthDate);
+
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => HomePage(currentUser: _email)));
               }),
