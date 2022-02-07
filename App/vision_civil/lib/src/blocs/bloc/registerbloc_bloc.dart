@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:vision_civil/src/repository/userRepository/userDB.dart';
+import 'package:vision_civil/src/repository/userRepository/userRepository.dart';
 import 'dart:async';
 
 part 'registerbloc_event.dart';
