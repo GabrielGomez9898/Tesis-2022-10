@@ -1,0 +1,97 @@
+@import "./Variables.scss";
+
+.navbar {
+    width: 5rem; //El ancho de la barra de navegación debe ser igual al margen que se dejó a la izquierda
+    height: 100vh; //vh es una unidad relativa al tamaño del viewport. 100vh va a ser 100% del alto del viewport
+    position: fixed;
+    background-color: $unselected-color;
+    transition: width 200ms ease;
+}
+
+.navbar:hover {
+    width: 18rem;
+}
+
+.nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.nav-item {
+    width: 100%;
+}
+
+.nav-item:last-child {
+    margin-top: auto; //Hace las margenes del ultimo elemento lo mas grandes posibles para que quede al final de la lista
+}
+
+.nav-link {
+    display: flex;
+    align-items: center;
+    height: 5rem; //el alto de cada link debe ser igual al ancho de la barra de navegación
+    color: $text-primary-color;
+    text-decoration: none;
+    filter: grayscale(100%) opacity(0.7);
+    cursor: pointer;
+    transition: $transition-speed;
+}
+
+.nav-link:hover {
+    filter: grayscale(0%) opacity(1);
+    background-color: $light-theme-select-color;
+    color: $svg-color2-alt1;
+}
+
+.nav-link svg {
+    min-width: 2rem;
+    margin: 0 1.5rem;
+}
+
+.fa-primary {
+    color: $svg-color1-alt1;
+}
+
+.fa-secondary {
+    color: $svg-color2-alt1;
+}
+
+.fa-primary,
+.fa-secondary {
+    transition: $transition-speed;
+}
+
+.link-text {
+    display: none; //NO se ve el texto de cada botón del navbar
+    margin-left: 1rem;
+}
+
+.navbar:hover .link-text {
+    display: block; //SI se ve el texto de cada botón del navbar
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: clip;
+}
+
+.logo {
+    margin-bottom: 1rem;
+    text-align: center;
+    color: $svg-color2-alt1;
+    background-color: $light-theme-select-color;
+    font-size: 1.5rem;
+    letter-spacing: 0.3ch;
+    width: 100%;
+}
+
+.logo svg {
+    transform: rotate(0deg);
+    transition: transform $transition-speed;
+}
+
+.navbar:hover .logo svg {
+    transform: rotate(-180deg);
+}
