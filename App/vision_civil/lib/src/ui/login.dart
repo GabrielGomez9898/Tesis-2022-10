@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/bloc/registerbloc_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/register.dart';
 
@@ -56,8 +58,11 @@ class _LoginScreenState extends State<Login> {
               ElevatedButton(
                   child: Text('Crear cuenta'),
                   onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) => Register()));
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => BlocProvider(
+                          create: (BuildContext context) => RegisterblocBloc(),
+                          child: Register()),
+                    ));
                   })
             ],
           ),

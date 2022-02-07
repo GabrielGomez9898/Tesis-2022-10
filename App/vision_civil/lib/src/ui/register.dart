@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:vision_civil/src/blocs/register_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/bloc/registerbloc_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/login.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -10,7 +11,7 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  RegisterBloc bloc = RegisterBloc();
+  //RegisterBloc bloc = RegisterBloc();
   String _email = "",
       _name = "",
       _birthDate = "",
@@ -96,8 +97,9 @@ class _RegisterState extends State<Register> {
           ElevatedButton(
               child: Text('Registrarme'),
               onPressed: () {
-                bloc.createUser(
-                    _email, _password, _name, _gender, _phone, _birthDate);
+                BlocProvider.of<RegisterblocBloc>(context).sendEvent.add(
+                    RegisterRequest(
+                        _email, _name, _birthDate, _gender, _password, _phone));
 
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (context) => HomePage(currentUser: _email)));

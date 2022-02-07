@@ -7,9 +7,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: 'Login App',
       theme: ThemeData(primarySwatch: Colors.blue),
-      home: Scaffold(
-        body: Login(),
-      ),
+      home: Scaffold(body: Login()),
     );
   }
 }
