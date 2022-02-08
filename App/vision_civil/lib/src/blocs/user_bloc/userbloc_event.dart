@@ -1,14 +1,14 @@
-part of 'registerbloc_bloc.dart';
+part of 'user_bloc.dart';
 
-abstract class RegisterblocEvent extends Equatable {
-  const RegisterblocEvent();
+abstract class UserblocEvent extends Equatable {
+  const UserblocEvent();
   @override
   List<Object> get props => [];
 }
 
 /*No borrar estos comentarios*/
 // ignore: must_be_immutable
-class RegisterEvent extends RegisterblocEvent {
+class RegisterEvent extends UserblocEvent {
   String email = "", name = "", birthDate = "", gender = "", password = "";
   double phone = 0;
 

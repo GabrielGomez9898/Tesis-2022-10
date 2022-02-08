@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vision_civil/src/blocs/bloc/registerbloc_bloc.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/register.dart';
 
@@ -61,7 +61,7 @@ class _LoginScreenState extends State<Login> {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlocProvider(
                           lazy: false,
-                          create: (BuildContext context) => RegisterblocBloc(),
+                          create: (BuildContext context) => UserBloc(),
                           child: Register()),
                     ));
                   })

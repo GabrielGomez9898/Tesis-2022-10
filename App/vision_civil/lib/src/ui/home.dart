@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vision_civil/src/blocs/bloc/registerbloc_bloc.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/login.dart';
+import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -14,42 +15,47 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Home Visión Civil"),
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () {},
-        ),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.accessibility),
-            onPressed: () {
-              //Navigator.of(context).pushReplacement(MaterialPageRoute(
-              // builder: (context) =>
-              //   Profile(currentUser: widget.currentUser)));
-            },
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Home Visión Civil"),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {},
           ),
-          IconButton(
-            icon: Icon(Icons.logout),
-            onPressed: () {
-              auth.signOut();
-              Navigator.of(context).pushReplacement(
-                  MaterialPageRoute(builder: (context) => Login()));
-            },
-          )
-        ],
-      ),
-      body: BlocBuilder<RegisterblocBloc, RegisterState>(
-        builder: (context, state) {
-          return Column(
-            children: [
-              Text("Bienvenido a Visión Civil"),
-              Text("Current ID USER: " + state.userID),
-            ],
-          );
-        },
-      ),
-    );
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.accessibility),
+              onPressed: () async {
+                BlocProvider.of<UserBloc>(context).close();
+
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<UserBloc>(context),
+                      child: Profile()),
+                ));
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.logout),
+              onPressed: () {
+                auth.signOut();
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (context) => Login()));
+              },
+            )
+          ],
+        ),
+        body: StreamBuilder<String>(
+            stream: BlocProvider.of<UserBloc>(context).userBlocStream,
+            builder: (context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Column(
+                  children: [Text("cargando...")],
+                );
+              }
+              return Column(
+                children: [Text("ud iser: " + snapshot.data.toString())],
+              );
+            }));
   }
 }

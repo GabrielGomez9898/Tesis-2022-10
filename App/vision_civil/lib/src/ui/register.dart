@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vision_civil/src/blocs/bloc/registerbloc_bloc.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/login.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -93,20 +93,15 @@ class _RegisterState extends State<Register> {
               });
             },
           ),
-          BlocBuilder<RegisterblocBloc, RegisterState>(
-            builder: (context, state) {
-              return Text('ID user: ' + state.userID);
-            },
-          ),
           ElevatedButton(
               child: Text('Registrarme'),
               onPressed: () {
-                BlocProvider.of<RegisterblocBloc>(context).add(RegisterEvent(
+                BlocProvider.of<UserBloc>(context).add(RegisterEvent(
                     _email, _name, _birthDate, _gender, _password, _phone));
 
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<RegisterblocBloc>(context),
+                      value: BlocProvider.of<UserBloc>(context),
                       child: HomePage()),
                 ));
               }),
