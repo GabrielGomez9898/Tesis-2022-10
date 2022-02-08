@@ -162,18 +162,14 @@ class ProfileState extends State<Profile> {
                                           print("Failed to update user"));
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => HomePage(
-                                              currentUser:
-                                                  widget.currentUser)));
+                                          builder: (context) => HomePage()));
                                 }),
                             ElevatedButton(
                                 child: Text('Atrás'),
                                 onPressed: () {
                                   Navigator.of(context).pushReplacement(
                                       MaterialPageRoute(
-                                          builder: (context) => HomePage(
-                                              currentUser:
-                                                  widget.currentUser)));
+                                          builder: (context) => HomePage()));
                                 }),
                           ],
                         );

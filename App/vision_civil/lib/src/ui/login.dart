@@ -60,6 +60,7 @@ class _LoginScreenState extends State<Login> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (context) => BlocProvider(
+                          lazy: false,
                           create: (BuildContext context) => RegisterblocBloc(),
                           child: Register()),
                     ));
@@ -78,8 +79,8 @@ Future<void> signIn(auth, email, password, BuildContext context) async {
       email: email,
       password: password,
     );
-    Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => HomePage(currentUser: email)));
+    Navigator.of(context)
+        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
   } on FirebaseAuthException catch (e) {
     showAlertDialog(context, e);
   }

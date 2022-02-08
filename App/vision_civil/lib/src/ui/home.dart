@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/bloc/registerbloc_bloc.dart';
 import 'package:vision_civil/src/ui/login.dart';
-import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key? key, required this.currentUser}) : super(key: key);
-  final String currentUser;
   @override
   HomeState createState() => HomeState();
 }
@@ -26,9 +25,9 @@ class HomeState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.accessibility),
             onPressed: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (context) =>
-                      Profile(currentUser: widget.currentUser)));
+              //Navigator.of(context).pushReplacement(MaterialPageRoute(
+              // builder: (context) =>
+              //   Profile(currentUser: widget.currentUser)));
             },
           ),
           IconButton(
@@ -41,8 +40,15 @@ class HomeState extends State<HomePage> {
           )
         ],
       ),
-      body: Column(
-        children: [Text("Bienvenido a Visión Civil"), Text(widget.currentUser)],
+      body: BlocBuilder<RegisterblocBloc, RegisterState>(
+        builder: (context, state) {
+          return Column(
+            children: [
+              Text("Bienvenido a Visión Civil"),
+              Text("Current ID USER: " + state.userID),
+            ],
+          );
+        },
       ),
     );
   }

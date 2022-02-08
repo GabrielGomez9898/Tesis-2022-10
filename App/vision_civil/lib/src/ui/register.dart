@@ -11,7 +11,6 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  //RegisterBloc bloc = RegisterBloc();
   String _email = "",
       _name = "",
       _birthDate = "",
@@ -94,15 +93,22 @@ class _RegisterState extends State<Register> {
               });
             },
           ),
+          BlocBuilder<RegisterblocBloc, RegisterState>(
+            builder: (context, state) {
+              return Text('ID user: ' + state.userID);
+            },
+          ),
           ElevatedButton(
               child: Text('Registrarme'),
               onPressed: () {
-                BlocProvider.of<RegisterblocBloc>(context).sendEvent.add(
-                    RegisterRequest(
-                        _email, _name, _birthDate, _gender, _password, _phone));
+                BlocProvider.of<RegisterblocBloc>(context).add(RegisterEvent(
+                    _email, _name, _birthDate, _gender, _password, _phone));
 
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (context) => HomePage(currentUser: _email)));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<RegisterblocBloc>(context),
+                      child: HomePage()),
+                ));
               }),
           ElevatedButton(
               child: Text('Cancelar'),
