@@ -11,7 +11,6 @@ class UserDB {
 
   Future<String> createUser(String email, String password, String name,
       String gender, double phone, String birthDate) async {
-    auth.createUserWithEmailAndPassword(email: email, password: password);
     DocumentReference user = await db.collection('users').add({
       'name': name,
       'email': email,
@@ -20,6 +19,8 @@ class UserDB {
       'gender': gender,
       'role': "CIUDADANO"
     });
+    auth.createUserWithEmailAndPassword(email: email, password: password);
+
     print("ID de usuario: " + user.id);
     return user.id;
   }

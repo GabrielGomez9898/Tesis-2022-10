@@ -57,9 +57,8 @@ class _LoginScreenState extends State<Login> {
                   child: Text('Crear cuenta'),
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => BlocProvider(
-                          lazy: false,
-                          create: (BuildContext context) => UserBloc(),
+                      builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<UserBloc>(context),
                           child: Register()),
                     ));
                   })

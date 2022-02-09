@@ -39,23 +39,19 @@ class HomeState extends State<HomePage> {
               icon: Icon(Icons.logout),
               onPressed: () {
                 auth.signOut();
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Login()));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<UserBloc>(context),
+                      child: Login()),
+                ));
               },
             )
           ],
         ),
-        body: StreamBuilder<String>(
-            stream: BlocProvider.of<UserBloc>(context).userBlocStream,
-            builder: (context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Column(
-                  children: [Text("cargando...")],
-                );
-              }
-              return Column(
-                children: [Text("ud iser: " + snapshot.data.toString())],
-              );
-            }));
+        body: BlocBuilder<UserBloc, UserblocState>(
+          builder: (context, state) {
+            return Text('id user: ' + state.userID);
+          },
+        ));
   }
 }
