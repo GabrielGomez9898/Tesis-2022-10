@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/register.dart';
+import 'package:vision_civil/src/widgets/textFieldWidget.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -23,30 +24,27 @@ class _LoginScreenState extends State<Login> {
       ),
       body: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              keyboardType: TextInputType.emailAddress,
-              decoration: InputDecoration(hintText: 'Email'),
-              onChanged: (value) {
-                setState(() {
-                  _email = value.trim();
-                });
-              },
-            ),
+          SizedBox(height: 100),
+          TextFieldFuntion(
+            hintText: 'Correo electronico',
+            onChanged: (String value) {
+              setState(() {
+                _email = value.trim();
+              });
+            },
+            icon: Icons.account_circle,
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              obscureText: true,
-              decoration: InputDecoration(hintText: 'Contraseña'),
-              onChanged: (value) {
-                setState(() {
-                  _password = value.trim();
-                });
-              },
-            ),
+          SizedBox(height: 3),
+          TextFieldFuntion(
+            hintText: 'Contraseña',
+            onChanged: (value) {
+              setState(() {
+                _password = value.trim();
+              });
+            },
+            icon: Icons.password,
           ),
+          SizedBox(height: 40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
