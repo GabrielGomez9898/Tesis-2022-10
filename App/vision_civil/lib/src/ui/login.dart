@@ -12,78 +12,95 @@ class Login extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<Login> {
-  String _email = "", _password = "";
+  String _email = "", _password = "", _loginText = "";
   final auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Login"),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 100),
-          TextFieldFuntion(
-            hintText: 'Correo electronico',
-            onChanged: (String value) {
-              setState(() {
-                _email = value.trim();
-              });
-            },
-            icon: Icons.account_circle,
-          ),
-          SizedBox(height: 3),
-          TextFieldFuntion(
-            hintText: 'Contraseña',
-            onChanged: (value) {
-              setState(() {
-                _password = value.trim();
-              });
-            },
-            icon: Icons.password,
-          ),
-          SizedBox(height: 40),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              ElevatedButton(
-                  child: Text('Iniciar Sesión'),
-                  onPressed: () {
-                    signIn(auth, _email, _password, context);
-                  }),
-              ElevatedButton(
-                  child: Text('Crear cuenta'),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                          value: BlocProvider.of<UserBloc>(context),
-                          child: Register()),
-                    ));
-                  })
-            ],
-          ),
-        ],
+    return BlocListener<UserBloc, UserblocState>(
+      listener: (context, state) {
+        switch (state.loginAchieved) {
+          case true:
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<UserBloc>(context), child: HomePage()),
+            ));
+            break;
+          case false:
+
+            //pendiente de mostrar un mensaje de mala autenticacion
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                  value: BlocProvider.of<UserBloc>(context), child: Login()),
+            ));
+            break;
+          default:
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Login"),
+        ),
+        body: Column(
+          children: [
+            SizedBox(height: 100),
+            TextFieldFuntion(
+              hintText: 'Correo electronico',
+              onChanged: (String value) {
+                setState(() {
+                  _email = value.trim();
+                });
+              },
+              icon: Icons.account_circle,
+            ),
+            SizedBox(height: 3),
+            TextFieldFuntion(
+              hintText: 'Contraseña',
+              onChanged: (value) {
+                setState(() {
+                  _password = value.trim();
+                });
+              },
+              icon: Icons.password,
+            ),
+            SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                ElevatedButton(
+                    child: Text('Iniciar Sesión'),
+                    onPressed: () {
+                      setState(() {
+                        _loginText = "Validando usuario...";
+                      });
+
+                      //signIn(auth, _email, _password, context);
+                      BlocProvider.of<UserBloc>(context)
+                          .add(LoginEvent(_email, _password));
+
+                      //sleep(const Duration(seconds: 2));
+                    }),
+                ElevatedButton(
+                    child: Text('Crear cuenta'),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<UserBloc>(context),
+                            child: Register()),
+                      ));
+                    })
+              ],
+            ),
+            Text(_loginText)
+          ],
+        ),
       ),
     );
   }
 }
 
-Future<void> signIn(auth, email, password, BuildContext context) async {
-  try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    Navigator.of(context)
-        .pushReplacement(MaterialPageRoute(builder: (context) => HomePage()));
-  } on FirebaseAuthException catch (e) {
-    showAlertDialog(context, e);
-  }
-}
-
-showAlertDialog(BuildContext context, errorMessage) {
+showAlertDialog(BuildContext context) {
   // set up the button
   Widget okButton = TextButton(
     child: Text("OK"),

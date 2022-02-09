@@ -24,6 +24,25 @@ class UserDB {
     print("ID de usuario: " + user.id);
     return user.id;
   }
+
+  Future<String> signIn(email, password) async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+      QuerySnapshot querySnap = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .get();
+      QueryDocumentSnapshot doc = querySnap.docs[
+          0]; // Assumption: the query returns only one document, THE doc you are looking for.
+      DocumentReference user = doc.reference;
+      return user.id;
+    } on FirebaseAuthException catch (e) {
+      return "null";
+    }
+  }
 }
 
 UserDB userdb = UserDB();

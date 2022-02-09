@@ -26,8 +26,6 @@ class HomeState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.accessibility),
               onPressed: () async {
-                BlocProvider.of<UserBloc>(context).close();
-
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<UserBloc>(context),
@@ -50,7 +48,10 @@ class HomeState extends State<HomePage> {
         ),
         body: BlocBuilder<UserBloc, UserblocState>(
           builder: (context, state) {
-            return Text('id user: ' + state.userID);
+            return Text('id user: ' +
+                state.userID +
+                ' ' +
+                state.loginAchieved.toString());
           },
         ));
   }
