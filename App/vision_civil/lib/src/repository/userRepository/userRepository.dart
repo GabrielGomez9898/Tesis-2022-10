@@ -40,8 +40,13 @@ class UserDB {
       DocumentReference user = doc.reference;
       return user.id;
     } on FirebaseAuthException catch (e) {
+      print(e.toString());
       return "null";
     }
+  }
+
+  void logOut() {
+    auth.signOut();
   }
 }
 

@@ -32,3 +32,5 @@ class LoginEvent extends UserblocEvent {
     this.password = _password;
   }
 }
+
+class LogoutEvent extends UserblocEvent {}

@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vision_civil/src/repository/userRepository/userRepository.dart';
 
 part 'userbloc_event.dart';
@@ -28,6 +27,9 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
           emit(UserblocState(userID: " ", loginAchieved: false));
         }
         print(loginUserID);
+      } else if (event is LogoutEvent) {
+        userdb.logOut();
+        emit(UserblocState(userID: " ", loginAchieved: false));
       }
     });
   }

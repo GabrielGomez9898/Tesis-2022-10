@@ -36,7 +36,7 @@ class HomeState extends State<HomePage> {
             IconButton(
               icon: Icon(Icons.logout),
               onPressed: () {
-                auth.signOut();
+                BlocProvider.of<UserBloc>(context).add(LogoutEvent());
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<UserBloc>(context),
