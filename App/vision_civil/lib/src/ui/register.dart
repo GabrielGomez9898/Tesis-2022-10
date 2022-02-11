@@ -101,8 +101,11 @@ class _RegisterState extends State<Register> {
           ElevatedButton(
               child: Text('Cancelar'),
               onPressed: () {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (context) => Login()));
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<UserBloc>(context),
+                      child: Login()),
+                ));
               }),
         ],
       ),
