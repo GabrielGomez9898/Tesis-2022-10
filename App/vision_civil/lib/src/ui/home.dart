@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
-import 'package:vision_civil/src/ui/login.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,11 +36,6 @@ class HomeState extends State<HomePage> {
               icon: Icon(Icons.logout),
               onPressed: () {
                 BlocProvider.of<UserBloc>(context).add(LogoutEvent());
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<UserBloc>(context),
-                      child: Login()),
-                ));
               },
             )
           ],

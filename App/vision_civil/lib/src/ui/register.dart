@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
-import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/login.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
@@ -98,12 +97,6 @@ class _RegisterState extends State<Register> {
               onPressed: () {
                 BlocProvider.of<UserBloc>(context).add(RegisterEvent(
                     _email, _name, _birthDate, _gender, _password, _phone));
-
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<UserBloc>(context),
-                      child: HomePage()),
-                ));
               }),
           ElevatedButton(
               child: Text('Cancelar'),

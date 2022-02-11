@@ -34,3 +34,18 @@ class LoginEvent extends UserblocEvent {
 }
 
 class LogoutEvent extends UserblocEvent {}
+
+// ignore: must_be_immutable
+class UpdateUserEvent extends UserblocEvent {
+  String email = "", name = "", birthDate = "", gender = "";
+  double phone = 0;
+
+  UpdateUserEvent(String _email, String _name, String _birthDate,
+      String _gender, double phone) {
+    this.email = _email;
+    this.name = _name;
+    this.birthDate = _birthDate;
+    this.gender = _gender;
+    this.phone = phone;
+  }
+}

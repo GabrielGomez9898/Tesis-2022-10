@@ -77,6 +77,18 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             userGender: " ",
             userBirthDate: " ",
             userRole: " "));
+      } else if (event is UpdateUserEvent) {
+        QueryDocumentSnapshot user = await userdb.updateUser(event.email,
+            event.name, event.gender, event.phone, event.birthDate);
+        emit(UserblocState(
+            userID: user.id,
+            loginAchieved: true,
+            userEmail: user.get('email'),
+            userName: user.get('name'),
+            userPhone: user.get('phone'),
+            userGender: user.get('gender'),
+            userBirthDate: user.get('birth_date'),
+            userRole: user.get('role')));
       }
     });
   }

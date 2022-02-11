@@ -55,6 +55,32 @@ class UserDB {
   void logOut() {
     auth.signOut();
   }
+
+  Future<QueryDocumentSnapshot> updateUser(String email, String name,
+      String gender, double phone, String birthDate) async {
+    //Get user to update
+    QuerySnapshot querySnap = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    QueryDocumentSnapshot doc = querySnap.docs[0];
+    DocumentReference userUpdate = doc.reference;
+    await userUpdate.update({
+      'name': name,
+      'phone': phone,
+      'birth_date': birthDate,
+      'gender': gender
+    });
+
+    //Get userupdated to refresh bloc states
+    QuerySnapshot querySnapReturn = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    QueryDocumentSnapshot userReturn = querySnapReturn.docs[0];
+
+    return userReturn;
+  }
 }
 
 UserDB userdb = UserDB();

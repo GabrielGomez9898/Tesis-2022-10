@@ -19,7 +19,8 @@ class ProfileState extends State<Profile> {
       appBar: AppBar(centerTitle: true, title: Text("Mi perfil")),
       body: BlocBuilder<UserBloc, UserblocState>(
         builder: (context, state) {
-          String _name = state.userName,
+          String _email = state.userEmail,
+              _name = state.userName,
               _birthDate = state.userBirthDate,
               _gender = state.userGender;
           double _phone = state.userPhone;
@@ -90,17 +91,9 @@ class ProfileState extends State<Profile> {
                       print(_phone);
                       print(_birthDate);
                       print(_gender);
-                      /*
-              
-                BlocProvider.of<UserBloc>(context).add(RegisterEvent(
-                    _email, _name, _birthDate, _gender, _password, _phone));
 
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<UserBloc>(context),
-                      child: HomePage()),
-                ));
-                */
+                      BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(
+                          _email, _name, _birthDate, _gender, _phone));
                     }),
               ],
             ),
