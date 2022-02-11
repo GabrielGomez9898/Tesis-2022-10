@@ -9,9 +9,9 @@ class UserDB {
     return db.collection('users').snapshots();
   }
 
-  Future<String> createUser(String email, String password, String name,
-      String gender, double phone, String birthDate) async {
-    DocumentReference user = await db.collection('users').add({
+  Future<QueryDocumentSnapshot> createUser(String email, String password,
+      String name, String gender, double phone, String birthDate) async {
+    await db.collection('users').add({
       'name': name,
       'email': email,
       'phone': phone,
@@ -20,12 +20,16 @@ class UserDB {
       'role': "CIUDADANO"
     });
     auth.createUserWithEmailAndPassword(email: email, password: password);
-
-    print("ID de usuario: " + user.id);
-    return user.id;
+    QuerySnapshot querySnap = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: email)
+        .get();
+    QueryDocumentSnapshot doc = querySnap.docs[0];
+    return doc;
   }
 
-  Future<String> signIn(email, password) async {
+  Future<QueryDocumentSnapshot> signIn(email, password) async {
+    QueryDocumentSnapshot userReturn;
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -35,13 +39,16 @@ class UserDB {
           .collection('users')
           .where('email', isEqualTo: email)
           .get();
-      QueryDocumentSnapshot doc = querySnap.docs[
-          0]; // Assumption: the query returns only one document, THE doc you are looking for.
-      DocumentReference user = doc.reference;
-      return user.id;
+      userReturn = querySnap.docs[0];
+      return userReturn;
     } on FirebaseAuthException catch (e) {
       print(e.toString());
-      return "null";
+      QuerySnapshot querySnap = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: 'notexistinguser')
+          .get();
+      QueryDocumentSnapshot userReturn = querySnap.docs[0];
+      return userReturn;
     }
   }
 

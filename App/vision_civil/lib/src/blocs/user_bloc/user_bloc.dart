@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:vision_civil/src/repository/userRepository/userRepository.dart';
 
@@ -11,25 +12,71 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
   StreamController<String> _outPut = StreamController();
   Stream<String> get userBlocStream => _outPut.stream;
 
-  UserBloc() : super(UserblocState(userID: " ", loginAchieved: false)) {
+  UserBloc()
+      : super(UserblocState(
+            userID: " ",
+            loginAchieved: false,
+            userEmail: " ",
+            userName: " ",
+            userPhone: 0,
+            userGender: " ",
+            userBirthDate: " ",
+            userRole: " ")) {
     on<UserblocEvent>((event, emit) async {
       if (event is RegisterEvent) {
-        String id = await userdb.createUser(event.email, event.password,
-            event.name, event.gender, event.phone, event.birthDate);
-        _outPut.add(id);
-        emit(UserblocState(userID: id, loginAchieved: true));
+        QueryDocumentSnapshot user = await userdb.createUser(
+            event.email,
+            event.password,
+            event.name,
+            event.gender,
+            event.phone,
+            event.birthDate);
+        _outPut.add(user.id);
+        emit(UserblocState(
+            userID: user.id,
+            loginAchieved: true,
+            userEmail: user.get('email'),
+            userName: user.get('name'),
+            userPhone: user.get('phone'),
+            userGender: user.get('gender'),
+            userBirthDate: user.get('birth_date'),
+            userRole: user.get('role')));
       } else if (event is LoginEvent) {
-        String loginUserID = await userdb.signIn(event.email, event.password);
+        QueryDocumentSnapshot user =
+            await userdb.signIn(event.email, event.password);
         //conseguir id del usuario que hizo login
-        if (loginUserID != "null") {
-          emit(UserblocState(userID: loginUserID, loginAchieved: true));
+        if (user.get('email') != 'notexistinguser') {
+          emit(UserblocState(
+              userID: user.id,
+              loginAchieved: true,
+              userEmail: user.get('email'),
+              userName: user.get('name'),
+              userPhone: user.get('phone'),
+              userGender: user.get('gender'),
+              userBirthDate: user.get('birth_date'),
+              userRole: user.get('role')));
         } else {
-          emit(UserblocState(userID: " ", loginAchieved: false));
+          emit(UserblocState(
+              userID: " ",
+              loginAchieved: false,
+              userEmail: " ",
+              userName: " ",
+              userPhone: 0,
+              userGender: " ",
+              userBirthDate: " ",
+              userRole: " "));
         }
-        print(loginUserID);
       } else if (event is LogoutEvent) {
         userdb.logOut();
-        emit(UserblocState(userID: " ", loginAchieved: false));
+        emit(UserblocState(
+            userID: " ",
+            loginAchieved: false,
+            userEmail: " ",
+            userName: " ",
+            userPhone: 0,
+            userGender: " ",
+            userBirthDate: " ",
+            userRole: " "));
       }
     });
   }

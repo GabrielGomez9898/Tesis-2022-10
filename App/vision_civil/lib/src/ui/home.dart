@@ -51,7 +51,19 @@ class HomeState extends State<HomePage> {
             return Text('id user: ' +
                 state.userID +
                 ' ' +
-                state.loginAchieved.toString());
+                state.loginAchieved.toString() +
+                ' ' +
+                state.userEmail +
+                ' ' +
+                state.userName +
+                ' ' +
+                state.userGender +
+                ' ' +
+                state.userBirthDate +
+                ' ' +
+                state.userPhone.toString() +
+                ' ' +
+                state.userRole);
           },
         ));
   }
