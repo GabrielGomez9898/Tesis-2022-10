@@ -1,32 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
-import 'package:vision_civil/src/ui/home.dart';
 
 class Profile extends StatefulWidget {
-  //Profile({Key? key, required this.currentUser}) : super(key: key);
-  //final String currentUser;
-
   @override
   ProfileState createState() => ProfileState();
 }
 
 class ProfileState extends State<Profile> {
-  final auth = FirebaseAuth.instance;
-  CollectionReference users = FirebaseFirestore.instance.collection('users');
-  final Stream<QuerySnapshot> queryusers =
-      FirebaseFirestore.instance.collection("users").snapshots();
-
-  String _name = "",
-      _birthDate = "",
-      _gender = "",
-      _listView = "Seleccione su género",
-      _dateView = "Fecha de nacimiento",
-      _iduser = "";
-  double _phone = 0;
+  String _listView = "Seleccione su género", _dateView = "Fecha de nacimiento";
 
   var _genders = ["Masculino", "Femenino"];
 
@@ -34,17 +17,95 @@ class ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(centerTitle: true, title: Text("Mi perfil")),
-      body: Column(
-        children: [
-          BlocBuilder<UserBloc, UserblocState>(
-            builder: (context, state) {
-              return Container(
-                  height: 700,
-                  padding: const EdgeInsets.symmetric(vertical: 20),
-                  child: Text('id user: ' + state.userID));
-            },
-          ),
-        ],
+      body: BlocBuilder<UserBloc, UserblocState>(
+        builder: (context, state) {
+          String _name = state.userName,
+              _birthDate = state.userBirthDate,
+              _gender = state.userGender;
+          double _phone = state.userPhone;
+          return Scaffold(
+            body: Column(
+              children: [
+                Text("Modifica tus datos"),
+                TextFormField(
+                  initialValue: state.userName,
+                  onChanged: (value) {
+                    _name = value.trim();
+                  },
+                ),
+                TextFormField(
+                  enabled: false,
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(hintText: state.userEmail),
+                  onChanged: (value) {},
+                ),
+                TextFormField(
+                  initialValue: state.userPhone.toString(),
+                  keyboardType: TextInputType.phone,
+                  onChanged: (value) {
+                    _phone = double.parse(value.trim());
+                  },
+                ),
+                TextFormField(
+                  enabled: false,
+                  decoration: InputDecoration(hintText: state.userRole),
+                  onChanged: (value) {},
+                ),
+                TextButton(
+                    onPressed: () {
+                      DatePicker.showDatePicker(context,
+                          showTitleActions: true,
+                          minTime: DateTime(1930, 3, 5),
+                          maxTime: DateTime(2019, 6, 7),
+                          onChanged: (date) {}, onConfirm: (date) {
+                        _birthDate = date.toString();
+                        showDateAlertDialog(
+                            context, state.userBirthDate, _birthDate);
+                        /*setState(() {
+                          _dateView = date.toString();
+                          _birthDate = _dateView;
+                        });*/
+                      }, currentTime: DateTime.now(), locale: LocaleType.es);
+                    },
+                    child: Text(_dateView)),
+                DropdownButton(
+                  items: _genders.map((String gender) {
+                    return DropdownMenuItem(child: Text(gender), value: gender);
+                  }).toList(),
+                  onChanged: (_value) {
+                    _gender = _value.toString();
+                    showGenderAlertDialog(context, state.userGender, _gender);
+                    /* setState(() {
+                      _gender = _value.toString();
+                      _listView = _gender;
+                    });*/
+                  },
+                  hint: Text(_listView),
+                ),
+                ElevatedButton(
+                    child: Text('Actualizar datos'),
+                    onPressed: () {
+                      print("quiere actualizar datos");
+                      print(_name);
+                      print(_phone);
+                      print(_birthDate);
+                      print(_gender);
+                      /*
+              
+                BlocProvider.of<UserBloc>(context).add(RegisterEvent(
+                    _email, _name, _birthDate, _gender, _password, _phone));
+
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                      value: BlocProvider.of<UserBloc>(context),
+                      child: HomePage()),
+                ));
+                */
+                    }),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
