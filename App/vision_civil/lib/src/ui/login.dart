@@ -5,6 +5,7 @@ import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/register.dart';
 import 'package:vision_civil/src/widgets/textFieldWidget.dart';
+import 'package:vision_civil/src/widgets/buttonWidget.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -37,63 +38,70 @@ class _LoginScreenState extends State<Login> {
           default:
         }
       },
-      child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text("Login"),
-        ),
-        body: Column(
-          children: [
-            SizedBox(height: 100),
-            TextFieldFuntion(
-              hintText: 'Correo electronico',
-              onChanged: (String value) {
-                setState(() {
-                  _email = value.trim();
-                });
-              },
-              icon: Icons.account_circle,
-            ),
-            SizedBox(height: 3),
-            TextFieldFuntion(
-              hintText: 'Contraseña',
-              onChanged: (value) {
-                setState(() {
-                  _password = value.trim();
-                });
-              },
-              icon: Icons.password,
-            ),
-            SizedBox(height: 40),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                    child: Text('Iniciar Sesión'),
-                    onPressed: () {
-                      setState(() {
-                        _loginText = "Validando usuario...";
-                      });
-
-                      //signIn(auth, _email, _password, context);
-                      BlocProvider.of<UserBloc>(context)
-                          .add(LoginEvent(_email, _password));
-
-                      //sleep(const Duration(seconds: 2));
-                    }),
-                ElevatedButton(
-                    child: Text('Crear cuenta'),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<UserBloc>(context),
-                            child: Register()),
-                      ));
-                    })
-              ],
-            ),
-            Text(_loginText)
-          ],
+      child: Container(
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image: AssetImage("assets/images/vision_civil.jpg"),
+                fit: BoxFit.cover)),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Login"),
+          ),
+          body: Column(
+            children: [
+              SizedBox(height: 150),
+              TextFieldFuntion(
+                hintText: 'Correo electronico',
+                onChanged: (String value) {
+                  setState(() {
+                    _email = value.trim();
+                  });
+                },
+                icon: Icons.account_circle,
+                tipo: TextInputType.emailAddress,
+              ),
+              SizedBox(height: 3),
+              TextFieldFuntion(
+                hintText: 'Contraseña',
+                onChanged: (value) {
+                  setState(() {
+                    _password = value.trim();
+                  });
+                },
+                icon: Icons.password,
+                tipo: TextInputType.visiblePassword,
+              ),
+              SizedBox(height: 40),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  ButtoWidget(
+                      text: "Iniciar sesión",
+                      textColor: Colors.black,
+                      press: () {
+                        setState(() {
+                          _loginText = "Validando usuario...";
+                        });
+                        BlocProvider.of<UserBloc>(context)
+                            .add(LoginEvent(_email, _password));
+                      }),
+                  ButtoWidget(
+                      text: "Crear cuenta",
+                      textColor: Colors.black,
+                      press: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => BlocProvider.value(
+                              value: BlocProvider.of<UserBloc>(context),
+                              child: Register()),
+                        ));
+                      }),
+                ],
+              ),
+              Text(_loginText)
+            ],
+          ),
         ),
       ),
     );
