@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/ui/create_report.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -15,7 +16,6 @@ class HomeState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          centerTitle: true,
           title: Text("Home Visión Civil"),
           leading: IconButton(
             icon: Icon(Icons.menu),
@@ -29,6 +29,16 @@ class HomeState extends State<HomePage> {
                   builder: (_) => BlocProvider.value(
                       value: BlocProvider.of<UserBloc>(context),
                       child: Profile()),
+                ));
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.create),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                      create: (BuildContext context) => UserBloc(),
+                      child: CreateReport()),
                 ));
               },
             ),
