@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/register.dart';
+import 'package:vision_civil/src/widgets/buttonHyperlink.dart';
 import 'package:vision_civil/src/widgets/textFieldWidget.dart';
 import 'package:vision_civil/src/widgets/buttonWidget.dart';
 
@@ -40,6 +41,7 @@ class _LoginScreenState extends State<Login> {
       },
       child: Container(
         decoration: BoxDecoration(
+            //mirar resolucion porque se desaparece logo
             image: DecorationImage(
                 image: AssetImage("assets/images/vision_civil.jpg"),
                 fit: BoxFit.cover)),
@@ -47,60 +49,85 @@ class _LoginScreenState extends State<Login> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             centerTitle: true,
-            title: Text("Login"),
+            title: Text("¡Bienvenidos!"),
           ),
-          body: Column(
-            children: [
-              SizedBox(height: 150),
-              TextFieldFuntion(
-                hintText: 'Correo electronico',
-                onChanged: (String value) {
-                  setState(() {
-                    _email = value.trim();
-                  });
-                },
-                icon: Icons.account_circle,
-                tipo: TextInputType.emailAddress,
-              ),
-              SizedBox(height: 3),
-              TextFieldFuntion(
-                hintText: 'Contraseña',
-                onChanged: (value) {
-                  setState(() {
-                    _password = value.trim();
-                  });
-                },
-                icon: Icons.password,
-                tipo: TextInputType.visiblePassword,
-              ),
-              SizedBox(height: 40),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  ButtoWidget(
-                      text: "Iniciar sesión",
-                      textColor: Colors.black,
-                      press: () {
-                        setState(() {
-                          _loginText = "Validando usuario...";
-                        });
-                        BlocProvider.of<UserBloc>(context)
-                            .add(LoginEvent(_email, _password));
-                      }),
-                  ButtoWidget(
-                      text: "Crear cuenta",
-                      textColor: Colors.black,
-                      press: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => BlocProvider.value(
-                              value: BlocProvider.of<UserBloc>(context),
-                              child: Register()),
-                        ));
-                      }),
-                ],
-              ),
-              Text(_loginText)
-            ],
+          body: SingleChildScrollView(
+            child: Column(
+              children: [
+                SizedBox(height: 170),
+                TextFieldFuntion(
+                  hintText: 'Correo electronico',
+                  onChanged: (String value) {
+                    setState(() {
+                      _email = value.trim();
+                    });
+                  },
+                  icon: Icons.account_circle,
+                  tipo: TextInputType.emailAddress,
+                  obsText: false,
+                ),
+                SizedBox(height: 3),
+                TextFieldFuntion(
+                  hintText: 'Contraseña',
+                  onChanged: (value) {
+                    setState(() {
+                      _password = value.trim();
+                    });
+                  },
+                  icon: Icons.password,
+                  tipo: TextInputType.visiblePassword,
+                  obsText: true,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    SizedBox(
+                      width: 230,
+                      height: 20,
+                      child: ButtonHyperlink(
+                          text: "¿Olvidaste tu contraseña?", press: () => true),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 40,
+                ),
+                ButtoWidget(
+                    text: "Ingresar",
+                    textColor: Colors.black,
+                    press: () {
+                      setState(() {
+                        _loginText = "Validando usuario...";
+                      });
+                      BlocProvider.of<UserBloc>(context)
+                          .add(LoginEvent(_email, _password));
+                    }),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "¿No tienes cuenta?    |",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    SizedBox(
+                      width: 100,
+                      height: 20,
+                      child: ButtonHyperlink(
+                          text: "Registrarse",
+                          press: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                  value: BlocProvider.of<UserBloc>(context),
+                                  child: Register()),
+                            ));
+                          }),
+                    ),
+                  ],
+                ),
+                Text(_loginText)
+              ],
+            ),
           ),
         ),
       ),
