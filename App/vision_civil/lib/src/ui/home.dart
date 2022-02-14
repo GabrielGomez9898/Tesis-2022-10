@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
 import 'package:vision_civil/src/ui/profile.dart';
@@ -37,7 +38,7 @@ class HomeState extends State<HomePage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider(
-                      create: (BuildContext context) => UserBloc(),
+                      create: (BuildContext context) => ReportBloc(),
                       child: CreateReport()),
                 ));
               },
