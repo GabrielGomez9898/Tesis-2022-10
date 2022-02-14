@@ -68,7 +68,9 @@ class HomeState extends State<HomePage> {
                 ' ' +
                 state.userPhone.toString() +
                 ' ' +
-                state.userRole);
+                state.userRole +
+                ' ' +
+                state.userDocument);
           },
         ));
   }

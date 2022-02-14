@@ -9,15 +9,22 @@ class UserDB {
     return db.collection('users').snapshots();
   }
 
-  Future<QueryDocumentSnapshot> createUser(String email, String password,
-      String name, String gender, double phone, String birthDate) async {
+  Future<QueryDocumentSnapshot> createUser(
+      String email,
+      String password,
+      String name,
+      String gender,
+      double phone,
+      String birthDate,
+      String document) async {
     await db.collection('users').add({
       'name': name,
       'email': email,
       'phone': phone,
       'birth_date': birthDate,
       'gender': gender,
-      'role': "CIUDADANO"
+      'role': "CIUDADANO",
+      'document': document
     });
     auth.createUserWithEmailAndPassword(email: email, password: password);
     QuerySnapshot querySnap = await FirebaseFirestore.instance

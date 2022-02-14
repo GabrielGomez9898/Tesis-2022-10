@@ -9,17 +9,23 @@ abstract class UserblocEvent extends Equatable {
 /*No borrar comentarios de ignore*/
 // ignore: must_be_immutable
 class RegisterEvent extends UserblocEvent {
-  String email = "", name = "", birthDate = "", gender = "", password = "";
+  String email = "",
+      document = "",
+      name = "",
+      birthDate = "",
+      gender = "",
+      password = "";
   double phone = 0;
 
   RegisterEvent(String _email, String _name, String _birthDate, String _gender,
-      String _password, double phone) {
+      String _password, double _phone, String _document) {
     this.email = _email;
     this.name = _name;
     this.birthDate = _birthDate;
     this.gender = _gender;
     this.password = _password;
-    this.phone = phone;
+    this.phone = _phone;
+    this.document = _document;
   }
 }
 

@@ -13,6 +13,7 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
   String _email = "",
+      _document = "",
       _name = "",
       _birthDate = "",
       _gender = "",
@@ -63,6 +64,15 @@ class _RegisterState extends State<Register> {
                   onChanged: (value) {
                     setState(() {
                       _name = value.trim();
+                    });
+                  },
+                  tipo: TextInputType.name,
+                  obsText: false),
+              TextFieldFuntion(
+                  hintText: "Documento de identidad",
+                  onChanged: (value) {
+                    setState(() {
+                      _document = value.trim();
                     });
                   },
                   tipo: TextInputType.name,
@@ -165,7 +175,8 @@ class _RegisterState extends State<Register> {
                             _birthDate,
                             _gender,
                             _password,
-                            _phone));
+                            _phone,
+                            _document));
                       })
                 ],
               )

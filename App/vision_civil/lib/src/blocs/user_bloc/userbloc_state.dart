@@ -8,6 +8,7 @@ class UserblocState {
   String userGender;
   String userBirthDate;
   String userRole;
+  String userDocument;
 
   bool loginAchieved;
 
@@ -19,5 +20,6 @@ class UserblocState {
       required this.userPhone,
       required this.userGender,
       required this.userBirthDate,
-      required this.userRole});
+      required this.userRole,
+      required this.userDocument});
 }

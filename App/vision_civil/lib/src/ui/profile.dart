@@ -11,7 +11,7 @@ class Profile extends StatefulWidget {
 class ProfileState extends State<Profile> {
   String _listView = "Seleccione su género", _dateView = "Fecha de nacimiento";
 
-  var _genders = ["Masculino", "Femenino"];
+  var _genders = ["Masculino", "Femenino", "Otro"];
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +33,11 @@ class ProfileState extends State<Profile> {
                   onChanged: (value) {
                     _name = value.trim();
                   },
+                ),
+                TextFormField(
+                  enabled: false,
+                  decoration: InputDecoration(hintText: state.userDocument),
+                  onChanged: (value) {},
                 ),
                 TextFormField(
                   enabled: false,
@@ -62,10 +67,6 @@ class ProfileState extends State<Profile> {
                         _birthDate = date.toString();
                         showDateAlertDialog(
                             context, state.userBirthDate, _birthDate);
-                        /*setState(() {
-                          _dateView = date.toString();
-                          _birthDate = _dateView;
-                        });*/
                       }, currentTime: DateTime.now(), locale: LocaleType.es);
                     },
                     child: Text(_dateView)),
@@ -76,22 +77,12 @@ class ProfileState extends State<Profile> {
                   onChanged: (_value) {
                     _gender = _value.toString();
                     showGenderAlertDialog(context, state.userGender, _gender);
-                    /* setState(() {
-                      _gender = _value.toString();
-                      _listView = _gender;
-                    });*/
                   },
                   hint: Text(_listView),
                 ),
                 ElevatedButton(
                     child: Text('Actualizar datos'),
                     onPressed: () {
-                      print("quiere actualizar datos");
-                      print(_name);
-                      print(_phone);
-                      print(_birthDate);
-                      print(_gender);
-
                       BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(
                           _email, _name, _birthDate, _gender, _phone));
                     }),
