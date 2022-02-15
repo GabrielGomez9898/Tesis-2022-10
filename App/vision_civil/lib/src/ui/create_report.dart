@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
@@ -23,6 +25,9 @@ class CreateReportState extends State<CreateReport> {
       _descripcion = " ",
       _fechaHora = " ";
 
+  var imagePicker = new ImagePicker();
+  var type;
+  var _image;
   @override
   Widget build(BuildContext context) {
     _fechaHora = now.year.toString() +
@@ -217,6 +222,37 @@ class CreateReportState extends State<CreateReport> {
                 _descripcion = value.trim();
               });
             },
+          ),
+          Container(
+              child: ElevatedButton(
+            onPressed: () {
+              print("quiere guardar foto");
+            },
+            child: GestureDetector(
+              onTap: () async {
+                XFile? image =
+                    await imagePicker.pickImage(source: ImageSource.camera);
+                setState(() {
+                  _image = File(image!.path);
+                });
+              },
+              child: Container(
+                  width: 50, height: 50, child: Text('Ingrese su foto')),
+            ),
+          )),
+          Container(
+            width: 30,
+            height: 30,
+            child: _image != null
+                ? Image.file(
+                    _image,
+                    width: 100.0,
+                    height: 100.0,
+                    fit: BoxFit.fitHeight,
+                  )
+                : Container(
+                    decoration: BoxDecoration(),
+                  ),
           ),
           TextFormField(
             initialValue: _fechaHora,
