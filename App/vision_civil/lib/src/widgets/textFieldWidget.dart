@@ -6,14 +6,15 @@ class TextFieldFuntion extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final TextInputType tipo;
   final bool obsText;
+  bool? enablded = true;
 
-  TextFieldFuntion({
-    required this.hintText,
-    this.icon = Icons.person,
-    required this.onChanged,
-    required this.tipo,
-    required this.obsText,
-  });
+  TextFieldFuntion(
+      {required this.hintText,
+      this.icon = Icons.person,
+      required this.onChanged,
+      required this.tipo,
+      required this.obsText,
+      this.enablded});
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +23,7 @@ class TextFieldFuntion extends StatelessWidget {
       child: TextField(
         keyboardType: tipo,
         obscureText: obsText,
+        enabled: enablded,
         decoration: InputDecoration(
           prefixIcon: Icon(
             icon,

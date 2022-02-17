@@ -30,8 +30,7 @@ class _RegisterState extends State<Register> {
       decoration: BoxDecoration(
           //mirar resolucion porque se desaparece logo
           image: DecorationImage(
-              image: AssetImage("assets/images/vision_civil.jpg"),
-              fit: BoxFit.cover)),
+              image: AssetImage("assets/images/fondo.jpg"), fit: BoxFit.cover)),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
@@ -41,8 +40,9 @@ class _RegisterState extends State<Register> {
         body: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
-                height: 140,
+              Container(
+                child: Image.asset('assets/images/LogoConNombre.jpg',
+                    width: 260.0, height: 190.0, scale: 1),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -75,6 +75,7 @@ class _RegisterState extends State<Register> {
                       _document = value.trim();
                     });
                   },
+                  icon: Icons.assignment,
                   tipo: TextInputType.name,
                   obsText: false),
               TextFieldFuntion(
@@ -84,6 +85,7 @@ class _RegisterState extends State<Register> {
                       _email = value.trim();
                     });
                   },
+                  icon: Icons.email,
                   tipo: TextInputType.emailAddress,
                   obsText: false),
               TextFieldFuntion(
@@ -93,6 +95,7 @@ class _RegisterState extends State<Register> {
                       _phone = double.parse(value.trim());
                     });
                   },
+                  icon: Icons.aod,
                   tipo: TextInputType.phone,
                   obsText: false),
               Row(
@@ -151,6 +154,7 @@ class _RegisterState extends State<Register> {
                       _password = value.trim();
                     });
                   },
+                  icon: Icons.password,
                   tipo: TextInputType.visiblePassword,
                   obsText: true),
               Row(

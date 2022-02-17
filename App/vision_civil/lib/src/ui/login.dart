@@ -19,6 +19,7 @@ class _LoginScreenState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return BlocListener<UserBloc, UserblocState>(
       listener: (context, state) {
         switch (state.loginAchieved) {
@@ -43,7 +44,7 @@ class _LoginScreenState extends State<Login> {
         decoration: BoxDecoration(
             //mirar resolucion porque se desaparece logo
             image: DecorationImage(
-                image: AssetImage("assets/images/vision_civil.jpg"),
+                image: AssetImage("assets/images/fondo.jpg"),
                 fit: BoxFit.cover)),
         child: Scaffold(
           backgroundColor: Colors.transparent,
@@ -54,7 +55,11 @@ class _LoginScreenState extends State<Login> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                SizedBox(height: 170),
+                Container(
+                  child: Image.asset('assets/images/LogoConNombre.jpg',
+                      width: 260.0, height: 190.0, scale: 1),
+                ),
+                SizedBox(height: size.height * 0.1),
                 TextFieldFuntion(
                   hintText: 'Correo electronico',
                   onChanged: (String value) {
@@ -90,7 +95,7 @@ class _LoginScreenState extends State<Login> {
                   ],
                 ),
                 SizedBox(
-                  height: 40,
+                  height: size.height * 0.09,
                 ),
                 ButtoWidget(
                     text: "Ingresar",
