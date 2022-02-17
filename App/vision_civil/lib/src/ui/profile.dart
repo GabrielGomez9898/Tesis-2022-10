@@ -25,6 +25,10 @@ class ProfileState extends State<Profile> {
       child: Container(
         margin: const EdgeInsets.only(left: 13.0, right: 13.0),
         child: Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text("Mi perfil"),
+          ),
           backgroundColor: Colors.transparent,
           body: BlocBuilder<UserBloc, UserblocState>(
             builder: (context, state) {
