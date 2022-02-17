@@ -35,7 +35,7 @@ class HomeState extends State<HomePage> {
             ),
             IconButton(
               icon: Icon(Icons.create),
-              onPressed: () {
+              onPressed: () async {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (_) => BlocProvider(
                       create: (BuildContext context) => ReportBloc(),

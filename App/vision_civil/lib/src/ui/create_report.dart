@@ -3,7 +3,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
-import 'package:vision_civil/src/widgets/textFieldWidget.dart';
+import 'package:location/location.dart';
 
 class CreateReport extends StatefulWidget {
   @override
@@ -31,6 +31,8 @@ class CreateReportState extends State<CreateReport> {
   var imagePicker = new ImagePicker();
   var type;
   var _image;
+
+  var location = new Location();
   @override
   Widget build(BuildContext context) {
     _fechaHora = now.year.toString() +
@@ -430,7 +432,12 @@ class CreateReportState extends State<CreateReport> {
                   children: [
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(primary: Colors.red),
-                        onPressed: () {
+                        onPressed: () async {
+                          var currentLocation = await location.getLocation();
+                          print("Latitude: " +
+                              currentLocation.latitude.toString());
+                          print("Longitude: " +
+                              currentLocation.longitude.toString());
                           BlocProvider.of<ReportBloc>(context).add(
                               CreateRepotEvent(_tipoReporte, _asunto,
                                   _descripcion, _fechaHora, "_lat", "_lon"));
