@@ -434,13 +434,17 @@ class CreateReportState extends State<CreateReport> {
                         style: ElevatedButton.styleFrom(primary: Colors.red),
                         onPressed: () async {
                           var currentLocation = await location.getLocation();
-                          print("Latitude: " +
-                              currentLocation.latitude.toString());
-                          print("Longitude: " +
-                              currentLocation.longitude.toString());
+                          String latitude = currentLocation.latitude.toString(),
+                              longitude = currentLocation.longitude.toString();
+
                           BlocProvider.of<ReportBloc>(context).add(
-                              CreateRepotEvent(_tipoReporte, _asunto,
-                                  _descripcion, _fechaHora, "_lat", "_lon"));
+                              CreateRepotEvent(
+                                  _tipoReporte,
+                                  _asunto,
+                                  _descripcion,
+                                  _fechaHora,
+                                  latitude,
+                                  longitude));
                         },
                         child: Text(
                           "Generar reporte",

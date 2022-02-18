@@ -16,8 +16,8 @@ class ReportDB {
       'descripcion': descripcion,
       'estado': 'PENDIENTE',
       'fecha_hora': fechaHora,
-      'latitude': "lat269",
-      'longitude': "lon753",
+      'latitude': lat,
+      'longitude': lon,
       'tipo_reporte': tipoReporte
     });
   }
