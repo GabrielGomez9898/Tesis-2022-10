@@ -30,7 +30,7 @@ class CreateReportState extends State<CreateReport> {
 
   var imagePicker = new ImagePicker();
   var type;
-  var _image;
+  File _image = File("nullpath");
 
   var location = new Location();
   @override
@@ -434,8 +434,9 @@ class CreateReportState extends State<CreateReport> {
                         style: ElevatedButton.styleFrom(primary: Colors.red),
                         onPressed: () async {
                           var currentLocation = await location.getLocation();
-                          String latitude = currentLocation.latitude.toString(),
-                              longitude = currentLocation.longitude.toString();
+                          String _latitude =
+                                  currentLocation.latitude.toString(),
+                              _longitude = currentLocation.longitude.toString();
 
                           BlocProvider.of<ReportBloc>(context).add(
                               CreateRepotEvent(
@@ -443,8 +444,9 @@ class CreateReportState extends State<CreateReport> {
                                   _asunto,
                                   _descripcion,
                                   _fechaHora,
-                                  latitude,
-                                  longitude));
+                                  _latitude,
+                                  _longitude,
+                                  _image));
                         },
                         child: Text(
                           "Generar reporte",
