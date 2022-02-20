@@ -36,13 +36,13 @@ class ReportDB {
 
       String idReport = documentReference.id;
 
-      var folderPath = "/reports/$idReport/images";
+      var folderPath = "/reports/$idReport/media";
 
       await documentReference.update({'folder_path': folderPath});
       // se guardan las fotos
       for (var i = 0; i < images.length; i++) {
         var imageID = Uuid().v1();
-        var imagePath = "/reports/$idReport/images/$imageID";
+        var imagePath = "/reports/$idReport/media/images/$imageID";
         final Reference storageReference =
             FirebaseStorage.instance.ref().child(imagePath);
         storageReference.putFile(images[i]);
@@ -50,7 +50,7 @@ class ReportDB {
 
       // se guarda el video
       var videoID = Uuid().v1();
-      var videoPath = "/reports/$idReport/video/$videoID";
+      var videoPath = "/reports/$idReport/media/video/$videoID";
       final Reference storageReference =
           FirebaseStorage.instance.ref().child(videoPath);
       storageReference.putFile(video);
