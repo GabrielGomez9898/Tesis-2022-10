@@ -1,7 +1,8 @@
-import firebase from "firebase/app";
-import "firebase/auth";
+import { initializeApp } from "firebase/app";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { useState, useEffect, useContext, createContext } from "react";
 
-const app = firebase.initializeApp({
+const firebaseApp = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
@@ -11,5 +12,23 @@ const app = firebase.initializeApp({
     measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
 });
 
-export const auth = app.auth();
-export default app;
+export const AuthContext = createContext()
+
+export const AuthContextProvider = (props) => {
+    const [user, setUser] = useState()
+    const [error, setError] = useState()
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(getAuth(), setUser, setError)
+        return () => unsubscribe()
+    }, [])
+
+    return <AuthContext.Provider value={{ user, error }} {...props} />
+}
+
+export const useAuthState = () => {
+    const auth = useContext(AuthContext)
+    return { ...auth, isAuthenticated: auth.user != null }
+}
+
+export const auth = getAuth(firebaseApp);
