@@ -31,6 +31,7 @@ class CreateReportState extends State<CreateReport> {
   var imagePicker = new ImagePicker();
   var type;
   File _image = File("nullpath");
+  List<File> _arrayImages = [];
 
   var location = new Location();
   @override
@@ -401,6 +402,10 @@ class CreateReportState extends State<CreateReport> {
                                   source: ImageSource.gallery);
                               setState(() {
                                 _image = File(image!.path);
+                                _arrayImages.add(_image);
+                                print("va a imprimir");
+                                print(_arrayImages);
+                                print("ya imprimio");
                               });
                             },
                             child: Icon(
@@ -446,7 +451,7 @@ class CreateReportState extends State<CreateReport> {
                                   _fechaHora,
                                   _latitude,
                                   _longitude,
-                                  _image));
+                                  _arrayImages));
                         },
                         child: Text(
                           "Generar reporte",

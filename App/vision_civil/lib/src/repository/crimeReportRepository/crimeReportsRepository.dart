@@ -15,16 +15,11 @@ class ReportDB {
   }
 
   void createReport(String tipoReporte, String asunto, String descripcion,
-      String fechaHora, String lat, String lon, File image) async {
-    if (image.path != "nullpath") {
-      var imageID = Uuid().v1();
-      var imagePath = "/reports/images/$imageID.jpg";
-
-      final Reference storageReference =
-          FirebaseStorage.instance.ref().child(imagePath);
-      storageReference.putFile(image);
-      //final StreamSubscription<StorageEvent> streamSubscription = uploadTask.asStream():
-      await db.collection('reports').add({
+      String fechaHora, String lat, String lon, List<File> images) async {
+    print("entro a create report");
+    print(images);
+    if (images[0].path != "nullpath1") {
+      var documentReference = await db.collection('reports').add({
         'asunto': asunto,
         'descripcion': descripcion,
         'estado': 'PENDIENTE',
@@ -32,8 +27,22 @@ class ReportDB {
         'latitude': lat,
         'longitude': lon,
         'tipo_reporte': tipoReporte,
-        'image_path': imagePath
       });
+
+      String idReport = documentReference.id;
+
+      var folderPath = "/reports/$idReport/images";
+
+      await documentReference.update({'folder_path': folderPath});
+      print("ya va a empezar a guardar las fotos en " + folderPath);
+      for (var i = 0; i < images.length; i++) {
+        print("entro");
+        var imageID = Uuid().v1();
+        var imagePath = "/reports/$idReport/images/$imageID";
+        final Reference storageReference =
+            FirebaseStorage.instance.ref().child(imagePath);
+        storageReference.putFile(images[i]);
+      }
     } else {
       await db.collection('reports').add({
         'asunto': asunto,

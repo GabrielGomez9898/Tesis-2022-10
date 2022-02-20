@@ -18,7 +18,7 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             event.fechaHora,
             event.lat,
             event.lon,
-            event.image);
+            event.images);
       }
     });
   }
