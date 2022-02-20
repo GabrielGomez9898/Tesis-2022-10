@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+
 import 'package:uuid/uuid.dart';
 
 class ReportDB {
@@ -14,10 +14,15 @@ class ReportDB {
     return db.collection('users').snapshots();
   }
 
-  void createReport(String tipoReporte, String asunto, String descripcion,
-      String fechaHora, String lat, String lon, List<File> images) async {
-    print("entro a create report");
-    print(images);
+  void createReport(
+      String tipoReporte,
+      String asunto,
+      String descripcion,
+      String fechaHora,
+      String lat,
+      String lon,
+      List<File> images,
+      File video) async {
     if (images[0].path != "nullpath1") {
       var documentReference = await db.collection('reports').add({
         'asunto': asunto,
@@ -34,15 +39,21 @@ class ReportDB {
       var folderPath = "/reports/$idReport/images";
 
       await documentReference.update({'folder_path': folderPath});
-      print("ya va a empezar a guardar las fotos en " + folderPath);
+      // se guardan las fotos
       for (var i = 0; i < images.length; i++) {
-        print("entro");
         var imageID = Uuid().v1();
         var imagePath = "/reports/$idReport/images/$imageID";
         final Reference storageReference =
             FirebaseStorage.instance.ref().child(imagePath);
         storageReference.putFile(images[i]);
       }
+
+      // se guarda el video
+      var videoID = Uuid().v1();
+      var videoPath = "/reports/$idReport/video/$videoID";
+      final Reference storageReference =
+          FirebaseStorage.instance.ref().child(videoPath);
+      storageReference.putFile(video);
     } else {
       await db.collection('reports').add({
         'asunto': asunto,

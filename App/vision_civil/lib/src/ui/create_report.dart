@@ -32,6 +32,7 @@ class CreateReportState extends State<CreateReport> {
   var type;
   File _image = File("nullpath");
   List<File> _arrayImages = [];
+  File _video = File("nullpathvideo");
 
   var location = new Location();
   @override
@@ -403,9 +404,6 @@ class CreateReportState extends State<CreateReport> {
                               setState(() {
                                 _image = File(image!.path);
                                 _arrayImages.add(_image);
-                                print("va a imprimir");
-                                print(_arrayImages);
-                                print("ya imprimio");
                               });
                             },
                             child: Icon(
@@ -428,6 +426,14 @@ class CreateReportState extends State<CreateReport> {
                                   decoration: BoxDecoration(),
                                 ),
                         ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              XFile? fileVideo = await ImagePicker()
+                                  .pickVideo(source: ImageSource.camera);
+
+                              _video = File(fileVideo!.path);
+                            },
+                            child: Text("Suba su video"))
                       ],
                     ),
                   ],
@@ -451,7 +457,8 @@ class CreateReportState extends State<CreateReport> {
                                   _fechaHora,
                                   _latitude,
                                   _longitude,
-                                  _arrayImages));
+                                  _arrayImages,
+                                  _video));
                         },
                         child: Text(
                           "Generar reporte",

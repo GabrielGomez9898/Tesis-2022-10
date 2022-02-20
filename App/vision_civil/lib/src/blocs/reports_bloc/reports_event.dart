@@ -16,11 +16,18 @@ class CreateRepotEvent extends ReportblocEvent {
       fechaHora = "",
       lat = "",
       lon = "";
-  File image = File("nullpath");
   List<File> images = [];
+  File video = File("nullpathvideo");
 
-  CreateRepotEvent(String _tipoReporte, String _asunto, String _descripcion,
-      String _fechaHora, String _lat, String _lon, List<File> _images) {
+  CreateRepotEvent(
+      String _tipoReporte,
+      String _asunto,
+      String _descripcion,
+      String _fechaHora,
+      String _lat,
+      String _lon,
+      List<File> _images,
+      File video) {
     this.tipoReporte = _tipoReporte;
     this.asunto = _asunto;
     this.descripcion = _descripcion;
@@ -28,5 +35,6 @@ class CreateRepotEvent extends ReportblocEvent {
     this.lat = _lat;
     this.lon = _lon;
     this.images = _images;
+    this.video = video;
   }
 }
