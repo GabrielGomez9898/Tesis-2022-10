@@ -1,0 +1,39 @@
+@import "./Variables.module.scss";
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+
+    input {
+        width: auto;
+        height: 3rem;
+        border-width: 0px;
+        border-radius: 5px;
+        padding-left: 1rem;
+
+        font-size: 100%;
+        font-family: 'Manjari', sans-serif;
+        background-color: $unselected-color;
+    }
+
+    input:hover, input:focus {
+        background-color: $light-theme-select-color;
+    }
+
+    button {
+        height: 2rem;
+        border-width: 0px;
+        border-radius: 5px;
+
+        font-weight: bold;
+        font-family: 'Spline Sans', sans-serif;
+        color: $btn-text-color;
+        background-color: $btn-color;
+    }
+
+    button:hover {
+        cursor: pointer;
+    }
+}
