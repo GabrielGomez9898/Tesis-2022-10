@@ -3,27 +3,16 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@react-google-maps/api": "^2.7.0",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^12.1.2",
     "@testing-library/user-event": "^13.5.0",
-<<<<<<< HEAD
-    "@types/googlemaps": "^3.43.3",
-    "@types/markerclustererplus": "^2.1.33",
-    "@types/react": "^17.0.39",
-    "ajv": "^6.12.6",
-    "google-map-react": "^2.1.10",
-=======
     "firebase": "^9.6.6",
->>>>>>> 0b596de17c41b6a022cc98f1f30ec5e2f114e9f6
     "google-maps-react": "^2.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-google-maps": "*",
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "sass": "^1.49.7",
-    "simple-react-google-maps": "^1.1.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -31,6 +20,12 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
   },
   "browserslist": {
     "production": [
