@@ -4,6 +4,10 @@ $light-theme-bg-color: white;
 $light-theme-select-color: rgb(224, 224, 224);
 $dark-theme-bg-color: rgb(50, 65, 107);
 $dark-theme-select-color: rgb(32, 42, 68);
+$danger-alert-color: #F66359;
+$success-alert-color: #2FB986;
+$info-alert-color: #46A8F5;
+$warning-alert-color: #FFAA2C;
 $icon-color: white;
 $svg-color1-alt1: hsl(207, 100%, 73%);
 $svg-color2-alt1: hsl(207, 100%, 50%);
@@ -20,3 +24,10 @@ $unselected-color: hsl(0, 0%, 94%);
 $selected-color: hsl(207, 100%, 50%);
 //OTHERS
 $transition-speed: 600ms;
+//EXPORT
+:export {
+    dangerAlertColor: $danger-alert-color;
+    successAlertColor: $success-alert-color;
+    infoAlertColor: $info-alert-color;
+    warningAlertColor: $warning-alert-color;
+}
