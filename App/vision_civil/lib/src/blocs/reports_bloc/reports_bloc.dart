@@ -19,7 +19,8 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             event.lat,
             event.lon,
             event.images,
-            event.video);
+            event.video,
+            event.userPhone);
       }
     });
   }

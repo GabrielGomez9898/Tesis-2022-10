@@ -18,6 +18,7 @@ class CreateRepotEvent extends ReportblocEvent {
       lon = "";
   List<File> images = [];
   File video = File("nullpathvideo");
+  double userPhone = 0;
 
   CreateRepotEvent(
       String _tipoReporte,
@@ -27,7 +28,8 @@ class CreateRepotEvent extends ReportblocEvent {
       String _lat,
       String _lon,
       List<File> _images,
-      File video) {
+      File video,
+      double _userPhone) {
     this.tipoReporte = _tipoReporte;
     this.asunto = _asunto;
     this.descripcion = _descripcion;
@@ -36,5 +38,6 @@ class CreateRepotEvent extends ReportblocEvent {
     this.lon = _lon;
     this.images = _images;
     this.video = video;
+    this.userPhone = _userPhone;
   }
 }

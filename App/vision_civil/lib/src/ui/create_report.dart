@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:location/location.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 
 class CreateReport extends StatefulWidget {
   @override
@@ -27,6 +28,9 @@ class CreateReportState extends State<CreateReport> {
       _asunto = " ",
       _descripcion = " ",
       _fechaHora = " ";
+  double _userPhone = 0;
+  bool _checkbox = false;
+  int count = 0;
 
   var imagePicker = new ImagePicker();
   var type;
@@ -433,9 +437,37 @@ class CreateReportState extends State<CreateReport> {
 
                               _video = File(fileVideo!.path);
                             },
-                            child: Text("Suba su video"))
+                            child: Text("Suba su video")),
                       ],
                     ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    BlocBuilder<UserBloc, UserblocState>(
+                      builder: (context, state) {
+                        return Checkbox(
+                          value: _checkbox,
+                          onChanged: (value) {
+                            count++;
+                            if (count % 2 == 0) {
+                              setState(() {
+                                _userPhone = 0;
+                                _checkbox = false;
+                                print(_userPhone);
+                              });
+                            } else {
+                              setState(() {
+                                _userPhone = state.userPhone;
+                                _checkbox = true;
+                                print(_userPhone);
+                              });
+                            }
+                          },
+                        );
+                      },
+                    ),
+                    Text('¿ Deseo adjuntar mi numero celular ?'),
                   ],
                 ),
                 Row(
@@ -458,7 +490,8 @@ class CreateReportState extends State<CreateReport> {
                                   _latitude,
                                   _longitude,
                                   _arrayImages,
-                                  _video));
+                                  _video,
+                                  _userPhone));
                         },
                         child: Text(
                           "Generar reporte",

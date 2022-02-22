@@ -33,14 +33,21 @@ class HomeState extends State<HomePage> {
                 ));
               },
             ),
-            IconButton(
-              icon: Icon(Icons.create),
-              onPressed: () async {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider(
-                      create: (BuildContext context) => ReportBloc(),
-                      child: CreateReport()),
-                ));
+            BlocBuilder<UserBloc, UserblocState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: Icon(Icons.create),
+                  onPressed: () async {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => MultiBlocProvider(providers: [
+                        BlocProvider.value(
+                            value: BlocProvider.of<UserBloc>(context)),
+                        BlocProvider(
+                            create: (BuildContext context) => ReportBloc())
+                      ], child: CreateReport()),
+                    ));
+                  },
+                );
               },
             ),
             IconButton(

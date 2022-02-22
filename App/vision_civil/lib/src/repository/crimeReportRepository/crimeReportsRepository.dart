@@ -22,8 +22,9 @@ class ReportDB {
       String lat,
       String lon,
       List<File> images,
-      File video) async {
-    if (images[0].path != "nullpath1") {
+      File video,
+      double userPhone) async {
+    if (images.length > 0) {
       var documentReference = await db.collection('reports').add({
         'asunto': asunto,
         'descripcion': descripcion,
@@ -32,6 +33,7 @@ class ReportDB {
         'latitude': lat,
         'longitude': lon,
         'tipo_reporte': tipoReporte,
+        'user_phone': userPhone
       });
 
       String idReport = documentReference.id;
@@ -62,7 +64,8 @@ class ReportDB {
         'fecha_hora': fechaHora,
         'latitude': lat,
         'longitude': lon,
-        'tipo_reporte': tipoReporte
+        'tipo_reporte': tipoReporte,
+        'user_phone': userPhone
       });
     }
   }
