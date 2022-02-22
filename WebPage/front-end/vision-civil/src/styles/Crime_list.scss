@@ -1,4 +1,4 @@
-@import "./Variables.scss";
+@import "./Variables.module.scss";
 
 .modal{
     position: fixed;
@@ -21,12 +21,12 @@
     align-items: center;
     justify-content: center;
     border-radius: 1%;
+    padding: 1rem;
 }
 .modalboton{
     background-color:$btn-color ;
     color: $btn-text-color;
-    align-items: center;
-    margin-left: 45%;
+    margin-left: 95%;
     border-radius: 15%;
 }
 .title{

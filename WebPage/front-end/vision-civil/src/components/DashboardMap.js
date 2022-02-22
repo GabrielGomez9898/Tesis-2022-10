@@ -63,12 +63,16 @@ const DashboardMap = (props) => {
     }
 
     const markers = [...Array(reports.length)].map((value, i) => {
-        <Marker position={reports[i]} />
+        return(
+        <Marker position={{lat: reports[i].lat , lng : reports[i].lng}} />)
     })
-
+    
     return(
         <Map google={props.google} zoom={16} style={mapStyles} initialCenter={initialCenter}>
-            {markers}
+            {reports.map((elemento,i) => {
+                return(
+        <Marker key = {i} position={reports[i]} />)
+    })}
         </Map>
     );
 }

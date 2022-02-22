@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../styles/Crime_list.scss";
-import Maps from "./Maps";
+import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
 
 const Crime_info = [
 	{
@@ -51,13 +51,17 @@ const Crime_list = () => {
   function getClass(index) {
     return index === activeObject?.id ? "active" : "inactive";
   }
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSn06808V8ZOQLN9iIQ1W9ok83cQCjDgg"> </script>
-
-  // here className can not be "inactive" since Modal always shows activeObject
+  const mapStyles = {
+    width: "43.5%",
+    height: "48%"
+}
   const Modal = ({ object: { Asunto, Descripcion , TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado} }) => (
     <div id="CrimeListtModal" className="active modal" >
 		<div className="modal-container">
+			<button className="modalboton" onClick={() => setShowModal(false)}>X</button>
+			<br></br>
 			<span>{Asunto}</span>
+			<br></br>
 			<span className="TipoAlerta">{TipoAlerta}</span>
 			<br></br>
 			<span className="Descripcion">{Descripcion}</span>
@@ -72,12 +76,9 @@ const Crime_list = () => {
 			<br></br>
 			<span className="estado">{estado}</span>
 			<br></br>
-			<Maps
-			latitud = {latitud}
-			longitud = {longitud}
-			apiKey={"AIzaSyDSn06808V8ZOQLN9iIQ1W9ok83cQCjDgg"}
-			/>
-			<button className="modalboton" onClick={() => setShowModal(false)}>Cerrar</button>
+			<Map google={google} zoom={16} style={mapStyles} initialCenter={{lat:latitud, lng : longitud}}>
+            <Marker position={{lat: latitud , lng:longitud}} />
+        	</Map>
 		</div>
     </div>
 	
@@ -91,7 +92,7 @@ const Crime_list = () => {
           <li
             key={id}
             onClick={() => {
-              setActiveObject({ id, Descripcion,TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado});
+              setActiveObject({ id, Asunto,Descripcion,TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado});
               setShowModal(true);
             }}
             className={getClass(id)}
