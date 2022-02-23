@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
+import 'package:vision_civil/src/ui/emergency_contacts.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,8 +20,14 @@ class HomeState extends State<HomePage> {
         appBar: AppBar(
           title: Text("Home Visión Civil"),
           leading: IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {},
+            icon: Icon(Icons.contacts),
+            onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => BlocProvider.value(
+                    value: BlocProvider.of<UserBloc>(context),
+                    child: ContactsPage()),
+              ));
+            },
           ),
           actions: <Widget>[
             IconButton(
