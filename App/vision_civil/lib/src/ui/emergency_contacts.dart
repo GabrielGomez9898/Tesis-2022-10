@@ -8,6 +8,8 @@ class ContactsPage extends StatefulWidget {
 }
 
 class ContactsPageState extends State<ContactsPage> {
+  String _newEmerContactName = "";
+  String _newEmerContactPhone = "";
   List<Contact> contacts = [];
 
   Future<PermissionStatus> _getPermission() async {
@@ -44,46 +46,61 @@ class ContactsPageState extends State<ContactsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text("Contactos de emergencia"),
-      ),
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          children: <Widget>[
-            Text("Contactos"),
-            TextFormField(
-              initialValue: "Gabriel",
-            ),
-            TextFormField(
-              initialValue: "Juan",
-            ),
-            TextFormField(
-              initialValue: "Diego",
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: contacts.length,
-              itemBuilder: (context, index) {
-                Contact contact = contacts[index];
-                String phone = " ";
-                try {
-                  phone = contact.phones!.first.value.toString();
-                  print(phone);
-                } catch (e) {
-                  print(e.toString());
-                  phone = " ";
-                }
-                return ListTile(
-                  title: Text(contact.displayName!),
-                  subtitle: phone != " " ? Text(phone) : Text("no phone"),
-                );
-              },
-            )
-          ],
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text("Contactos de emergencia"),
         ),
-      ),
-    );
+        body: ListView.builder(
+          shrinkWrap: true,
+          itemCount: contacts.length,
+          itemBuilder: (context, index) {
+            Contact contact = contacts[index];
+            String phone = " ";
+            try {
+              phone = contact.phones!.first.value.toString();
+            } catch (e) {
+              phone = " ";
+            }
+            return ListTile(
+              title: Text(contact.displayName!),
+              subtitle: phone != " " ? Text(phone) : Text("no phone"),
+              onTap: () {
+                setState(() {
+                  _newEmerContactName = contact.displayName!;
+                  _newEmerContactPhone = phone;
+                  showNewEmergencyContact(
+                      context, _newEmerContactName, _newEmerContactPhone);
+                });
+              },
+            );
+          },
+        ));
   }
+}
+
+showNewEmergencyContact(BuildContext context, name, phone) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text('Contacto de emrgencia agregado'),
+    content: Text('Nombre: ' + name + '\n' + 'Celular: ' + phone),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
 }
