@@ -13,7 +13,6 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
   List<Contact> contacts = [];
 
   Future<PermissionStatus> _getPermission() async {
-    print("entro a pedir permiso");
     PermissionStatus status = await Permission.contacts.request();
     print(status.toString());
 
@@ -25,10 +24,8 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
   }
 
   getAllContacts() async {
-    print("entro getAllContacts");
     final PermissionStatus permissionStatus = await _getPermission();
     if (permissionStatus == PermissionStatus.granted) {
-      print("entro al permsio");
       List<Contact> _contacts =
           (await ContactsService.getContacts(withThumbnails: false)).toList();
       setState(() {

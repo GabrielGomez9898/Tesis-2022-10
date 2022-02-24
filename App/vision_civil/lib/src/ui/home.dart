@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
@@ -23,8 +24,8 @@ class HomeState extends State<HomePage> {
             icon: Icon(Icons.contacts),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider.value(
-                    value: BlocProvider.of<UserBloc>(context),
+                builder: (_) => BlocProvider(
+                    create: (BuildContext context) => ContactsblocBloc(),
                     child: ContactsPage()),
               ));
             },
