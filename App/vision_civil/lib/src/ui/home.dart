@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/ui/contacts.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
-import 'package:vision_civil/src/ui/emergency_contacts.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 
 class HomePage extends StatefulWidget {

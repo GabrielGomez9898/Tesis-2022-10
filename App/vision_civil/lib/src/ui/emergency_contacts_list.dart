@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:permission_handler/permission_handler.dart';
 
-class ContactsPage extends StatefulWidget {
+class EmergencyContactsPage extends StatefulWidget {
   @override
-  ContactsPageState createState() => ContactsPageState();
+  EmergencyContactsPageState createState() => EmergencyContactsPageState();
 }
 
-class ContactsPageState extends State<ContactsPage> {
+class EmergencyContactsPageState extends State<EmergencyContactsPage> {
   String _newEmerContactName = "";
   String _newEmerContactPhone = "";
   List<Contact> contacts = [];
