@@ -1,5 +1,12 @@
+import Navbar from "../components/Navbar";
+
 const ControlPage = () => {
-    return <div className="content">ControlPage</div>;
+    return (
+        <div>
+            <Navbar/>
+            <div className="content-container">ControlPage</div>
+        </div>
+    );
 };
 
 export default ControlPage;

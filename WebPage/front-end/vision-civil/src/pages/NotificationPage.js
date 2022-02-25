@@ -1,5 +1,12 @@
+import Navbar from "../components/Navbar";
+
 const NotificationPage = () => {
-    return <div className="content">NotificationPage</div>;
+    return (
+        <div>
+            <Navbar/>
+            <div className="content-container">NotificationPage</div>
+        </div>
+    );
 };
 
 export default NotificationPage;
