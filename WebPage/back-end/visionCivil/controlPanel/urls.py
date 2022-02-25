@@ -3,6 +3,7 @@ from . import views
 
 #urlConf
 urlpatterns = [
-    path("hello/", views.getHelloWorld),
-    path("reports/", views.getFilteredReports)
+    path("report", views.getReportById),
+    path("reports/", views.getAllReports),
+    path("filteredReports", views.getFilteredReports)
 ]
