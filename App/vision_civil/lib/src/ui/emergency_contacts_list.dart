@@ -7,6 +7,9 @@ import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
 
 class EmergencyContactsPage extends StatefulWidget {
+  EmergencyContactsPage({Key? key, required this.uniqueIDContact})
+      : super(key: key);
+  String uniqueIDContact;
   @override
   EmergencyContactsPageState createState() => EmergencyContactsPageState();
 }
@@ -66,12 +69,8 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               title: Text(contact.displayName!),
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => MultiBlocProvider(providers: [
-                    BlocProvider.value(
-                        value: BlocProvider.of<ContactsblocBloc>(context)),
-                  ], child: ContactsPage()),
-                ));
+                print(
+                    "Quiere cambiar el contacto id: " + widget.uniqueIDContact);
                 /* setState(() {
                   _newEmerContactName = contact.displayName!;
                   _newEmerContactPhone = phone;

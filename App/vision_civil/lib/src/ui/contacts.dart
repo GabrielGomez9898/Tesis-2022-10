@@ -78,12 +78,20 @@ class ContactsPageState extends State<ContactsPage> {
                         SizedBox(width: 50),
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EmergencyContactsPage()),
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<UserBloc>(
+                                              context)),
+                                      BlocProvider.value(
+                                          value:
+                                              BlocProvider.of<ContactsblocBloc>(
+                                                  context))
+                                    ],
+                                    child: EmergencyContactsPage(
+                                        uniqueIDContact: uniqueContact1)),
+                              ));
                             },
                             child: Text("Cambiar contacto"))
                       ],
@@ -95,12 +103,20 @@ class ContactsPageState extends State<ContactsPage> {
                         SizedBox(width: 50),
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EmergencyContactsPage()),
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<UserBloc>(
+                                              context)),
+                                      BlocProvider.value(
+                                          value:
+                                              BlocProvider.of<ContactsblocBloc>(
+                                                  context))
+                                    ],
+                                    child: EmergencyContactsPage(
+                                        uniqueIDContact: uniqueContact2)),
+                              ));
                             },
                             child: Text("Cambiar contacto"))
                       ],
@@ -112,12 +128,20 @@ class ContactsPageState extends State<ContactsPage> {
                         SizedBox(width: 50),
                         ElevatedButton(
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EmergencyContactsPage()),
-                              );
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<UserBloc>(
+                                              context)),
+                                      BlocProvider.value(
+                                          value:
+                                              BlocProvider.of<ContactsblocBloc>(
+                                                  context))
+                                    ],
+                                    child: EmergencyContactsPage(
+                                        uniqueIDContact: uniqueContact3)),
+                              ));
                             },
                             child: Text("Cambiar contacto"))
                       ],
