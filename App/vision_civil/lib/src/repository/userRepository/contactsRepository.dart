@@ -10,25 +10,6 @@ class ContactsDB {
   }
 
   Future<QuerySnapshot> getEmergencyContacts(String idUser) async {
-    await FirebaseFirestore.instance
-        .collection('emergency_contacts')
-        .where('id_user', isEqualTo: idUser)
-        .get()
-        .then((QuerySnapshot querySnapshot) {
-      querySnapshot.docs.forEach((doc) {
-        /*
-        print(doc.id);
-        print(doc['contact']);
-        print(doc["contact_name"]);
-        print(doc["contact_phone"]);
-        print(doc['id_user']);*/
-      });
-    });
-    /*
-    QuerySnapshot querySnap = await FirebaseFirestore.instance
-        .collection('emergency_contacts')
-        .where('id_user', isEqualTo: idUser)
-        .get();*/
     Future<QuerySnapshot> docs = FirebaseFirestore.instance
         .collection('emergency_contacts')
         .where('id_user', isEqualTo: idUser)

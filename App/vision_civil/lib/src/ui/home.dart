@@ -24,9 +24,11 @@ class HomeState extends State<HomePage> {
             icon: Icon(Icons.contacts),
             onPressed: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => BlocProvider(
-                    create: (BuildContext context) => ContactsblocBloc(),
-                    child: ContactsPage()),
+                builder: (_) => MultiBlocProvider(providers: [
+                  BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
+                  BlocProvider(
+                      create: (BuildContext context) => ContactsblocBloc())
+                ], child: ContactsPage()),
               ));
             },
           ),

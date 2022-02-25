@@ -7,4 +7,12 @@ abstract class ContactsblocEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetUserContacts extends ContactsblocEvent {}
+/*No borrar comentarios de ignore*/
+// ignore: must_be_immutable
+class GetUserContactsEvent extends ContactsblocEvent {
+  String userID = " ";
+
+  GetUserContactsEvent(String _userID) {
+    this.userID = _userID;
+  }
+}

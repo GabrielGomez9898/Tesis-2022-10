@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/ui/contacts.dart';
 
 class EmergencyContactsPage extends StatefulWidget {
   @override
@@ -62,12 +66,19 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               title: Text(contact.displayName!),
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
-                setState(() {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(providers: [
+                    BlocProvider.value(
+                        value: BlocProvider.of<ContactsblocBloc>(context)),
+                  ], child: ContactsPage()),
+                ));
+                /* setState(() {
                   _newEmerContactName = contact.displayName!;
                   _newEmerContactPhone = phone;
-                  showNewEmergencyContact(
-                      context, _newEmerContactName, _newEmerContactPhone);
-                });
+
+                  //showNewEmergencyContact(
+                      //context, _newEmerContactName, _newEmerContactPhone);
+                });*/
               },
             );
           },
