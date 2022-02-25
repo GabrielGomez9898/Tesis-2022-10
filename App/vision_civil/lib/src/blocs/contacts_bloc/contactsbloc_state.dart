@@ -1,5 +1,6 @@
 part of 'contactsbloc_bloc.dart';
 
 class ContactsblocState {
-  ContactsblocState();
+  List<EmergencyContact> emergencyUserContacts;
+  ContactsblocState({required this.emergencyUserContacts});
 }
