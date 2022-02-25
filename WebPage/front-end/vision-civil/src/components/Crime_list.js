@@ -53,7 +53,7 @@ const Crime_list = () => {
   }
   const mapStyles = {
     width: "43.5%",
-    height: "48%"
+    height: "46%"
 }
   const Modal = ({ object: { Asunto, Descripcion , TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado} }) => (
     <div id="CrimeListtModal" className="active modal" >
