@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/models/emergency_contact.dart';
 import 'package:vision_civil/src/ui/emergency_contacts_list.dart';
 
 class ContactsPage extends StatefulWidget {
@@ -10,17 +11,12 @@ class ContactsPage extends StatefulWidget {
 }
 
 class ContactsPageState extends State<ContactsPage> {
-  String uniqueContact1 = " ",
-      contactName1 = "Cargando...",
-      contactPhone1 = " ";
-  String uniqueContact2 = " ",
-      contactName2 = "Cargando...",
-      contactPhone2 = " ";
-  String uniqueContact3 = " ",
-      contactName3 = "Cargando...",
-      contactPhone3 = " ";
-  int contactID1 = 0, contactID2 = 0, contactID3 = 0;
-
+  EmergencyContact emergencyContact1 =
+      new EmergencyContact(" ", 0, "Cargando...", " ");
+  EmergencyContact emergencyContact2 =
+      new EmergencyContact(" ", 0, "Cargando... ", " ");
+  EmergencyContact emergencyContact3 =
+      new EmergencyContact(" ", 0, "Cargando... ", " ");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,34 +33,49 @@ class ContactsPageState extends State<ContactsPage> {
                 listener: (context, state) {
                   setState(() {
                     try {
-                      uniqueContact1 = state.emergencyUserContacts[0].id;
-                      contactID1 = state.emergencyUserContacts[0].contact;
-                      contactName1 = state.emergencyUserContacts[0].contactName;
-                      contactPhone1 =
-                          state.emergencyUserContacts[0].contactPhone;
+                      emergencyContact1
+                          .setUniqueId(state.emergencyUserContacts[0].uniqueid);
+                      emergencyContact1
+                          .setContact(state.emergencyUserContacts[0].contact);
+                      emergencyContact1.setContactName(
+                          state.emergencyUserContacts[0].contactName);
+                      emergencyContact1.setContactPhone(
+                          state.emergencyUserContacts[0].contactPhone);
                     } catch (e) {
-                      uniqueContact1 = " ";
-                      contactName1 = " ";
+                      emergencyContact1.setUniqueId(" ");
+                      emergencyContact1.setContact(0);
+                      emergencyContact1.setContactName(" ");
+                      emergencyContact1.setContactPhone(" ");
                     }
                     try {
-                      uniqueContact2 = state.emergencyUserContacts[1].id;
-                      contactID2 = state.emergencyUserContacts[1].contact;
-                      contactName2 = state.emergencyUserContacts[1].contactName;
-                      contactPhone2 =
-                          state.emergencyUserContacts[1].contactPhone;
+                      emergencyContact2
+                          .setUniqueId(state.emergencyUserContacts[1].uniqueid);
+                      emergencyContact2
+                          .setContact(state.emergencyUserContacts[1].contact);
+                      emergencyContact2.setContactName(
+                          state.emergencyUserContacts[1].contactName);
+                      emergencyContact2.setContactPhone(
+                          state.emergencyUserContacts[1].contactPhone);
                     } catch (e) {
-                      uniqueContact2 = " ";
-                      contactName2 = " ";
+                      emergencyContact2.setUniqueId(" ");
+                      emergencyContact2.setContact(0);
+                      emergencyContact2.setContactName(" ");
+                      emergencyContact2.setContactPhone(" ");
                     }
                     try {
-                      uniqueContact3 = state.emergencyUserContacts[2].id;
-                      contactID3 = state.emergencyUserContacts[2].contact;
-                      contactName3 = state.emergencyUserContacts[2].contactName;
-                      contactPhone3 =
-                          state.emergencyUserContacts[2].contactPhone;
+                      emergencyContact3
+                          .setUniqueId(state.emergencyUserContacts[2].uniqueid);
+                      emergencyContact3
+                          .setContact(state.emergencyUserContacts[2].contact);
+                      emergencyContact3.setContactName(
+                          state.emergencyUserContacts[2].contactName);
+                      emergencyContact3.setContactPhone(
+                          state.emergencyUserContacts[2].contactPhone);
                     } catch (e) {
-                      uniqueContact3 = " ";
-                      contactName3 = " ";
+                      emergencyContact3.setUniqueId(" ");
+                      emergencyContact3.setContact(0);
+                      emergencyContact3.setContactName(" ");
+                      emergencyContact3.setContactPhone(" ");
                     }
                   });
                 },
@@ -74,7 +85,7 @@ class ContactsPageState extends State<ContactsPage> {
                     Row(
                       children: [
                         SizedBox(width: 50),
-                        Text(contactName1),
+                        Text(emergencyContact1.contactName),
                         SizedBox(width: 50),
                         ElevatedButton(
                             onPressed: () {
@@ -90,7 +101,7 @@ class ContactsPageState extends State<ContactsPage> {
                                                   context))
                                     ],
                                     child: EmergencyContactsPage(
-                                        uniqueIDContact: uniqueContact1)),
+                                        emergencyContact: emergencyContact1)),
                               ));
                             },
                             child: Text("Cambiar contacto"))
@@ -99,7 +110,7 @@ class ContactsPageState extends State<ContactsPage> {
                     Row(
                       children: [
                         SizedBox(width: 50),
-                        Text(contactName2),
+                        Text(emergencyContact2.contactName),
                         SizedBox(width: 50),
                         ElevatedButton(
                             onPressed: () {
@@ -115,7 +126,7 @@ class ContactsPageState extends State<ContactsPage> {
                                                   context))
                                     ],
                                     child: EmergencyContactsPage(
-                                        uniqueIDContact: uniqueContact2)),
+                                        emergencyContact: emergencyContact2)),
                               ));
                             },
                             child: Text("Cambiar contacto"))
@@ -124,7 +135,7 @@ class ContactsPageState extends State<ContactsPage> {
                     Row(
                       children: [
                         SizedBox(width: 50),
-                        Text(contactName3),
+                        Text(emergencyContact3.contactName),
                         SizedBox(width: 50),
                         ElevatedButton(
                             onPressed: () {
@@ -140,7 +151,7 @@ class ContactsPageState extends State<ContactsPage> {
                                                   context))
                                     ],
                                     child: EmergencyContactsPage(
-                                        uniqueIDContact: uniqueContact3)),
+                                        emergencyContact: emergencyContact3)),
                               ));
                             },
                             child: Text("Cambiar contacto"))

@@ -21,6 +21,12 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
             emit(ContactsblocState(emergencyUserContacts: emergencyContacts));
           });
         });
+      } else if (event is UpdateContactEvent) {
+        print("Quiere actualizar contacto");
+        print(event.uniqueID);
+        print(event.contact);
+        print(event.contactName);
+        print(event.contactPhone);
       }
     });
   }

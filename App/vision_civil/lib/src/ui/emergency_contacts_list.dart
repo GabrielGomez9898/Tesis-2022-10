@@ -4,12 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/models/emergency_contact.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
 
 class EmergencyContactsPage extends StatefulWidget {
-  EmergencyContactsPage({Key? key, required this.uniqueIDContact})
+  EmergencyContactsPage({Key? key, required this.emergencyContact})
       : super(key: key);
-  String uniqueIDContact;
+  EmergencyContact emergencyContact;
   @override
   EmergencyContactsPageState createState() => EmergencyContactsPageState();
 }
@@ -69,15 +70,12 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               title: Text(contact.displayName!),
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
-                print(
-                    "Quiere cambiar el contacto id: " + widget.uniqueIDContact);
-                /* setState(() {
-                  _newEmerContactName = contact.displayName!;
-                  _newEmerContactPhone = phone;
-
-                  //showNewEmergencyContact(
-                      //context, _newEmerContactName, _newEmerContactPhone);
-                });*/
+                BlocProvider.of<ContactsblocBloc>(context).add(
+                    UpdateContactEvent(
+                        widget.emergencyContact.uniqueid,
+                        widget.emergencyContact.contact,
+                        widget.emergencyContact.contactName,
+                        widget.emergencyContact.contactPhone));
               },
             );
           },
