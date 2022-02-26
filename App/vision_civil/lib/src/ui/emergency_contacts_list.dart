@@ -74,8 +74,8 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
                     UpdateContactEvent(
                         widget.emergencyContact.uniqueid,
                         widget.emergencyContact.contact,
-                        widget.emergencyContact.contactName,
-                        widget.emergencyContact.contactPhone));
+                        contact.displayName!,
+                        phone));
               },
             );
           },
