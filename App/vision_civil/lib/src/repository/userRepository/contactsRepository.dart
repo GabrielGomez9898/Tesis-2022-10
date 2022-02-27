@@ -19,12 +19,19 @@ class ContactsDB {
 
   void updateContact(
       String _uniqueID, String _contactName, String _contactPhone) async {
-    //Get contact to update
-    print(_uniqueID);
     await FirebaseFirestore.instance
         .collection('emergency_contacts')
         .doc(_uniqueID)
         .update({'contact_name': _contactName, 'contact_phone': _contactPhone});
+  }
+
+  void addContact(
+      String _contactName, String _contactPhone, String _idUser) async {
+    await db.collection('emergency_contacts').add({
+      'contact_name': _contactName,
+      'contact_phone': _contactPhone,
+      'id_user': _idUser
+    });
   }
 }
 

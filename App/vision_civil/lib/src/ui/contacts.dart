@@ -78,24 +78,28 @@ class ContactsPageState extends State<ContactsPage> {
                         SizedBox(width: 50),
                         Text(emergencyContact1.contactName),
                         SizedBox(width: 50),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(
-                                          value: BlocProvider.of<UserBloc>(
-                                              context)),
-                                      BlocProvider.value(
-                                          value:
-                                              BlocProvider.of<ContactsblocBloc>(
-                                                  context))
-                                    ],
-                                    child: EmergencyContactsPage(
-                                        emergencyContact: emergencyContact1)),
-                              ));
-                            },
-                            child: Text("Cambiar contacto"))
+                        BlocBuilder<UserBloc, UserblocState>(
+                          builder: (context, state) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<UserBloc>(
+                                                  context)),
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<
+                                                  ContactsblocBloc>(context))
+                                        ],
+                                        child: EmergencyContactsPage(
+                                            emergencyContact: emergencyContact1,
+                                            idUser: state.userID)),
+                                  ));
+                                },
+                                child: Text("Cambiar contacto"));
+                          },
+                        )
                       ],
                     ),
                     Row(
@@ -103,24 +107,28 @@ class ContactsPageState extends State<ContactsPage> {
                         SizedBox(width: 50),
                         Text(emergencyContact2.contactName),
                         SizedBox(width: 50),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(
-                                          value: BlocProvider.of<UserBloc>(
-                                              context)),
-                                      BlocProvider.value(
-                                          value:
-                                              BlocProvider.of<ContactsblocBloc>(
-                                                  context))
-                                    ],
-                                    child: EmergencyContactsPage(
-                                        emergencyContact: emergencyContact2)),
-                              ));
-                            },
-                            child: Text("Cambiar contacto"))
+                        BlocBuilder<UserBloc, UserblocState>(
+                          builder: (context, state) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<UserBloc>(
+                                                  context)),
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<
+                                                  ContactsblocBloc>(context))
+                                        ],
+                                        child: EmergencyContactsPage(
+                                            emergencyContact: emergencyContact2,
+                                            idUser: state.userID)),
+                                  ));
+                                },
+                                child: Text("Cambiar contacto"));
+                          },
+                        )
                       ],
                     ),
                     Row(
@@ -128,24 +136,28 @@ class ContactsPageState extends State<ContactsPage> {
                         SizedBox(width: 50),
                         Text(emergencyContact3.contactName),
                         SizedBox(width: 50),
-                        ElevatedButton(
-                            onPressed: () {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => MultiBlocProvider(
-                                    providers: [
-                                      BlocProvider.value(
-                                          value: BlocProvider.of<UserBloc>(
-                                              context)),
-                                      BlocProvider.value(
-                                          value:
-                                              BlocProvider.of<ContactsblocBloc>(
-                                                  context))
-                                    ],
-                                    child: EmergencyContactsPage(
-                                        emergencyContact: emergencyContact3)),
-                              ));
-                            },
-                            child: Text("Cambiar contacto"))
+                        BlocBuilder<UserBloc, UserblocState>(
+                          builder: (context, state) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (_) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<UserBloc>(
+                                                  context)),
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<
+                                                  ContactsblocBloc>(context))
+                                        ],
+                                        child: EmergencyContactsPage(
+                                            emergencyContact: emergencyContact3,
+                                            idUser: state.userID)),
+                                  ));
+                                },
+                                child: Text("Cambiar contacto"));
+                          },
+                        )
                       ],
                     ),
                   ],

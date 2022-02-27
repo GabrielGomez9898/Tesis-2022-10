@@ -29,6 +29,8 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
         print(event.contactName);
         print(event.contactPhone);
       } else if (event is AddContactEvent) {
+        contactsdb.addContact(
+            event.contactName, event.contactPhone, event.idUser);
         print("Quiere agregar un nuevo contacto");
         print(event.contactName);
         print(event.contactPhone);

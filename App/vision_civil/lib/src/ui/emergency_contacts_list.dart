@@ -8,9 +8,11 @@ import 'package:vision_civil/src/models/emergency_contact.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
 
 class EmergencyContactsPage extends StatefulWidget {
-  EmergencyContactsPage({Key? key, required this.emergencyContact})
+  EmergencyContactsPage(
+      {Key? key, required this.emergencyContact, required this.idUser})
       : super(key: key);
   EmergencyContact emergencyContact;
+  String idUser;
   @override
   EmergencyContactsPageState createState() => EmergencyContactsPageState();
 }
@@ -70,9 +72,15 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               title: Text(contact.displayName!),
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
-                BlocProvider.of<ContactsblocBloc>(context).add(
-                    UpdateContactEvent(widget.emergencyContact.uniqueid,
-                        contact.displayName!, phone));
+                if (widget.emergencyContact.uniqueid == " ") {
+                  BlocProvider.of<ContactsblocBloc>(context).add(
+                      AddContactEvent(
+                          contact.displayName!, phone, widget.idUser));
+                } else {
+                  BlocProvider.of<ContactsblocBloc>(context).add(
+                      UpdateContactEvent(widget.emergencyContact.uniqueid,
+                          contact.displayName!, phone));
+                }
               },
             );
           },
