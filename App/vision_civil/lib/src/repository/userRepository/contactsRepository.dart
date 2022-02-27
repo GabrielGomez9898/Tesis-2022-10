@@ -17,8 +17,8 @@ class ContactsDB {
     return docs;
   }
 
-  void updateContact(String _uniqueID, int _contact, String _contactName,
-      String _contactPhone) async {
+  void updateContact(
+      String _uniqueID, String _contactName, String _contactPhone) async {
     //Get contact to update
     print(_uniqueID);
     await FirebaseFirestore.instance

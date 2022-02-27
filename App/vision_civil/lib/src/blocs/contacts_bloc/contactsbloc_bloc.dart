@@ -16,17 +16,16 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
             contactsdb.getEmergencyContacts(event.userID);
         await contacts.then((QuerySnapshot querySnapshot) {
           querySnapshot.docs.forEach((doc) {
-            emergencyContacts.add(EmergencyContact(doc.id, doc['contact'],
-                doc["contact_name"], doc["contact_phone"]));
+            emergencyContacts.add(EmergencyContact(
+                doc.id, doc["contact_name"], doc["contact_phone"]));
             emit(ContactsblocState(emergencyUserContacts: emergencyContacts));
           });
         });
       } else if (event is UpdateContactEvent) {
-        contactsdb.updateContact(event.uniqueID, event.contact,
-            event.contactName, event.contactPhone);
+        contactsdb.updateContact(
+            event.uniqueID, event.contactName, event.contactPhone);
         print("Quiere actualizar contacto");
         print(event.uniqueID);
-        print(event.contact);
         print(event.contactName);
         print(event.contactPhone);
       }

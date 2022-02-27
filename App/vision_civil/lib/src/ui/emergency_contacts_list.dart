@@ -71,11 +71,8 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
                 BlocProvider.of<ContactsblocBloc>(context).add(
-                    UpdateContactEvent(
-                        widget.emergencyContact.uniqueid,
-                        widget.emergencyContact.contact,
-                        contact.displayName!,
-                        phone));
+                    UpdateContactEvent(widget.emergencyContact.uniqueid,
+                        contact.displayName!, phone));
               },
             );
           },

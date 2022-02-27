@@ -12,11 +12,11 @@ class ContactsPage extends StatefulWidget {
 
 class ContactsPageState extends State<ContactsPage> {
   EmergencyContact emergencyContact1 =
-      new EmergencyContact(" ", 0, "Cargando...", " ");
+      new EmergencyContact(" ", "Cargando...", " ");
   EmergencyContact emergencyContact2 =
-      new EmergencyContact(" ", 0, "Cargando... ", " ");
+      new EmergencyContact(" ", "Cargando... ", " ");
   EmergencyContact emergencyContact3 =
-      new EmergencyContact(" ", 0, "Cargando... ", " ");
+      new EmergencyContact(" ", "Cargando... ", " ");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,45 +35,36 @@ class ContactsPageState extends State<ContactsPage> {
                     try {
                       emergencyContact1
                           .setUniqueId(state.emergencyUserContacts[0].uniqueid);
-                      emergencyContact1
-                          .setContact(state.emergencyUserContacts[0].contact);
                       emergencyContact1.setContactName(
                           state.emergencyUserContacts[0].contactName);
                       emergencyContact1.setContactPhone(
                           state.emergencyUserContacts[0].contactPhone);
                     } catch (e) {
                       emergencyContact1.setUniqueId(" ");
-                      emergencyContact1.setContact(0);
                       emergencyContact1.setContactName(" ");
                       emergencyContact1.setContactPhone(" ");
                     }
                     try {
                       emergencyContact2
                           .setUniqueId(state.emergencyUserContacts[1].uniqueid);
-                      emergencyContact2
-                          .setContact(state.emergencyUserContacts[1].contact);
                       emergencyContact2.setContactName(
                           state.emergencyUserContacts[1].contactName);
                       emergencyContact2.setContactPhone(
                           state.emergencyUserContacts[1].contactPhone);
                     } catch (e) {
                       emergencyContact2.setUniqueId(" ");
-                      emergencyContact2.setContact(0);
                       emergencyContact2.setContactName(" ");
                       emergencyContact2.setContactPhone(" ");
                     }
                     try {
                       emergencyContact3
                           .setUniqueId(state.emergencyUserContacts[2].uniqueid);
-                      emergencyContact3
-                          .setContact(state.emergencyUserContacts[2].contact);
                       emergencyContact3.setContactName(
                           state.emergencyUserContacts[2].contactName);
                       emergencyContact3.setContactPhone(
                           state.emergencyUserContacts[2].contactPhone);
                     } catch (e) {
                       emergencyContact3.setUniqueId(" ");
-                      emergencyContact3.setContact(0);
                       emergencyContact3.setContactName(" ");
                       emergencyContact3.setContactPhone(" ");
                     }
