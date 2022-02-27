@@ -42,7 +42,7 @@ class ReportDB {
 
       await documentReference.update({'folder_path': folderPath});
       // se guardan las fotos junto con sus ids para el facil acceso en web
-      String imagesids = " ";
+      String imagesids = "";
       for (var i = 0; i < images.length; i++) {
         var imageID = Uuid().v1();
         imagesids += imageID + ",";

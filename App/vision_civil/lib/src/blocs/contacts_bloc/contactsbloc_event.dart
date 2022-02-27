@@ -30,3 +30,16 @@ class UpdateContactEvent extends ContactsblocEvent {
     this.contactPhone = _contactPhone;
   }
 }
+
+// ignore: must_be_immutable
+class AddContactEvent extends ContactsblocEvent {
+  String contactName = " ";
+  String contactPhone = " ";
+  String idUser = " ";
+
+  AddContactEvent(String _contactName, String _contactPhone, String _idUser) {
+    this.contactName = _contactName;
+    this.contactPhone = _contactPhone;
+    this.idUser = _idUser;
+  }
+}
