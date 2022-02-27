@@ -24,17 +24,11 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
       } else if (event is UpdateContactEvent) {
         contactsdb.updateContact(
             event.uniqueID, event.contactName, event.contactPhone);
-        print("Quiere actualizar contacto");
-        print(event.uniqueID);
-        print(event.contactName);
-        print(event.contactPhone);
       } else if (event is AddContactEvent) {
         contactsdb.addContact(
             event.contactName, event.contactPhone, event.idUser);
-        print("Quiere agregar un nuevo contacto");
-        print(event.contactName);
-        print(event.contactPhone);
-        print(event.idUser);
+      } else if (event is DeleteContactEvent) {
+        contactsdb.deleteContact(event.uniqueID);
       }
     });
   }

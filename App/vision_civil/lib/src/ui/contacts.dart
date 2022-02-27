@@ -11,12 +11,9 @@ class ContactsPage extends StatefulWidget {
 }
 
 class ContactsPageState extends State<ContactsPage> {
-  EmergencyContact emergencyContact1 =
-      new EmergencyContact(" ", "Cargando...", " ");
-  EmergencyContact emergencyContact2 =
-      new EmergencyContact(" ", "Cargando... ", " ");
-  EmergencyContact emergencyContact3 =
-      new EmergencyContact(" ", "Cargando... ", " ");
+  EmergencyContact emergencyContact1 = new EmergencyContact(" ", "...", " ");
+  EmergencyContact emergencyContact2 = new EmergencyContact(" ", "... ", " ");
+  EmergencyContact emergencyContact3 = new EmergencyContact(" ", "... ", " ");
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -70,17 +67,17 @@ class ContactsPageState extends State<ContactsPage> {
                     }
                   });
                 },
-                child: Column(
-                  children: [
-                    Text("Mis contactos"),
-                    Row(
+                child: BlocBuilder<UserBloc, UserblocState>(
+                  builder: (context, state) {
+                    return Column(
                       children: [
-                        SizedBox(width: 50),
-                        Text(emergencyContact1.contactName),
-                        SizedBox(width: 50),
-                        BlocBuilder<UserBloc, UserblocState>(
-                          builder: (context, state) {
-                            return ElevatedButton(
+                        Text("Mis contactos"),
+                        Row(
+                          children: [
+                            SizedBox(width: 25),
+                            Text(emergencyContact1.contactName),
+                            SizedBox(width: 25),
+                            ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => MultiBlocProvider(
@@ -97,19 +94,23 @@ class ContactsPageState extends State<ContactsPage> {
                                             idUser: state.userID)),
                                   ));
                                 },
-                                child: Text("Cambiar contacto"));
-                          },
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 50),
-                        Text(emergencyContact2.contactName),
-                        SizedBox(width: 50),
-                        BlocBuilder<UserBloc, UserblocState>(
-                          builder: (context, state) {
-                            return ElevatedButton(
+                                child: Text("Cambiar contacto")),
+                            SizedBox(width: 25),
+                            ElevatedButton(
+                                onPressed: () {
+                                  BlocProvider.of<ContactsblocBloc>(context)
+                                      .add(DeleteContactEvent(
+                                          emergencyContact1.uniqueid));
+                                },
+                                child: Icon(Icons.delete))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(width: 25),
+                            Text(emergencyContact2.contactName),
+                            SizedBox(width: 25),
+                            ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => MultiBlocProvider(
@@ -126,19 +127,23 @@ class ContactsPageState extends State<ContactsPage> {
                                             idUser: state.userID)),
                                   ));
                                 },
-                                child: Text("Cambiar contacto"));
-                          },
-                        )
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        SizedBox(width: 50),
-                        Text(emergencyContact3.contactName),
-                        SizedBox(width: 50),
-                        BlocBuilder<UserBloc, UserblocState>(
-                          builder: (context, state) {
-                            return ElevatedButton(
+                                child: Text("Cambiar contacto")),
+                            SizedBox(width: 25),
+                            ElevatedButton(
+                                onPressed: () {
+                                  BlocProvider.of<ContactsblocBloc>(context)
+                                      .add(DeleteContactEvent(
+                                          emergencyContact2.uniqueid));
+                                },
+                                child: Icon(Icons.delete))
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            SizedBox(width: 25),
+                            Text(emergencyContact3.contactName),
+                            SizedBox(width: 25),
+                            ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
                                     builder: (_) => MultiBlocProvider(
@@ -155,12 +160,20 @@ class ContactsPageState extends State<ContactsPage> {
                                             idUser: state.userID)),
                                   ));
                                 },
-                                child: Text("Cambiar contacto"));
-                          },
-                        )
+                                child: Text("Cambiar contacto")),
+                            SizedBox(width: 25),
+                            ElevatedButton(
+                                onPressed: () {
+                                  BlocProvider.of<ContactsblocBloc>(context)
+                                      .add(DeleteContactEvent(
+                                          emergencyContact3.uniqueid));
+                                },
+                                child: Icon(Icons.delete))
+                          ],
+                        ),
                       ],
-                    ),
-                  ],
+                    );
+                  },
                 ),
               ),
             );

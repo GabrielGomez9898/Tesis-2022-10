@@ -33,6 +33,10 @@ class ContactsDB {
       'id_user': _idUser
     });
   }
+
+  void deleteContact(String _uniqueID) async {
+    await db.collection('emergency_contacts').doc(_uniqueID).delete();
+  }
 }
 
 ContactsDB contactsdb = ContactsDB();

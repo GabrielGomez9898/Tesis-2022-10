@@ -3,10 +3,10 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
-import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/models/emergency_contact.dart';
-import 'package:vision_civil/src/ui/contacts.dart';
 
+/*No borrar comentarios de ignore*/
+// ignore: must_be_immutable
 class EmergencyContactsPage extends StatefulWidget {
   EmergencyContactsPage(
       {Key? key, required this.emergencyContact, required this.idUser})
@@ -18,8 +18,6 @@ class EmergencyContactsPage extends StatefulWidget {
 }
 
 class EmergencyContactsPageState extends State<EmergencyContactsPage> {
-  String _newEmerContactName = "";
-  String _newEmerContactPhone = "";
   List<Contact> contacts = [];
 
   Future<PermissionStatus> _getPermission() async {
@@ -76,10 +74,12 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       AddContactEvent(
                           contact.displayName!, phone, widget.idUser));
+                  Navigator.pop(context);
                 } else {
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       UpdateContactEvent(widget.emergencyContact.uniqueid,
                           contact.displayName!, phone));
+                  Navigator.pop(context);
                 }
               },
             );
