@@ -8,10 +8,11 @@ const MapFilterCard = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        getMapData();
     }
 
     const getMapData = () => {
-        Axios.get("http://127.0.0.1:8000/controlPanel/filteredReports?period=LAST_DAY&reportType=VIOLACION").then((response) => {
+        Axios.get("http://127.0.0.1:8000/controlPanel/filteredReports?period=LAST_WEEK&reportType=VIOLACION").then((response) => {
             console.log(response);
         });
     }
