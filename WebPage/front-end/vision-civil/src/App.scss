@@ -5,6 +5,7 @@
   font-size: 16px;
   font-family: 'Spline Sans', sans-serif;
   font-weight: bold;
+  overflow-x: hidden;
 }
 
 body {
@@ -29,6 +30,12 @@ body::-webkit-scrollbar-thumb {
 .content-container {
   margin-left: 5rem; //rem es una unidad relativa al tamaño de la fuente seleccionado en el tag root, en este caso sería 5 * 16px = 85px
   padding: 1rem;
+
+  background: rgb(255,94,249);
+  background: -moz-linear-gradient(225deg, rgba(255,94,249,1) 0%, rgba(125,172,251,1) 50%, rgba(104,185,251,1) 100%);
+  background: -webkit-linear-gradient(225deg, rgba(255,94,249,1) 0%, rgba(125,172,251,1) 50%, rgba(104,185,251,1) 100%);
+  background: linear-gradient(225deg, rgba(255,94,249,1) 0%, rgba(125,172,251,1) 50%, rgba(104,185,251,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff5ef9",endColorstr="#68b9fb",GradientType=1);
 }
 
 .center-children-container {
