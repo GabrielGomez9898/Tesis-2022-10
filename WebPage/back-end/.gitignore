@@ -1,3 +1,9 @@
+# firebase-admin
+serviceAccountKey.json
+
+# Visual Studio Code
+.vscode
+
 # Virtual Environment
 /backendVenv
 
