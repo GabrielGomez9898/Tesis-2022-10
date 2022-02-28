@@ -63,3 +63,43 @@ def getFilteredReports(request):
             reports.append(doc.to_dict())
 
     return JsonResponse(reports, safe = False)
+
+def getMapData(request):
+    if(request.method != "GET") or ("lowerDate" not in request.GET) or ("upperDate" not in request.GET) or ("reportType" not in request.GET):
+        return
+    
+    lowerDate = request.GET["lowerDate"].replace("-", "/")
+    upperDate = request.GET["upperDate"].replace("-", "/")
+    reportType = request.GET["reportType"]
+
+    docs = None
+    if(reportType != "TODOS"):
+        docs = db.collection("reports").where("tipo_reporte", "==", reportType).get()
+    else:
+        docs = db.collection("reports").get()
+
+    lowerDateList =  lowerDate.split("/", 2)
+    year = int(lowerDateList[0])
+    month = int(lowerDateList[1])
+    day = int(lowerDateList[2])
+    lowerDateTime = dt.date(year, month, day)
+
+    upperDateList = upperDate.split("/", 2)
+    year = int(upperDateList[0])
+    month = int(upperDateList[1])
+    day = int(upperDateList[2])
+    upperDateTime = dt.date(year, month, day)
+
+    coordinates = []
+    for doc in docs:
+        report = doc.to_dict()
+        reportDateList = report["fecha_hora"].split("/", 2)
+        reportDateList[2] = reportDateList[2].split(" | ")[0]
+        year = int(reportDateList[0])
+        month = int(reportDateList[1])
+        day = int(reportDateList[2])
+        reportDateTime = dt.date(year, month, day)
+        if(reportDateTime >= lowerDateTime and reportDateTime <= upperDateTime):
+            coordinates.append({"lat":report["latitude"], "lng":report["longitude"], "reportType":report["tipo_reporte"]})
+
+    return JsonResponse(coordinates, safe = False)

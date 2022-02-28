@@ -5,5 +5,6 @@ from . import views
 urlpatterns = [
     path("report", views.getReportById),
     path("reports/", views.getAllReports),
-    path("filteredReports", views.getFilteredReports)
+    path("filteredReports", views.getFilteredReports),
+    path("mapData", views.getMapData)
 ]
