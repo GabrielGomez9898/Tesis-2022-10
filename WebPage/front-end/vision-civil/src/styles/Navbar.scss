@@ -1,15 +1,19 @@
-@import "./Variables.scss";
+@import "./Variables.module.scss";
 
 .navbar {
     width: 5rem; //El ancho de la barra de navegación debe ser igual al margen que se dejó a la izquierda
-    height: 100vh; //vh es una unidad relativa al tamaño del viewport. 100vh va a ser 100% del alto del viewport
-    position: fixed;
+    height: 100vh; //vh es una unidad relativa al alto del viewport. 100vh va a ser 100% del alto del viewport
+    z-index: 1000; //Para que la barra de navegación se muestre al frente de cualquier otro elemento
+    position: fixed; //Para que la barra de navegación quede fija cuando se hace scroll
+
     background-color: $unselected-color;
     transition: width 200ms ease;
 }
 
 .navbar:hover {
     width: 18rem;
+
+    box-shadow: 2px 2px 8px grey;
 }
 
 .nav-list {

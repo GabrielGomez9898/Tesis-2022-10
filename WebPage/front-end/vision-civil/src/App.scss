@@ -1,10 +1,11 @@
-@import "./styles/Variables.scss";
+@import "./styles/Variables.module.scss";
 @import url('https://fonts.googleapis.com/css2?family=Manjari:wght@100;400;700&family=Spline+Sans:wght@300;400;500;600;700&display=swap');
 
 :root {
   font-size: 16px;
   font-family: 'Spline Sans', sans-serif;
   font-weight: bold;
+  overflow-x: hidden;
 }
 
 body {
@@ -26,7 +27,14 @@ body::-webkit-scrollbar-thumb {
   background: $selected-color;
 }
 
-.content {
+.content-container {
   margin-left: 5rem; //rem es una unidad relativa al tamaño de la fuente seleccionado en el tag root, en este caso sería 5 * 16px = 85px
   padding: 1rem;
+}
+
+.center-children-container {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

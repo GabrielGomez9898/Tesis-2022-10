@@ -1,8 +1,19 @@
 import "../styles/Navbar.scss";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { signOut } from "firebase/auth";
+import { auth, useAuthState } from "../firebase";
 
 const Navbar = () => {
     let navigate = useNavigate();
+
+    const { isAuthenticated } = useAuthState();
+
+    const exit = () => {
+        signOut(auth);
+        navigate("/login");
+        console.log(`AuthenticatedRoute: ${isAuthenticated}`)
+    }
+
     return (
         <nav className="navbar">
             <ul className="nav-list">
@@ -180,8 +191,14 @@ const Navbar = () => {
                     </a>
                 </li>
 
-                <li className="nav-item">
+                {/* <li className="nav-item">
                     <a className="nav-link">
+                        <span className="link-text">{user?.email}</span>
+                    </a>
+                </li> */}
+
+                <li className="nav-item">
+                    <a className="nav-link" onClick={exit}>
                         <svg
                             aria-hidden="true"
                             focusable="false"
