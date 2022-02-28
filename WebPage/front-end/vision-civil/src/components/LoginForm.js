@@ -36,7 +36,7 @@ const LoginForm = () => {
     return (
         <>
             {message && <Alert text={message} alertType="danger" isDeletable={false}/>}
-            <form className="form" onSubmit={login}>
+            <form className="login-form" onSubmit={login}>
                 <label htmlFor="email" id="email-label">Email</label><br/>
                 <input type="email" id="email" name="email" placeholder="Ingrese su email" required onChange={(e) => {setEmail(e.target.value)}}/><br/>
                 <label htmlFor="password" id="password-label">Contraseña</label><br/>

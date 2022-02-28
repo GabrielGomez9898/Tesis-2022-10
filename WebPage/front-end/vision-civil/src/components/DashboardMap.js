@@ -55,8 +55,8 @@ const DashboardMap = (props) => {
     ];
 
     const mapDimensions = {
-        width: "46.5vw",
-        height: "40vh",
+        width: "62.5vw",
+        height: "48vh",
         borderRadius: "15px"
     }
 
@@ -80,7 +80,7 @@ const DashboardMap = (props) => {
             {[...Array(reports.length)].map((value, i) => {
                 return (
                     props.hasCircleMarkers ? 
-                    <Circle center={reports[i]} radius={15} strokeColor="transparent" strokeOpacity={0} strokeWeight={5} fillColor="#FF0000" fillOpacity={0.35} /> : 
+                    <Circle center={reports[i]} radius={15} strokeColor="transparent" strokeOpacity={0} strokeWeight={5} fillColor="#FF0000" fillOpacity={0.4} /> : 
                     <Marker position={reports[i]}/>);
             })}
         </Map>
