@@ -1,8 +1,11 @@
+from pickle import NONE
 import re
+from tokenize import String
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from firestoreSettings import db
+from firestoreSettings import db , bucket
 import datetime as dt
+import numpy as np
 
 def getReportById(request):
     if (request.method != "GET"):
@@ -16,11 +19,24 @@ def getAllReports(request):
         return
 
     docs = db.collection("reports").get()
-    
     reports = []
+    i = 0
     for doc in docs:
-        reports.append(doc.to_dict())
-
+        fotos = []
+        report = doc.to_dict()
+        report["id"] = i
+        i += 1
+        keys = report.keys()
+        if('images_ids' in keys):
+            images = [str(x) for x in doc.get('images_ids').split(',') if x.strip()]
+            for item in images:
+                blob = bucket.blob("reports/"+doc.id +"/media/images/"+item)
+                #print(blob.generate_signed_url(dt.timedelta(seconds=300), method='GET'))
+                fotos.append(blob.generate_signed_url(dt.timedelta(seconds=300), method='GET')) 
+        report["fotos"] = fotos
+        reports.append(report)    
+        print(report.get('fotos'))
+        
     return JsonResponse(reports, safe = False)
 
 def getFilteredReports(request):
