@@ -3,9 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const mapDataSlice = createSlice({
     name: "mapData",
     initialState: {
-        value: {
-            coordinates: []
-        }
+        value: []
     },
     reducers: {
         refreshData: (state, action) => {
