@@ -1,50 +1,16 @@
 import React, { useState } from "react";
 import "../styles/Crime_list.scss";
-import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
+import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react";
+import { renderMatches } from "react-router-dom";
 
-const Crime_info = [
-	{
-		id: 1,
-		Asunto: 'importante',
-		TipoAlerta: 'Robo',
-		Descripcion: 'descripcion',
-		fecha: '24/02/2022',
-		hora: 'miHora',
-		latitud: 4.49155,
-		longitud: -74.2606,
-		foto: 'miFoto',
-		video: '',
-		estado: '',
-	},
-	{
-		id: 2,
-		Asunto: 'casi importante',
-		TipoAlerta: 'violacion',
-		Descripcion: 'descripcion',
-		fecha: '14/02/2022',
-		hora: 'hora2',
-		latitud: 'lat2',
-		longitud: 'lon2',
-		foto: 'foto2',
-		video: '',
-		estado: '',
-	},
-	{
-		id: 3,
-		Asunto: 'nada importante',
-		TipoAlerta: 'Asalto',
-		Descripcion: 'descripcion',
-		fecha: '04/03/2022',
-		hora: 'hora3',
-		latitud: 'lat3',
-		longitud: 'lon3',
-		foto: 'foto3',
-		video: '',
-		estado: '',
-	},
-];
+const lista = [];
+const requestURL = 'http://127.0.0.1:8001/controlPanel/reports/';
+const request = new XMLHttpRequest();
+request.open('GET', requestURL);
+request.responseType = 'json';
+request.send();	
 
-const Crime_list = () => {
+  const Crime_list = () => {
   const [showModal, setShowModal] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
 
@@ -55,49 +21,47 @@ const Crime_list = () => {
     width: "43.5%",
     height: "46%"
 }
-  const Modal = ({ object: { Asunto, Descripcion , TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado} }) => (
+  const Modal = ({ object: { item} }) => (
     <div id="CrimeListtModal" className="active modal" >
 		<div className="modal-container">
 			<button className="modalboton" onClick={() => setShowModal(false)}>X</button>
 			<br></br>
-			<span>{Asunto}</span>
+			<span>{item.asunto}</span>
 			<br></br>
-			<span className="TipoAlerta">{TipoAlerta}</span>
+			<span className="TipoAlerta">{item.tipo_reporte}</span>
 			<br></br>
-			<span className="Descripcion">{Descripcion}</span>
+			<span className="Descripcion">{item.descripcion}</span>
 			<br></br>
-			<span className="fecha">{fecha}</span>
+			<span className="fecha">{item.fecha_hora}</span>
 			<br></br>
-			<span className="hora">{hora}</span>
-			<br></br>
-			<span className="foto">{foto}</span>
+			<span className="foto">{item.user_phone}</span>
 			<br></br>
 			<span className="video">{video}</span>
 			<br></br>
-			<span className="estado">{estado}</span>
+			<span className="estado">{item.estado}</span>
 			<br></br>
-			<Map google={google} zoom={16} style={mapStyles} initialCenter={{lat:latitud, lng : longitud}}>
+			<Map google={google} zoom={16} style={mapStyles} initialCenter={{lat:item.latitude, lng : item.longitude}}>
             <Marker position={{lat: latitud , lng:longitud}} />
         	</Map>
 		</div>
     </div>
 	
   );
-
+  
   return (
     <>
 	<h1 className="title"> Listado de crimenes</h1>
       <ul className="list-menu list">
-        {Crime_info.map(({ id, Asunto,Descripcion, TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado}) => (
+        {this.lista.map(({ item}) => (
           <li
-            key={id}
+            key={item.id}
             onClick={() => {
-              setActiveObject({ id, Asunto,Descripcion,TipoAlerta , fecha , hora , latitud , longitud, foto, video, estado});
+              setActiveObject({ item});
               setShowModal(true);
             }}
-            className={getClass(id)}
+            className={getClass(item)}
           >
-            <h2>{Asunto}</h2>
+            <h2>{item.asunto}</h2>
           </li>
         ))}
       </ul>
