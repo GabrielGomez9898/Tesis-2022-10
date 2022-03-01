@@ -1,7 +1,7 @@
 import "../styles/Forms.scss";
+import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { refreshData } from "../features/MapData";
-import { useState, useRef } from "react";
 import Axios from "axios";
 
 const MapFilterCard = () => {
@@ -25,7 +25,7 @@ const MapFilterCard = () => {
 
     const getMapData = () => {
         Axios.get(`http://127.0.0.1:8000/controlPanel/mapData?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
-            console.log(response);
+            dispatch(refreshData(response.data));
         });
     }
 

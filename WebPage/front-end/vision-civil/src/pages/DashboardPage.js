@@ -19,7 +19,7 @@ const DashboardPage = () => {
                 <div className="dashboard-container">
                     <MapFilterCard/>
                     <div className="card-map-container">
-                        <DashboardMap hasCircleMarkers={true}/>
+                        <DashboardMap/>
                     </div>
                     <MapLegend/>
                     <TypeChartsFilterCard/>
