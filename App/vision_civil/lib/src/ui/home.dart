@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
@@ -40,14 +39,6 @@ class HomeState extends State<HomePage> {
     if (permissionStatus == PermissionStatus.granted) {}
   }
 
-  static const MethodChannel _channel = const MethodChannel('smsker');
-
-  static Future<String> _sendMessageToContacts() async {
-    final String phoneSent = await _channel.invokeMethod('sendSms',
-        {'phone': "+573057162569", 'message': "Emergencia necesito tu ayuda"});
-    return phoneSent;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,8 +50,8 @@ class HomeState extends State<HomePage> {
               Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => MultiBlocProvider(providers: [
                   BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
-                  BlocProvider(
-                      create: (BuildContext context) => ContactsblocBloc())
+                  BlocProvider.value(
+                      value: BlocProvider.of<ContactsblocBloc>(context)),
                 ], child: ContactsPage()),
               ));
             },
@@ -126,7 +117,14 @@ class HomeState extends State<HomePage> {
                 SizedBox(height: 50),
                 ElevatedButton(
                     onPressed: () {
-                      _sendMessageToContacts();
+                      BlocProvider.of<ContactsblocBloc>(context).add(
+                          SendEmergencyAlertEvent(
+                              "+573197903438",
+                              "+573503995860",
+                              "+573106358522",
+                              "Gabriel Gomez",
+                              "4.7061827",
+                              "-74.0693012"));
                     },
                     child: Text("Alertar a mis contactos"))
               ],

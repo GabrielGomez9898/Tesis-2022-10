@@ -29,6 +29,23 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
             event.contactName, event.contactPhone, event.idUser);
       } else if (event is DeleteContactEvent) {
         contactsdb.deleteContact(event.uniqueID);
+      } else if (event is SendEmergencyAlertEvent) {
+        print("quiere alertar a sus contactos");
+        print(event.contactPhone1);
+        print(event.contactPhone2);
+        print(event.contactPhone3);
+        print(event.userInEmergency);
+        print(event.latitude);
+        print(event.longitude);
+        print("fin");
+
+        contactsdb.sendMessageToContacts(
+            event.contactPhone1,
+            event.contactPhone2,
+            event.contactPhone3,
+            event.userInEmergency,
+            event.latitude,
+            event.longitude);
       }
     });
   }

@@ -52,3 +52,28 @@ class DeleteContactEvent extends ContactsblocEvent {
     this.uniqueID = _uniqueID;
   }
 }
+
+// ignore: must_be_immutable
+class SendEmergencyAlertEvent extends ContactsblocEvent {
+  String contactPhone1 = " ";
+  String contactPhone2 = " ";
+  String contactPhone3 = " ";
+  String userInEmergency = " ";
+  String latitude = " ";
+  String longitude = " ";
+
+  SendEmergencyAlertEvent(
+      String _contactPhone1,
+      String _contactPhone2,
+      String _contactPhone3,
+      String _userInEmergency,
+      String _latitude,
+      String _longitude) {
+    this.contactPhone1 = _contactPhone1;
+    this.contactPhone2 = _contactPhone2;
+    this.contactPhone3 = _contactPhone3;
+    this.userInEmergency = _userInEmergency;
+    this.latitude = _latitude;
+    this.longitude = _longitude;
+  }
+}
