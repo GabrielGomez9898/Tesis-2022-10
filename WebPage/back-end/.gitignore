@@ -1,7 +1,11 @@
-# Virtual Environment
-/backendVenv
+# firebase-admin
+serviceAccountKey.json
+
+# Visual Studio Code
+.vscode
 
 # Byte-compiled / optimized / DLL files
+visionCivil/__pycache__/
 __pycache__/
 *.py[cod]
 *$py.class
