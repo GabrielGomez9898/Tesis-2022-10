@@ -1,0 +1,34 @@
+//COLORS
+//Backgrounds & containers
+$light-theme-bg-color: white;
+$light-theme-select-color: rgb(224, 224, 224);
+$dark-theme-bg-color: rgb(50, 65, 107);
+$dark-theme-select-color: rgb(32, 42, 68);
+$danger-alert-color: #F66359;
+$success-alert-color: #2FB986;
+$info-alert-color: #46A8F5;
+$warning-alert-color: #FFAA2C;
+$icon-color: white;
+$svg-color1-alt1: hsl(207, 100%, 73%);
+$svg-color2-alt1: hsl(207, 100%, 50%);
+$svg-color1-alt2: rgb(255, 141, 35);
+$svg-color2-alt2: rgb(255, 105, 35);
+$dashboard-card-color: #F2F1F0;
+//Text
+$text-primary-color: black;
+$text-secondary-color: grey;
+//Interactive elements
+$btn-text-color: white;
+$btn-color: hsl(207, 100%, 50%);
+$danger-btn-color: hsl(0, 83%, 55%);
+$unselected-color: hsl(0, 0%, 94%);
+$selected-color: hsl(207, 100%, 50%);
+//OTHERS
+$transition-speed: 600ms;
+//EXPORT
+:export {
+    dangerAlertColor: $danger-alert-color;
+    successAlertColor: $success-alert-color;
+    infoAlertColor: $info-alert-color;
+    warningAlertColor: $warning-alert-color;
+}
