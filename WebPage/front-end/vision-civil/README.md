@@ -1,70 +1,47 @@
-# Getting Started with Create React App
+# VisiónCivil Web
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A web app where the government functionaries can visualize all the data about the crime reports made by the citizens from the mobile app.
 
-## Available Scripts
+This section of the repository contains all the source code of the web app that is meant to be used by the functionaries of the government. The Front-end of the web app is build with **React v17.0.2**. All the styles are written in **SASS v1.49.7**. The Back-end of the app is build with **Django v4.0.2**.
 
-In the project directory, you can run:
+## **Run the project for testing purposes**
+> In order to access the web app from a production point of view open your favorite browser and go to ***www.visioncivil.com***
 
-### `npm start`
+### **Bringing up the server**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+If you have already worked with the project and have all the Python modules that the project requires [skip the below section](#starting-the-development-server).
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#### **Preparing your Python environment and installing modules**
 
-### `npm test`
+1. Go to `Tesis-2022-10/WebPage/back-end/vision-civil/`
+2. Either create a Virtual Environment using `py -m venv .venv` or just skip step **2** and step **3** and download all the modules directly to your default Virtual Environment
+3. Activate the Virtual Environment that you just have created going to `.venv/Scripts/` and typing `activate`
+4. Install all the following modules with the Virtual Environment activated:
+    * Type `pip install Django`
+    * Type `pip install firebase-admin`
+    * Type `pip install django-cors-headers`
+5. Go back to `Tesis-2022-10/WebPage/back-end/vision-civil/`
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### **Starting the development server**
 
-### `npm run build`
+Start the development server by typing `py manage.py runserver` or if you want to run the server in a different port than port **8000** run `py manage.py runserver <your desired port number>`
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+After completing all the steps and while the server is running, any request handling message or error will be displayed on the console each time a request is sent to the server.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### **Running the client side application**
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+If you have already worked with the project and have all the Node modules that the project requires [skip the below section](#running-the-react-application).
 
-### `npm run eject`
+#### **Preparing your Node environment and installing modules**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Install all the required modules by typing `npm install`
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### **Running the React application**
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+Run the React application by typing `npm start`. The application will run on port **3000**.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+> If you want to test each endpoint (aka view in Django) individually, without having to run the client side application, write an email to ***dankramirez@outlook.com*** asking for each resource URI and the reason why you need them.
 
-## Learn More
+## **How to support the project**
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+If you are interested in supporting the project start by reading the documentation in order to understand how both the Front-end and Back-end are structured, which languages and workflow do we work with and many other things.
