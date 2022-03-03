@@ -52,12 +52,21 @@ class ContactsDB {
         _latitude +
         "," +
         _longitude;
-    await _channel
-        .invokeMethod('sendSms', {'phone': _contactPhone1, 'message': message});
-    await _channel
-        .invokeMethod('sendSms', {'phone': _contactPhone2, 'message': message});
-    await _channel
-        .invokeMethod('sendSms', {'phone': _contactPhone3, 'message': message});
+    if (_contactPhone1 != " ") {
+      await _channel.invokeMethod(
+          'sendSms', {'phone': _contactPhone1, 'message': message});
+      print("envio sms a: " + _contactPhone1);
+    }
+    if (_contactPhone2 != " ") {
+      await _channel.invokeMethod(
+          'sendSms', {'phone': _contactPhone2, 'message': message});
+      print("envio sms a: " + _contactPhone2);
+    }
+    if (_contactPhone3 != " ") {
+      await _channel.invokeMethod(
+          'sendSms', {'phone': _contactPhone3, 'message': message});
+      print("envio sms a: " + _contactPhone3);
+    }
   }
 }
 

@@ -31,13 +31,6 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
         contactsdb.deleteContact(event.uniqueID);
       } else if (event is SendEmergencyAlertEvent) {
         print("quiere alertar a sus contactos");
-        print(event.contactPhone1);
-        print(event.contactPhone2);
-        print(event.contactPhone3);
-        print(event.userInEmergency);
-        print(event.latitude);
-        print(event.longitude);
-        print("fin");
 
         contactsdb.sendMessageToContacts(
             event.contactPhone1,

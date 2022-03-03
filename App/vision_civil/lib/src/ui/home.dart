@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
+import 'package:location/location.dart';
+import 'package:permission_handler/permission_handler.dart' as perm;
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
@@ -23,21 +24,23 @@ class HomeState extends State<HomePage> {
     _getSMSPermission();
   }
 
-  Future<PermissionStatus> _getPermission() async {
-    PermissionStatus status = await Permission.sms.request();
+  Future<perm.PermissionStatus> _getPermission() async {
+    perm.PermissionStatus status = await perm.Permission.sms.request();
     print(status.toString());
 
     if (status == PermissionStatus.granted) {
-      return PermissionStatus.granted;
+      return perm.PermissionStatus.granted;
     } else {
-      return PermissionStatus.denied;
+      return perm.PermissionStatus.denied;
     }
   }
 
   void _getSMSPermission() async {
-    final PermissionStatus permissionStatus = await _getPermission();
-    if (permissionStatus == PermissionStatus.granted) {}
+    await _getPermission();
   }
+
+  String contactPhone1 = "", contactPhone2 = "", contactPhone3 = "";
+  var location = new Location();
 
   @override
   Widget build(BuildContext context) {
@@ -93,40 +96,68 @@ class HomeState extends State<HomePage> {
           ],
         ),
         body: BlocBuilder<UserBloc, UserblocState>(
-          builder: (context, state) {
+          builder: (context, userstate) {
+            BlocProvider.of<ContactsblocBloc>(context)
+                .add(GetUserContactsEvent(userstate.userID));
             return Column(
               children: [
                 Text('id user: ' +
-                    state.userID +
+                    userstate.userID +
                     ' ' +
-                    state.loginAchieved.toString() +
+                    userstate.loginAchieved.toString() +
                     ' ' +
-                    state.userEmail +
+                    userstate.userEmail +
                     ' ' +
-                    state.userName +
+                    userstate.userName +
                     ' ' +
-                    state.userGender +
+                    userstate.userGender +
                     ' ' +
-                    state.userBirthDate +
+                    userstate.userBirthDate +
                     ' ' +
-                    state.userPhone.toString() +
+                    userstate.userPhone.toString() +
                     ' ' +
-                    state.userRole +
+                    userstate.userRole +
                     ' ' +
-                    state.userDocument),
+                    userstate.userDocument),
                 SizedBox(height: 50),
-                ElevatedButton(
-                    onPressed: () {
-                      BlocProvider.of<ContactsblocBloc>(context).add(
-                          SendEmergencyAlertEvent(
-                              "+573197903438",
-                              "+573503995860",
-                              "+573106358522",
-                              "Gabriel Gomez",
-                              "4.7061827",
-                              "-74.0693012"));
-                    },
-                    child: Text("Alertar a mis contactos"))
+                BlocBuilder<ContactsblocBloc, ContactsblocState>(
+                  builder: (context, contactsstate) {
+                    return ElevatedButton(
+                        onPressed: () async {
+                          var currentLocation = await location.getLocation();
+                          String _latitude =
+                                  currentLocation.latitude.toString(),
+                              _longitude = currentLocation.longitude.toString();
+                          try {
+                            contactPhone1 = contactsstate
+                                .emergencyUserContacts[0].contactPhone;
+                          } catch (e) {
+                            contactPhone1 = " ";
+                          }
+                          try {
+                            contactPhone2 = contactsstate
+                                .emergencyUserContacts[1].contactPhone;
+                          } catch (e) {
+                            contactPhone2 = " ";
+                          }
+                          try {
+                            contactPhone3 = contactsstate
+                                .emergencyUserContacts[2].contactPhone;
+                          } catch (e) {
+                            contactPhone3 = " ";
+                          }
+                          BlocProvider.of<ContactsblocBloc>(context).add(
+                              SendEmergencyAlertEvent(
+                                  contactPhone1,
+                                  contactPhone2,
+                                  contactPhone3,
+                                  userstate.userName,
+                                  _latitude,
+                                  _longitude));
+                        },
+                        child: Text("Alertar a mis contactos"));
+                  },
+                )
               ],
             );
           },
