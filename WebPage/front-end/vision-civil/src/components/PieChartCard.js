@@ -57,7 +57,7 @@ const PieChartCard = () => {
     return (
         <ResponsiveContainer className="card-piechart-container" width="100%" height="100%" >
             <PieChart>
-                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={100} outerRadius={150} fill="#8884d8" >
+                <Pie data={data.sort((a, b) => a.value - b.value)} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={100} outerRadius={150} fill="#8884d8" >
                     <LabelList 
                         dataKey="name" 
                         angle="0" 
