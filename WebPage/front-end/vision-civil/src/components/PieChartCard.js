@@ -54,16 +54,6 @@ const PieChartCard = () => {
 
     const COLORS = ['#3498DB', '#5132FF', '#27AE60', '#8E44AD', "#FD66FF", "#FF4848", "#F39C12", "#1ABC9C"];
 
-    const renderCustomizedLabel = ({ x, y, width, height, value }) => {
-        return (
-            <g>
-                <text fill="black">
-                    {`${((value / 193) * 100).toFixed(0)}%`}
-                </text>
-            </g>
-        );
-    };
-
     return (
         <ResponsiveContainer className="card-piechart-container" width="100%" height="100%" >
             <PieChart>
@@ -79,7 +69,7 @@ const PieChartCard = () => {
                         dataKey="value" 
                         angle="0" 
                         formatter={(value) => `${((value / 193) * 100).toFixed(0)}%`} 
-                        style={{fill: "white", stroke: "white", strokeWidth: 0, }} 
+                        style={{fill: "white", stroke: "white", strokeWidth: 0}} 
                     />
                     {data.map((val, i) => (
                         <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
