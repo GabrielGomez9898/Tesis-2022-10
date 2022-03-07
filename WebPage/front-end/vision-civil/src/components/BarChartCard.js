@@ -56,18 +56,17 @@ const BarChartCard = () => {
     return (
         <div className="card-barchart-container">
             <ResponsiveContainer width="100%" height="100%" >
-                <BarChart data={data.sort((a, b) => a.A - b.A)} width={730} height={250} barCategoryGap="0%">
+                <BarChart data={data.sort((a, b) => a.A - b.A)} width={730} height={250} barCategoryGap="0%" margin={{ top: 35, right: 35, left: 0, bottom: 10 }}>
                     <CartesianGrid vertical={false} strokeDasharray="3 3" />
                     <XAxis 
                         dataKey="reportType" 
                         angle={-45} 
                         interval={0} 
                         height={100} 
-                        tickSize={48} 
-                        padding={{left:30, right: 30}} 
+                        tickSize={48}
                         style={{color: "black", fontFamily: ["Manjari", "sansSerif"], fontSize: "0.9rem"}}
                     />
-                    <YAxis width={60} tickSize={0} padding={{top: 30}}>
+                    <YAxis width={70} tickSize={0} style={{color: "black", fontFamily: ["Manjari", "sansSerif"], fontSize: "0.9rem"}}>
                         <Label 
                             position={"left"} 
                             angle={-90} 
