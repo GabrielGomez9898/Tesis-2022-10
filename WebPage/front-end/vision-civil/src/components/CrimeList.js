@@ -4,7 +4,7 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
 import Axios from "axios";
 
 
-const Crime_list = () => {
+const CrimeList = () => {
   //funcion para sacar los reportes del back
   function getListadoData() {
     Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/getAllReports')
@@ -86,4 +86,4 @@ const Crime_list = () => {
   );
 };
 
-export default Crime_list;
+export default CrimeList;
