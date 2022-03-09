@@ -33,9 +33,12 @@ def getAllReports(request):
                 blob = bucket.blob("reports/"+doc.id +"/media/images/"+item)
                 #print(blob.generate_signed_url(dt.timedelta(seconds=300), method='GET'))
                 fotos.append(blob.generate_signed_url(dt.timedelta(seconds=300), method='GET')) 
+        if(len(fotos)!= 0):
+            report["hasFotos"] = True;
+        else :
+            report["hasFotos"] = False;       
         report["fotos"] = fotos
         reports.append(report)    
-        print(report.get('fotos'))
         
     return JsonResponse(reports, safe = False)
 
