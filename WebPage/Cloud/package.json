@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@google-cloud/firestore": "5.0.2",
+    "firebase": "^9.6.7",
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.1"
+  },
+  "devDependencies": {
+    "@google-cloud/functions-framework": "^3.0.0"
+  },
+  "scripts": {
+    "start": "npx functions-framework --target=get"
+  }
+}
