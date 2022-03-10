@@ -7,6 +7,18 @@ This section of the repository contains all the source code of the web app that 
 ## **Run the project for testing purposes**
 > In order to access the web app from a production point of view open your favorite browser and go to ***www.visioncivil.com***
 
+### **Setting Up Firebase on your local machine**
+
+In order to run and test the Firebase functions you have to install all the node modules:
+
+1. Go to `Tesis-2022-10/WebPage/Cloud/`
+2. Type `npm install`
+3. Install Firebase Tools in order to be able to use Firebase CLI by typing `npm install -g firebase-tools`
+
+Ask the proprietary of the Firebase app if you can have proprietary privileges. If you already have privileges you have to login in order to test the functions you have written:
+
+Type `firebase login` and follow the steps showed on the Firebase CLI. When the CLI sends you to the browser Firebase page login by using the account that have the privileges previously asked. 
+
 ### **Bringing up the server**
 
 If you have already worked with the project and have all the Python modules that the project requires [skip the below section](#starting-the-development-server).
