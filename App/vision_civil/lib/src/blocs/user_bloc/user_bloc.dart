@@ -84,6 +84,7 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             userRole: " ",
             userDocument: " "));
       } else if (event is UpdateUserEvent) {
+        print(event.name);
         QueryDocumentSnapshot user = await userdb.updateUser(event.email,
             event.name, event.gender, event.phone, event.birthDate);
         emit(UserblocState(

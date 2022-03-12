@@ -60,14 +60,23 @@ class HomeState extends State<HomePage> {
             },
           ),
           actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.accessibility),
-              onPressed: () async {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (_) => BlocProvider.value(
-                      value: BlocProvider.of<UserBloc>(context),
-                      child: Profile()),
-                ));
+            BlocBuilder<UserBloc, UserblocState>(
+              builder: (context, state) {
+                return IconButton(
+                  icon: Icon(Icons.accessibility),
+                  onPressed: () async {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => BlocProvider.value(
+                          value: BlocProvider.of<UserBloc>(context),
+                          child: Profile(
+                              email: state.userEmail,
+                              name: state.userName,
+                              birthDate: state.userBirthDate,
+                              gender: state.userGender,
+                              phone: state.userPhone)),
+                    ));
+                  },
+                );
               },
             ),
             BlocBuilder<UserBloc, UserblocState>(

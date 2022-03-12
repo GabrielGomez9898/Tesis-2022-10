@@ -55,3 +55,5 @@ class UpdateUserEvent extends UserblocEvent {
     this.phone = phone;
   }
 }
+
+class GetUserEvent extends UserblocEvent {}

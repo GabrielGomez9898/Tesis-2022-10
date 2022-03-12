@@ -6,12 +6,33 @@ import 'package:vision_civil/src/widgets/buttonWidget.dart';
 import 'package:vision_civil/src/widgets/textFieldWidget.dart';
 
 class Profile extends StatefulWidget {
+  const Profile(
+      {Key? key,
+      required this.email,
+      required this.name,
+      required this.birthDate,
+      required this.gender,
+      required this.phone})
+      : super(key: key);
+  final String email, name, birthDate, gender;
+  final double phone;
+
   @override
-  ProfileState createState() => ProfileState();
+  ProfileState createState() => ProfileState(
+      this.email, this.name, this.birthDate, this.gender, this.phone);
 }
 
 class ProfileState extends State<Profile> {
-  String _listView = "Seleccione su género", _dateView = "Fecha de nacimiento";
+  String email = " ", name = " ", birthDate = " ", gender = " ";
+  double phone = 0;
+  ProfileState(String widgetEmail, String widgetName, String widgetBirthDate,
+      String widgetGender, double widgetPhone) {
+    this.email = widgetEmail;
+    this.name = widgetName;
+    this.birthDate = widgetBirthDate;
+    this.gender = widgetGender;
+    this.phone = widgetPhone;
+  }
 
   var _genders = ["Masculino", "Femenino", "Otro"];
 
@@ -32,12 +53,6 @@ class ProfileState extends State<Profile> {
           backgroundColor: Colors.transparent,
           body: BlocBuilder<UserBloc, UserblocState>(
             builder: (context, state) {
-              String _email = state.userEmail,
-                  _name = state.userName,
-                  _birthDate = state.userBirthDate,
-                  _gender = state.userGender;
-              double _phone = state.userPhone;
-
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -64,7 +79,9 @@ class ProfileState extends State<Profile> {
                     TextFieldFuntion(
                         hintText: state.userName,
                         onChanged: (value) {
-                          _name = value.trim();
+                          setState(() {
+                            this.name = value.trim();
+                          });
                         },
                         tipo: TextInputType.emailAddress,
                         obsText: false),
@@ -87,7 +104,9 @@ class ProfileState extends State<Profile> {
                     TextFieldFuntion(
                         hintText: state.userPhone.toString(),
                         onChanged: (value) {
-                          _phone = double.parse(value.trim());
+                          setState(() {
+                            this.phone = double.parse(value.trim());
+                          });
                         },
                         tipo: TextInputType.number,
                         icon: Icons.aod,
@@ -114,32 +133,41 @@ class ProfileState extends State<Profile> {
                               minTime: DateTime(1930, 3, 5),
                               maxTime: DateTime(2019, 6, 7),
                               onChanged: (date) {}, onConfirm: (date) {
-                            _birthDate = date.toString();
-                            showDateAlertDialog(
-                                context, state.userBirthDate, _birthDate);
+                            setState(() {
+                              this.birthDate = date.toString();
+                            });
                           },
                               currentTime: DateTime.now(),
                               locale: LocaleType.es);
                         },
-                        child: Text(_dateView)),
+                        child: Text(this.birthDate)),
                     DropdownButton(
                       items: _genders.map((String gender) {
                         return DropdownMenuItem(
                             child: Text(gender), value: gender);
                       }).toList(),
                       onChanged: (_value) {
-                        _gender = _value.toString();
-                        showGenderAlertDialog(
-                            context, state.userGender, _gender);
+                        setState(() {
+                          this.gender = _value.toString();
+                        });
                       },
-                      hint: Text(_listView),
+                      hint: Text(this.gender),
                     ),
                     ButtoWidget(
                       text: 'Actualizar datos',
                       textColor: Colors.black,
                       press: () {
+                        print(this.email);
+                        print(this.name);
+                        print(this.birthDate);
+                        print(this.gender);
+                        print(this.phone);
                         BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(
-                            _email, _name, _birthDate, _gender, _phone));
+                            this.email,
+                            this.name,
+                            this.birthDate,
+                            this.gender,
+                            this.phone));
                       },
                     ),
                   ],
@@ -151,66 +179,4 @@ class ProfileState extends State<Profile> {
       ),
     );
   }
-}
-
-showDateAlertDialog(BuildContext context, currentDate, updateDate) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text('Se actualizará su fecha de nacimiento'),
-    content: Text('Fecha a actualizar: ' +
-        updateDate +
-        '\n' +
-        'Fecha actual: ' +
-        currentDate),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
-showGenderAlertDialog(BuildContext context, currentGender, updateGender) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text('Se actualizará su género'),
-    content: Text('Género a actualizar: ' +
-        updateGender +
-        '\n' +
-        'Género actual: ' +
-        currentGender),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
 }
