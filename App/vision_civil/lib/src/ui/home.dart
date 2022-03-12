@@ -44,132 +44,247 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Text("Home Visión Civil"),
-          leading: IconButton(
-            icon: Icon(Icons.contacts),
-            onPressed: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => MultiBlocProvider(providers: [
-                  BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
-                  BlocProvider.value(
-                      value: BlocProvider.of<ContactsblocBloc>(context)),
-                ], child: ContactsPage()),
-              ));
-            },
-          ),
-          actions: <Widget>[
-            BlocBuilder<UserBloc, UserblocState>(
-              builder: (context, state) {
-                return IconButton(
-                  icon: Icon(Icons.accessibility),
-                  onPressed: () async {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => BlocProvider.value(
-                          value: BlocProvider.of<UserBloc>(context),
-                          child: Profile(
-                              email: state.userEmail,
-                              name: state.userName,
-                              birthDate: state.userBirthDate,
-                              gender: state.userGender,
-                              phone: state.userPhone)),
-                    ));
-                  },
-                );
-              },
-            ),
-            BlocBuilder<UserBloc, UserblocState>(
-              builder: (context, state) {
-                return IconButton(
-                  icon: Icon(Icons.create),
-                  onPressed: () async {
+    return BlocBuilder<UserBloc, UserblocState>(
+      builder: (context, state) {
+        if (state.userRole == "CIUDADANO") {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text("Home Visión Civil"),
+                leading: IconButton(
+                  icon: Icon(Icons.contacts),
+                  onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                       builder: (_) => MultiBlocProvider(providers: [
                         BlocProvider.value(
                             value: BlocProvider.of<UserBloc>(context)),
-                        BlocProvider(
-                            create: (BuildContext context) => ReportBloc())
-                      ], child: CreateReport()),
+                        BlocProvider.value(
+                            value: BlocProvider.of<ContactsblocBloc>(context)),
+                      ], child: ContactsPage()),
                     ));
                   },
-                );
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.logout),
-              onPressed: () {
-                BlocProvider.of<UserBloc>(context).add(LogoutEvent());
-              },
-            )
-          ],
-        ),
-        body: BlocBuilder<UserBloc, UserblocState>(
-          builder: (context, userstate) {
-            BlocProvider.of<ContactsblocBloc>(context)
-                .add(GetUserContactsEvent(userstate.userID));
-            return Column(
-              children: [
-                Text('id user: ' +
-                    userstate.userID +
-                    ' ' +
-                    userstate.loginAchieved.toString() +
-                    ' ' +
-                    userstate.userEmail +
-                    ' ' +
-                    userstate.userName +
-                    ' ' +
-                    userstate.userGender +
-                    ' ' +
-                    userstate.userBirthDate +
-                    ' ' +
-                    userstate.userPhone.toString() +
-                    ' ' +
-                    userstate.userRole +
-                    ' ' +
-                    userstate.userDocument),
-                SizedBox(height: 50),
-                BlocBuilder<ContactsblocBloc, ContactsblocState>(
-                  builder: (context, contactsstate) {
-                    return ElevatedButton(
+                ),
+                actions: <Widget>[
+                  BlocBuilder<UserBloc, UserblocState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(Icons.accessibility),
                         onPressed: () async {
-                          var currentLocation = await location.getLocation();
-                          String _latitude =
-                                  currentLocation.latitude.toString(),
-                              _longitude = currentLocation.longitude.toString();
-                          try {
-                            contactPhone1 = contactsstate
-                                .emergencyUserContacts[0].contactPhone;
-                          } catch (e) {
-                            contactPhone1 = " ";
-                          }
-                          try {
-                            contactPhone2 = contactsstate
-                                .emergencyUserContacts[1].contactPhone;
-                          } catch (e) {
-                            contactPhone2 = " ";
-                          }
-                          try {
-                            contactPhone3 = contactsstate
-                                .emergencyUserContacts[2].contactPhone;
-                          } catch (e) {
-                            contactPhone3 = " ";
-                          }
-                          BlocProvider.of<ContactsblocBloc>(context).add(
-                              SendEmergencyAlertEvent(
-                                  contactPhone1,
-                                  contactPhone2,
-                                  contactPhone3,
-                                  userstate.userName,
-                                  _latitude,
-                                  _longitude));
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<UserBloc>(context),
+                                child: Profile(
+                                    email: state.userEmail,
+                                    name: state.userName,
+                                    birthDate: state.userBirthDate,
+                                    gender: state.userGender,
+                                    phone: state.userPhone)),
+                          ));
                         },
-                        child: Text("Alertar a mis contactos"));
+                      );
+                    },
+                  ),
+                  BlocBuilder<UserBloc, UserblocState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(Icons.create),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => MultiBlocProvider(providers: [
+                              BlocProvider.value(
+                                  value: BlocProvider.of<UserBloc>(context)),
+                              BlocProvider(
+                                  create: (BuildContext context) =>
+                                      ReportBloc())
+                            ], child: CreateReport()),
+                          ));
+                        },
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      BlocProvider.of<UserBloc>(context).add(LogoutEvent());
+                    },
+                  )
+                ],
+              ),
+              body: BlocBuilder<UserBloc, UserblocState>(
+                builder: (context, userstate) {
+                  BlocProvider.of<ContactsblocBloc>(context)
+                      .add(GetUserContactsEvent(userstate.userID));
+                  return Column(
+                    children: [
+                      Text('id user: ' +
+                          userstate.userID +
+                          ' ' +
+                          userstate.loginAchieved.toString() +
+                          ' ' +
+                          userstate.userEmail +
+                          ' ' +
+                          userstate.userName +
+                          ' ' +
+                          userstate.userGender +
+                          ' ' +
+                          userstate.userBirthDate +
+                          ' ' +
+                          userstate.userPhone.toString() +
+                          ' ' +
+                          userstate.userRole +
+                          ' ' +
+                          userstate.userDocument +
+                          ' ' +
+                          userstate.idPolice +
+                          ' ' +
+                          userstate.available.toString() +
+                          ' ' +
+                          userstate.onService.toString()),
+                      SizedBox(height: 50),
+                      BlocBuilder<ContactsblocBloc, ContactsblocState>(
+                        builder: (context, contactsstate) {
+                          return ElevatedButton(
+                              onPressed: () async {
+                                var currentLocation =
+                                    await location.getLocation();
+                                String _latitude =
+                                        currentLocation.latitude.toString(),
+                                    _longitude =
+                                        currentLocation.longitude.toString();
+                                try {
+                                  contactPhone1 = contactsstate
+                                      .emergencyUserContacts[0].contactPhone;
+                                } catch (e) {
+                                  contactPhone1 = " ";
+                                }
+                                try {
+                                  contactPhone2 = contactsstate
+                                      .emergencyUserContacts[1].contactPhone;
+                                } catch (e) {
+                                  contactPhone2 = " ";
+                                }
+                                try {
+                                  contactPhone3 = contactsstate
+                                      .emergencyUserContacts[2].contactPhone;
+                                } catch (e) {
+                                  contactPhone3 = " ";
+                                }
+                                BlocProvider.of<ContactsblocBloc>(context).add(
+                                    SendEmergencyAlertEvent(
+                                        contactPhone1,
+                                        contactPhone2,
+                                        contactPhone3,
+                                        userstate.userName,
+                                        _latitude,
+                                        _longitude));
+                              },
+                              child: Text("Alertar a mis contactos"));
+                        },
+                      )
+                    ],
+                  );
+                },
+              ));
+        } else {
+          return Scaffold(
+              appBar: AppBar(
+                title: Text("Home Visión Civil Policias"),
+                leading: IconButton(
+                  icon: Icon(Icons.contacts),
+                  onPressed: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                      builder: (_) => MultiBlocProvider(providers: [
+                        BlocProvider.value(
+                            value: BlocProvider.of<UserBloc>(context)),
+                        BlocProvider.value(
+                            value: BlocProvider.of<ContactsblocBloc>(context)),
+                      ], child: ContactsPage()),
+                    ));
                   },
-                )
-              ],
-            );
-          },
-        ));
+                ),
+                actions: <Widget>[
+                  BlocBuilder<UserBloc, UserblocState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(Icons.accessibility),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<UserBloc>(context),
+                                child: Profile(
+                                    email: state.userEmail,
+                                    name: state.userName,
+                                    birthDate: state.userBirthDate,
+                                    gender: state.userGender,
+                                    phone: state.userPhone)),
+                          ));
+                        },
+                      );
+                    },
+                  ),
+                  BlocBuilder<UserBloc, UserblocState>(
+                    builder: (context, state) {
+                      return IconButton(
+                        icon: Icon(Icons.create),
+                        onPressed: () async {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => MultiBlocProvider(providers: [
+                              BlocProvider.value(
+                                  value: BlocProvider.of<UserBloc>(context)),
+                              BlocProvider(
+                                  create: (BuildContext context) =>
+                                      ReportBloc())
+                            ], child: CreateReport()),
+                          ));
+                        },
+                      );
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.logout),
+                    onPressed: () {
+                      BlocProvider.of<UserBloc>(context).add(LogoutEvent());
+                    },
+                  )
+                ],
+              ),
+              body: BlocBuilder<UserBloc, UserblocState>(
+                builder: (context, userstate) {
+                  BlocProvider.of<ContactsblocBloc>(context)
+                      .add(GetUserContactsEvent(userstate.userID));
+                  return Column(
+                    children: [
+                      Text('id user: ' +
+                          userstate.userID +
+                          ' ' +
+                          userstate.loginAchieved.toString() +
+                          ' ' +
+                          userstate.userEmail +
+                          ' ' +
+                          userstate.userName +
+                          ' ' +
+                          userstate.userGender +
+                          ' ' +
+                          userstate.userBirthDate +
+                          ' ' +
+                          userstate.userPhone.toString() +
+                          ' ' +
+                          userstate.userRole +
+                          ' ' +
+                          userstate.userDocument +
+                          ' ' +
+                          userstate.idPolice +
+                          ' ' +
+                          userstate.available.toString() +
+                          ' ' +
+                          userstate.onService.toString()),
+                      SizedBox(height: 50),
+                      Text("Reportes")
+                    ],
+                  );
+                },
+              ));
+        }
+      },
+    );
   }
 }

@@ -157,11 +157,6 @@ class ProfileState extends State<Profile> {
                       text: 'Actualizar datos',
                       textColor: Colors.black,
                       press: () {
-                        print(this.email);
-                        print(this.name);
-                        print(this.birthDate);
-                        print(this.gender);
-                        print(this.phone);
                         BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(
                             this.email,
                             this.name,

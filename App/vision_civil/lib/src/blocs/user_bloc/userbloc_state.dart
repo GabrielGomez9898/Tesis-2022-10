@@ -10,6 +10,10 @@ class UserblocState {
   String userRole;
   String userDocument;
 
+  String idPolice;
+  bool available;
+  bool onService;
+
   bool loginAchieved;
 
   UserblocState(
@@ -21,5 +25,8 @@ class UserblocState {
       required this.userGender,
       required this.userBirthDate,
       required this.userRole,
-      required this.userDocument});
+      required this.userDocument,
+      required this.idPolice,
+      required this.available,
+      required this.onService});
 }

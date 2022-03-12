@@ -22,7 +22,10 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             userGender: " ",
             userBirthDate: " ",
             userRole: " ",
-            userDocument: " ")) {
+            userDocument: " ",
+            idPolice: " ",
+            available: false,
+            onService: false)) {
     on<UserblocEvent>((event, emit) async {
       if (event is RegisterEvent) {
         QueryDocumentSnapshot user = await userdb.createUser(
@@ -43,22 +46,48 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             userGender: user.get('gender'),
             userBirthDate: user.get('birth_date'),
             userRole: user.get('role'),
-            userDocument: user.get('document')));
+            userDocument: user.get('document'),
+            idPolice: " ",
+            available: false,
+            onService: false));
       } else if (event is LoginEvent) {
         QueryDocumentSnapshot user =
             await userdb.signIn(event.email, event.password);
         //conseguir id del usuario que hizo login
         if (user.get('email') != 'notexistinguser') {
-          emit(UserblocState(
-              userID: user.id,
-              loginAchieved: true,
-              userEmail: user.get('email'),
-              userName: user.get('name'),
-              userPhone: user.get('phone'),
-              userGender: user.get('gender'),
-              userBirthDate: user.get('birth_date'),
-              userRole: user.get('role'),
-              userDocument: user.get('document')));
+          String role = user.get('role');
+          if (role != "POLICIA") {
+            print("Es ciudadano");
+            emit(UserblocState(
+                userID: user.id,
+                loginAchieved: true,
+                userEmail: user.get('email'),
+                userName: user.get('name'),
+                userPhone: user.get('phone'),
+                userGender: user.get('gender'),
+                userBirthDate: user.get('birth_date'),
+                userRole: user.get('role'),
+                userDocument: user.get('document'),
+                idPolice: " ",
+                available: false,
+                onService: false));
+          } else {
+            print("Es policia");
+
+            emit(UserblocState(
+                userID: user.id,
+                loginAchieved: true,
+                userEmail: user.get('email'),
+                userName: user.get('name'),
+                userPhone: user.get('phone'),
+                userGender: user.get('gender'),
+                userBirthDate: user.get('birth_date'),
+                userRole: user.get('role'),
+                userDocument: " ",
+                idPolice: user.get('id_policia'),
+                available: user.get('disponible'),
+                onService: user.get('enServicio')));
+          }
         } else {
           emit(UserblocState(
               userID: " ",
@@ -69,7 +98,10 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
               userGender: " ",
               userBirthDate: " ",
               userRole: " ",
-              userDocument: " "));
+              userDocument: " ",
+              idPolice: " ",
+              available: false,
+              onService: false));
         }
       } else if (event is LogoutEvent) {
         userdb.logOut();
@@ -82,7 +114,10 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             userGender: " ",
             userBirthDate: " ",
             userRole: " ",
-            userDocument: " "));
+            userDocument: " ",
+            idPolice: " ",
+            available: false,
+            onService: false));
       } else if (event is UpdateUserEvent) {
         print(event.name);
         QueryDocumentSnapshot user = await userdb.updateUser(event.email,
@@ -96,7 +131,10 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             userGender: user.get('gender'),
             userBirthDate: user.get('birth_date'),
             userRole: user.get('role'),
-            userDocument: user.get('document')));
+            userDocument: user.get('document'),
+            idPolice: " ",
+            available: false,
+            onService: false));
       }
     });
   }
