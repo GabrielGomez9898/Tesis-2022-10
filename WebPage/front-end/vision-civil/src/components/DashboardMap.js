@@ -13,8 +13,8 @@ const DashboardMap = (props) => {
     }
 
     const initialCenter = {
-        lat: "4.4878791",
-        lng: "-74.2591367"
+        lat: "4.4893662",
+        lng: "-74.2591137"
     }
 
     const defaultMapOptions = {
@@ -28,7 +28,7 @@ const DashboardMap = (props) => {
     }
 
     return(
-        <Map google={props.google} style={mapDimensions} zoom={16} initialCenter={initialCenter} mapTypeControl={false} zoomControl={false} onReady={(mapProps, map) => mapLoaded(mapProps, map)}>
+        <Map google={props.google} style={mapDimensions} zoom={15} initialCenter={initialCenter} mapTypeControl={false} zoomControl={false} onReady={(mapProps, map) => mapLoaded(mapProps, map)}>
             {[...Array(mapData.length)].map((value, i) => {
                 let circleColor = "";
                 let CircleOpacity = 0.0;
@@ -53,6 +53,9 @@ const DashboardMap = (props) => {
                 }
                 else if(mapData[i].reportType === "AGRESION") {
                     circleColor = "#ff8800";
+                }
+                else if(mapData[i].reportType === "OTRO") {
+                    circleColor = "#000000";
                 }
 
                 return <Circle center={{lat:parseFloat(mapData[i].lat), lng:parseFloat(mapData[i].lng)}} radius={15} strokeColor="transparent" strokeOpacity={0} strokeWeight={5} fillColor={circleColor} fillOpacity={0.4} />

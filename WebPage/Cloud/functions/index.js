@@ -1,3 +1,11 @@
+const {
+  totalReportsByWeek, 
+  totalReportsByMonth, 
+  totalReportsByTrimester, 
+  totalReportsBySemester, 
+  totalReportsByYear, 
+  totalReportsForever
+} = require("./getTimeChartsDataUtil.js");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
@@ -22,14 +30,14 @@ app.get("/mapData", async (request, response) => {
     const upperDate = queryParams["upperDate"].replaceAll("-", "/");
     const reportType = queryParams["reportType"];
 
+    const lowerDateObject = new Date(lowerDate);
+    const upperDateObject = new Date(upperDate);
+
     let docs = undefined;
     (reportType != "TODOS") ?
       (docs = await db.collection("reports").where("tipo_reporte", "==", reportType).get()) :
       (docs = await db.collection("reports").get());
-
-    const lowerDateObject = new Date(lowerDate);
-    const upperDateObject = new Date(upperDate);
-
+    
     const mapData = [];
     docs.forEach((doc, i) => {
       report = doc.data();
@@ -44,6 +52,96 @@ app.get("/mapData", async (request, response) => {
     return response.status(200).json(mapData);
   }
   catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//getTypeChartsData
+app.get("/typeChartsData", async (request, response) => {
+  try {
+    const queryParams = request.query;
+    const lowerDate = queryParams["lowerDate"].replaceAll("-", "/"); 
+    const upperDate = queryParams["upperDate"].replaceAll("-", "/");
+
+    const lowerDateObject = new Date(lowerDate);
+    const upperDateObject = new Date(upperDate);
+
+    const docs = await db.collection("reports").get();
+
+    const reportsOnDateRange = [];
+    docs.forEach((doc, i) => {
+      report = doc.data();
+      reportDate = report["fecha_hora"].split(" | ")[0];
+      reportDateObject = new Date(reportDate);
+
+      if (reportDateObject >= lowerDateObject && reportDateObject <= upperDateObject) {
+        reportsOnDateRange.push(report["tipo_reporte"]);
+      }
+    });
+
+    const typeChartsData = {
+      hurtoViviendaNum: reportsOnDateRange.filter((val) => val === "HURTO_VIVIENDA").length,
+      hurtoPersonaNum: reportsOnDateRange.filter((val) => val === "HURTO_PERSONA").length,
+      hurtoVehiculoNum: reportsOnDateRange.filter((val) => val === "HURTO_VEHICULO").length,
+      vandalismoNum: reportsOnDateRange.filter((val) => val === "VANDALISMO").length,
+      violacionNum: reportsOnDateRange.filter((val) => val === "VIOLACION").length,
+      homicidioNum: reportsOnDateRange.filter((val) => val === "HOMICIDIO").length,
+      agresionNum: reportsOnDateRange.filter((val) => val === "AGRESION").length,
+      otroNum: reportsOnDateRange.filter((val) => val === "OTRO").length
+    };
+
+    return response.status(200).json(typeChartsData);
+  }
+  catch(error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//getTimeChartsData
+app.get("/timeChartsData", async (request, response) => {
+  try {
+    const queryParams = request.query;
+    const period = queryParams["period"];
+
+    let totalReportsByPeriod = undefined;
+    switch(period){
+      case "ESTA_SEMANA":
+        totalReportsByPeriod = await totalReportsByWeek(db);
+        break;
+      case "ESTE_MES":
+        totalReportsByPeriod = await totalReportsByMonth(db);
+        break;
+      case "ESTE_TRIMESTRE":
+        totalReportsByPeriod = await totalReportsByTrimester(db);
+        break;
+      case "ESTE_SEMESTRE":
+        totalReportsByPeriod = await totalReportsBySemester(db);
+        break;
+      case "ESTE_AÑO":
+        totalReportsByPeriod = await totalReportsByYear(db);
+        break;
+      case "DE_POR_VIDA":
+        totalReportsByPeriod = await totalReportsForever(db);
+        break;
+    }
+
+    const typeChartsData = {
+      totalReportsByPeriod: totalReportsByPeriod,
+      hurtoViviendaByPeriod: [],
+      hurtoPersonaByPeriod: [],
+      hurtoVehiculoByPeriod: [],
+      vandalismoByPeriod: [],
+      violacionByPeriod: [],
+      homicidioByPeriod: [],
+      agresionByPeriod: [],
+      otroByPeriod: []
+    };
+
+    return response.status(200).json(typeChartsData);
+  }
+  catch(error) {
     printError(error);
     return response.status(500).send(error);
   }
