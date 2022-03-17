@@ -129,14 +129,14 @@ app.get("/timeChartsData", async (request, response) => {
 
     const typeChartsData = {
       totalReportsByPeriod: totalReportsByPeriod,
-      hurtoViviendaByPeriod: [],
-      hurtoPersonaByPeriod: [],
-      hurtoVehiculoByPeriod: [],
-      vandalismoByPeriod: [],
-      violacionByPeriod: [],
-      homicidioByPeriod: [],
-      agresionByPeriod: [],
-      otroByPeriod: []
+      hurtoViviendaByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "HURTO_VIVIENDA").length),
+      hurtoPersonaByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "HURTO_PERSONA").length),
+      hurtoVehiculoByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "HURTO_VEHICULO").length),
+      vandalismoByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "VANDALISMO").length),
+      violacionByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "VIOLACION").length),
+      homicidioByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "HOMICIDIO").length),
+      agresionByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "AGRESION").length),
+      otroByPeriod: totalReportsByPeriod.map((val) => val["tipoReportes"].filter((val) => val === "OTRO").length)
     };
 
     return response.status(200).json(typeChartsData);
