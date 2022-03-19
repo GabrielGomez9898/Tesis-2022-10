@@ -158,7 +158,7 @@ exports.totalReportsByTrimester = async (db) => {
                 }
             });
     
-            obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"long"})
+            obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"long"});
 
             // obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"short"}) + 
             // lowerDateObject.toLocaleDateString("es-CO", {"day":"numeric"}) +
@@ -185,46 +185,85 @@ exports.totalReportsByTrimester = async (db) => {
  * @return {Any[]} An array that contains objects with each period landmark (e.g, January, February, etc.) and the total number of reports by landmark
  */
 exports.totalReportsBySemester = async (db) => {
-    const date =  new Date();
-    const lowerDateObject = date.clone();
-    lowerDateObject.setDate(lowerDateObject.getDate() - 180);
-    const upperDateObject = date.clone();
+    date = new Date();
+    year = date.getFullYear();
+    month =  date.getMonth();
+    day = date.getDate();
+    const currentDateInRangeObject = new Date(year, month, day);
+    
+    numberOfDays = new Date(year, month, 0).getDate();
+    dayOfMonth = currentDateInRangeObject.getDate();
 
     const docs = await db.collection("reports").get();
-
-    obj = {"reportes": 0, "tipoReportes": []};
-
+    
     const totalReportsByPeriod = [];
-    const currentDateInRangeObject = lowerDateObject.clone();
-    for (let i = 1; i <=  180; i++) {
-        currentDateInRangeObject.setDate(currentDateInRangeObject.getDate() + 1);
+    for(let i = 0; i < 6; i++){
+        
+        obj = {"reportes": 0, "tipoReportes": []};
+        
+        if(i === 0 && dayOfMonth < numberOfDays){
+            lowerDateObject = currentDateInRangeObject.clone();
+            lowerDateObject.setDate(lowerDateObject.getDate() - dayOfMonth + 1);
 
-        if(i % 30 === 1){
-            beginDateObject = currentDateInRangeObject.clone();
-        }
-        else if(i % 30 === 0){
             docs.forEach((doc, i) => {
                 report = doc.data();
                 reportDateStr = report["fecha_hora"].slice(0, report["fecha_hora"].indexOf(" "));
                 reportDateObject = new Date(reportDateStr);
-
-                if (reportDateObject >= beginDateObject && reportDateObject <= currentDateInRangeObject) {
+    
+                if (reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject) {
                     obj["reportes"]++;
                     obj["tipoReportes"].push(report["tipo_reporte"]);
                 }
             });
-
-            obj["periodo"] = beginDateObject.toLocaleDateString("es-CO", {"month":"short"}) + 
-                                beginDateObject.toLocaleDateString("es-CO", {"day":"numeric"}) +
+    
+            obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"short"}) + 
+                                lowerDateObject.toLocaleDateString("es-CO", {"day":"numeric"}) +
                                 "-" +
                                 currentDateInRangeObject.toLocaleDateString("es-CO", {"month": "short"}) +
                                 currentDateInRangeObject.toLocaleDateString("es-CO", {"day":"numeric"});
     
             obj["periodo"] = obj["periodo"].replaceAll(".", "");
-
-            totalReportsByPeriod.push(obj);
-            obj = {"reportes": 0, "tipoReportes": []};
         }
+        else if(i > 0) {
+            lowerDateObject.setMonth(lowerDateObject.getMonth() - 1);
+            lowerDateObject.setDate(1);
+
+            docs.forEach((doc, i) => {
+                report = doc.data();
+                reportDateStr = report["fecha_hora"].slice(0, report["fecha_hora"].indexOf(" "));
+                reportDateObject = new Date(reportDateStr);
+    
+                if (reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject) {
+                    obj["reportes"]++;
+                    obj["tipoReportes"].push(report["tipo_reporte"]);
+                }
+            });
+    
+            obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"long"});
+
+            // obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"short"}) + 
+            // lowerDateObject.toLocaleDateString("es-CO", {"day":"numeric"}) +
+            // "-" +
+            // currentDateInRangeObject.toLocaleDateString("es-CO", {"month": "short"}) +
+            // currentDateInRangeObject.toLocaleDateString("es-CO", {"day":"numeric"});
+        }
+
+        currentDateInRangeObject.setDate(1);
+
+        if(currentDateInRangeObject.getMonth() === 0) {
+            currentDateInRangeObject.setMonth(11);
+            currentDateInRangeObject.setFullYear(currentDateInRangeObject.getFullYear() - 1);
+        }
+        else if(currentDateInRangeObject.getMonth() > 0) {
+            currentDateInRangeObject.setMonth(currentDateInRangeObject.getMonth() - 1);
+        }
+
+        month = currentDateInRangeObject.getMonth() + 1;
+        year = currentDateInRangeObject.getFullYear();
+        numberOfDays = new Date(year, month, 0).getDate();
+        currentDateInRangeObject.setDate(numberOfDays);
+
+        totalReportsByPeriod.unshift(obj);
     }
 
     return totalReportsByPeriod;
@@ -236,7 +275,80 @@ exports.totalReportsBySemester = async (db) => {
  * @return {Any[]} An array that contains objects with each period landmark (e.g, January, February, etc.) and the total number of reports by landmark
  */
 exports.totalReportsByYear = async (db) => {
+    date = new Date();
+    year = date.getFullYear();
+    month =  date.getMonth();
+    day = date.getDate();
+    const currentDateInRangeObject = new Date(year, month, day);
 
+    const docs = await db.collection("reports").get();
+    
+    const totalReportsByPeriod = [];
+    for(let i = 0; i < 12; i++){
+        month = currentDateInRangeObject.getMonth() + 1;
+        year = currentDateInRangeObject.getFullYear();
+        numberOfDays = new Date(year, month, 0).getDate();
+        dayOfMonth = currentDateInRangeObject.getDate();
+        
+        obj = {"reportes": 0, "tipoReportes": []};
+
+        if(i === 0 && dayOfMonth < numberOfDays){
+            lowerDateObject = currentDateInRangeObject.clone();
+            lowerDateObject.setDate(lowerDateObject.getDate() - dayOfMonth + 1);
+
+            docs.forEach((doc, i) => {
+                report = doc.data();
+                reportDateStr = report["fecha_hora"].slice(0, report["fecha_hora"].indexOf(" "));
+                reportDateObject = new Date(reportDateStr);
+    
+                if (reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject) {
+                    obj["reportes"]++;
+                    obj["tipoReportes"].push(report["tipo_reporte"]);
+                }
+            });
+    
+            obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"short"}) + 
+                                lowerDateObject.toLocaleDateString("es-CO", {"day":"numeric"}) +
+                                "-" +
+                                currentDateInRangeObject.toLocaleDateString("es-CO", {"month": "short"}) +
+                                currentDateInRangeObject.toLocaleDateString("es-CO", {"day":"numeric"});
+    
+            obj["periodo"] = obj["periodo"].replaceAll(".", "");
+        }
+        else if(i > 0) {
+            lowerDateObject.setMonth(lowerDateObject.getMonth() - 1);
+            lowerDateObject.setDate(1);
+
+            docs.forEach((doc, i) => {
+                report = doc.data();
+                reportDateStr = report["fecha_hora"].slice(0, report["fecha_hora"].indexOf(" "));
+                reportDateObject = new Date(reportDateStr);
+    
+                if (reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject) {
+                    obj["reportes"]++;
+                    obj["tipoReportes"].push(report["tipo_reporte"]);
+                }
+            });
+    
+            obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"long"});
+
+            // obj["periodo"] = lowerDateObject.toLocaleDateString("es-CO", {"month":"short"}) + 
+            // lowerDateObject.toLocaleDateString("es-CO", {"day":"numeric"}) +
+            // "-" +
+            // currentDateInRangeObject.toLocaleDateString("es-CO", {"month": "short"}) +
+            // currentDateInRangeObject.toLocaleDateString("es-CO", {"day":"numeric"});
+        }
+
+        currentDateInRangeObject.setMonth(currentDateInRangeObject.getMonth() - 1);
+        month = currentDateInRangeObject.getMonth() + 1;
+        year = currentDateInRangeObject.getFullYear();
+        numberOfDays = new Date(year, month, 0).getDate();
+        currentDateInRangeObject.setDate(numberOfDays);
+
+        totalReportsByPeriod.unshift(obj);
+    }
+
+    return totalReportsByPeriod;
 };
 
 /**
