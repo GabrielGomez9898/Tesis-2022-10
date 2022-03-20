@@ -379,20 +379,7 @@ class CreateReportState extends State<CreateReport> {
                             ),
                           ),
                         )),
-                        Container(
-                          width: 30,
-                          height: 30,
-                          child: _image != null
-                              ? Image.file(
-                                  _image,
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.fitHeight,
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(),
-                                ),
-                        ),
+                        
                       ],
                     ),
                     SizedBox(width: 10),
@@ -406,7 +393,9 @@ class CreateReportState extends State<CreateReport> {
                               print("toco el boton");
                               XFile? image = await imagePicker.pickImage(
                                   source: ImageSource.gallery);
+                              print("antes de entrar al setstate");
                               setState(() {
+                                print("entro al setsate");
                                 _image = File(image!.path);
                                 _arrayImages.add(_image);
                                 print("Image path: "+image.path);
@@ -418,20 +407,7 @@ class CreateReportState extends State<CreateReport> {
                             ),
                           ),
                         )),
-                        Container(
-                          width: 30,
-                          height: 30,
-                          child: _image != null
-                              ? Image.file(
-                                  _image,
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.fitHeight,
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(),
-                                ),
-                        ),
+                      
                         ElevatedButton(
                             onPressed: () async {
                               XFile? fileVideo = await ImagePicker()
