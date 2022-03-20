@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { Area, AreaChart, CartesianGrid, Label, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const AreaChartCard = () => {
-    const typeChartsData = useSelector((state) => state.typeChartsData.value);
+    const timeChartsData = useSelector((state) => state.timeChartsData.value);
 
     const sampleData = {
         totalReportsByPeriod: [],

@@ -6,49 +6,49 @@ import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend , LabelList, T
 const PieChartCard = () => {
     const typeChartsData = useSelector((state) => state.typeChartsData.value)
 
-    const sampleData = {
-        hurtoViviendaNum: 8,
-        hurtoPersonaNum: 39,
-        hurtoVehiculoNum: 20,
-        vandalismoNum: 12,
-        violacionNum: 27,
-        homicidioNum: 12,
-        agresionNum: 68,
-        otroNum: 7
-    }
+    // const sampleData = {
+    //     hurtoViviendaNum: 8,
+    //     hurtoPersonaNum: 39,
+    //     hurtoVehiculoNum: 20,
+    //     vandalismoNum: 12,
+    //     violacionNum: 27,
+    //     homicidioNum: 12,
+    //     agresionNum: 68,
+    //     otroNum: 7
+    // }
 
     const data = [
         {
             name: "Hurto de viviendas",
-            value: sampleData.hurtoViviendaNum
+            value: typeChartsData.hurtoViviendaNum
         },
         {
             name: "Hurto a personas",
-            value: sampleData.hurtoPersonaNum
+            value: typeChartsData.hurtoPersonaNum
         },
         {
             name: "Hurto de vehículos",
-            value: sampleData.hurtoVehiculoNum
+            value: typeChartsData.hurtoVehiculoNum
         },
         {
             name: "Vandalismo",
-            value: sampleData.vandalismoNum
+            value: typeChartsData.vandalismoNum
         },
         {
             name: "Violación",
-            value: sampleData.violacionNum
+            value: typeChartsData.violacionNum
         },
         {
             name: "Homicidio",
-            value: sampleData.homicidioNum
+            value: typeChartsData.homicidioNum
         },
         {
             name: "Agresión",
-            value: sampleData.agresionNum
+            value: typeChartsData.agresionNum
         },
         {
             name: "Otro",
-            value: sampleData.otroNum
+            value: typeChartsData.otroNum
         }
     ]
 
