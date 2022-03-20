@@ -5,49 +5,49 @@ import { ResponsiveContainer, Bar, BarChart, CartesianGrid, Legend, Tooltip, XAx
 const BarChartCard = () => {
     const typeChartsData = useSelector((state) => state.typeChartsData.value);
 
-    const sampleData = {
-        hurtoViviendaNum: 8,
-        hurtoPersonaNum: 39,
-        hurtoVehiculoNum: 20,
-        vandalismoNum: 12,
-        violacionNum: 27,
-        homicidioNum: 12,
-        agresionNum: 68,
-        otroNum: 7
-    }
+    // const sampleData = {
+    //     hurtoViviendaNum: 8,
+    //     hurtoPersonaNum: 39,
+    //     hurtoVehiculoNum: 20,
+    //     vandalismoNum: 12,
+    //     violacionNum: 27,
+    //     homicidioNum: 12,
+    //     agresionNum: 68,
+    //     otroNum: 7
+    // }
 
     const data = [
         {
             reportType: "Hurto de viviendas",
-            A: sampleData.hurtoViviendaNum
+            A: typeChartsData.hurtoViviendaNum
         },
         {
             reportType: "Hurto a personas",
-            A: sampleData.hurtoPersonaNum
+            A: typeChartsData.hurtoPersonaNum
         },
         {
             reportType: "Hurto de vehículos",
-            A: sampleData.hurtoVehiculoNum
+            A: typeChartsData.hurtoVehiculoNum
         },
         {
             reportType: "Vandalismo",
-            A: sampleData.vandalismoNum
+            A: typeChartsData.vandalismoNum
         },
         {
             reportType: "Violación",
-            A: sampleData.violacionNum
+            A: typeChartsData.violacionNum
         },
         {
             reportType: "Homicidio",
-            A: sampleData.homicidioNum
+            A: typeChartsData.homicidioNum
         },
         {
             reportType: "Agresión",
-            A: sampleData.agresionNum
+            A: typeChartsData.agresionNum
         },
         {
             reportType: "Otro",
-            A: sampleData.otroNum
+            A: typeChartsData.otroNum
         }
     ]
 

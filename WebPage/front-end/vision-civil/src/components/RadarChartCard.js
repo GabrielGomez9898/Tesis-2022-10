@@ -5,18 +5,18 @@ import { PolarAngleAxis, PolarGrid, RadarChart, ResponsiveContainer, Radar, Lege
 const RadarChartCard = () => {
     const typeChartsData = useSelector((state) => state.typeChartsData.value);
 
-    const sampleData = {
-        hurtoViviendaNum: 8,
-        hurtoPersonaNum: 39,
-        hurtoVehiculoNum: 20,
-        vandalismoNum: 12,
-        violacionNum: 27,
-        homicidioNum: 12,
-        agresionNum: 68,
-        otroNum: 7
-    }
+    // const sampleData = {
+    //     hurtoViviendaNum: 8,
+    //     hurtoPersonaNum: 39,
+    //     hurtoVehiculoNum: 20,
+    //     vandalismoNum: 12,
+    //     violacionNum: 27,
+    //     homicidioNum: 12,
+    //     agresionNum: 68,
+    //     otroNum: 7
+    // }
 
-    const biggest = Math.max(...Object.values(sampleData))
+    const biggest = Math.max(...Object.values(typeChartsData))
 
     const round5 = (x) => {
         console.log(Math.ceil(x / 5) * 5);
@@ -26,42 +26,42 @@ const RadarChartCard = () => {
     const data = [
         {
             reportType: "Hurto de viviendas",
-            A: sampleData.hurtoViviendaNum,
+            A: typeChartsData.hurtoViviendaNum,
             fullMark: biggest
         },
         {
             reportType: "Hurto a personas",
-            A: sampleData.hurtoPersonaNum,
+            A: typeChartsData.hurtoPersonaNum,
             fullMark: biggest
         },
         {
             reportType: "Hurto de vehículos",
-            A: sampleData.hurtoVehiculoNum,
+            A: typeChartsData.hurtoVehiculoNum,
             fullMark: biggest
         },
         {
             reportType: "Vandalismo",
-            A: sampleData.vandalismoNum,
+            A: typeChartsData.vandalismoNum,
             fullMark: biggest
         },
         {
             reportType: "Violación",
-            A: sampleData.violacionNum,
+            A: typeChartsData.violacionNum,
             fullMark: biggest
         },
         {
             reportType: "Homicidio",
-            A: sampleData.homicidioNum,
+            A: typeChartsData.homicidioNum,
             fullMark: biggest
         },
         {
             reportType: "Agresión",
-            A: sampleData.agresionNum,
+            A: typeChartsData.agresionNum,
             fullMark: biggest
         },
         {
             reportType: "Otro",
-            A: sampleData.otroNum,
+            A: typeChartsData.otroNum,
             fullMark: biggest
         }
     ]
