@@ -1,25 +1,36 @@
 import "../styles/Forms.scss";
 import { useDispatch } from "react-redux";
 import { refreshData } from "../features/TimeChartsData";
+import { useState } from "react";
+import Axios from "axios";
 
 const TimeChartsFilterCard = () => {
     const dispatch = useDispatch();
 
+    const [period, setPeriod] = useState("ESTA_SEMANA");
+
     const handleSubmit = (e) => {
         e.preventDefault();
+        getTimeChartsData();
+    }
+
+    const getTimeChartsData = () => {
+        Axios.get(`http://localhost:5001/miproyecto-5cf83/us-central1/app/timeChartsData?period=${period}`).then((response) => {
+            dispatch(refreshData(response.data));
+        })
     }
 
     return (
         <form className="card-timechartfilter-container" onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="period">Periodo</label><br/>
-                <select id="period">
-                    <option>Esta semana</option>
-                    <option>Este mes</option>
-                    <option>Este trimestre</option>
-                    <option>Este semestre</option>
-                    <option>Este año</option>
-                    <option>De por vida</option>
+                <select id="period" required onChange={(e) => {setPeriod(e.target.value)}}>
+                    <option key="ultimos7dias" value="ESTA_SEMANA">Últimos 7 días</option>
+                    <option key="ultimos30dias" value="ESTE_MES">Últimos 30 días</option>
+                    <option key="esteTrimestre" value="ESTE_TRIMESTRE">Este trimestre</option>
+                    <option key="esteSemestre" value="ESTE_SEMESTRE">Este semestre</option>
+                    <option key="esteAnio" value="ESTE_AÑO">Este año</option>
+                    <option key="dePorVida" value="DE_POR_VIDA">De por vida</option>
                 </select>
             </div>
             <button type="submit">Aplicar filtros a diagramas de periodo</button>

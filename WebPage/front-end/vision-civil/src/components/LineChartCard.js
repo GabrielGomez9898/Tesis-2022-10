@@ -3,51 +3,51 @@ import { useSelector } from "react-redux";
 import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Label, Area, AreaChart } from "recharts";
 
 const LineChartCard = () => {
-    const typeChartsData = useSelector((state) => state.typeChartsData.value);
+    const timeChartsData = useSelector((state) => state.timeChartsData.value);
 
-    const sampleData = {
-        totalReportsByPeriod: [
-            {
-                reportes: 20,
-                periodo: "Lunes"
-            },
-            {
-                reportes: 3,
-                periodo: "Martes"
-            },
-            {
-                reportes: 6,
-                periodo: "Miércoles"
-            },
-            {
-                reportes: 2,
-                periodo: "Jueves"
-            },
-            {
-                reportes: 1,
-                periodo: "Viernes"
-            },
-            {
-                reportes: 23,
-                periodo: "Sábado"
-            },
-            {
-                reportes: 9,
-                periodo: "Domingo"
-            }
-        ],
+    // const sampleData = {
+    //     totalReportsByPeriod: [
+    //         {
+    //             reportes: 20,
+    //             periodo: "Lunes"
+    //         },
+    //         {
+    //             reportes: 3,
+    //             periodo: "Martes"
+    //         },
+    //         {
+    //             reportes: 6,
+    //             periodo: "Miércoles"
+    //         },
+    //         {
+    //             reportes: 2,
+    //             periodo: "Jueves"
+    //         },
+    //         {
+    //             reportes: 1,
+    //             periodo: "Viernes"
+    //         },
+    //         {
+    //             reportes: 23,
+    //             periodo: "Sábado"
+    //         },
+    //         {
+    //             reportes: 9,
+    //             periodo: "Domingo"
+    //         }
+    //     ],
 
-        hurtoViviendaByPeriod: [],
-        hurtoPersonaByPeriod: [],
-        hurtoVehiculoByPeriod: [],
-        vandalismoByPeriod: [],
-        violacionByPeriod: [],
-        homicidioByPeriod: [],
-        agresionByPeriod: [],
-        otroByPeriod: []
-    }
+    //     hurtoViviendaByPeriod: [],
+    //     hurtoPersonaByPeriod: [],
+    //     hurtoVehiculoByPeriod: [],
+    //     vandalismoByPeriod: [],
+    //     violacionByPeriod: [],
+    //     homicidioByPeriod: [],
+    //     agresionByPeriod: [],
+    //     otroByPeriod: []
+    // }
 
-    const data = sampleData.totalReportsByPeriod;
+    const data = timeChartsData.totalReportsByPeriod;
 
     return (
         <div className="card-linechart-container">

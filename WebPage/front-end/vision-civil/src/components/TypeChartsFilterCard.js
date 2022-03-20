@@ -18,7 +18,6 @@ const TypeChartsFilterCard = () => {
     const getTypeChartsData = () => {
         Axios.get(`http://localhost:5001/miproyecto-5cf83/us-central1/app/typeChartsData?lowerDate=${lowerDate}&upperDate=${upperDate}`).then((response) => {
             dispatch(refreshData(response.data));
-            console.log(response.data);
         });
     }
 
