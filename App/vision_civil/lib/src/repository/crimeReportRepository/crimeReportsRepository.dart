@@ -24,6 +24,7 @@ class ReportDB {
       List<File> images,
       File video,
       double userPhone) async {
+        print("entro a guardar reporte");
     if (images.length > 0) {
       var documentReference = await db.collection('reports').add({
         'asunto': asunto,

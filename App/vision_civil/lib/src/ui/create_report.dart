@@ -379,20 +379,7 @@ class CreateReportState extends State<CreateReport> {
                             ),
                           ),
                         )),
-                        Container(
-                          width: 30,
-                          height: 30,
-                          child: _image != null
-                              ? Image.file(
-                                  _image,
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.fitHeight,
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(),
-                                ),
-                        ),
+                        
                       ],
                     ),
                     SizedBox(width: 10),
@@ -408,6 +395,7 @@ class CreateReportState extends State<CreateReport> {
                               setState(() {
                                 _image = File(image!.path);
                                 _arrayImages.add(_image);
+                                print(_image);
                               });
                             },
                             child: Icon(
@@ -416,20 +404,7 @@ class CreateReportState extends State<CreateReport> {
                             ),
                           ),
                         )),
-                        Container(
-                          width: 30,
-                          height: 30,
-                          child: _image != null
-                              ? Image.file(
-                                  _image,
-                                  width: 100.0,
-                                  height: 100.0,
-                                  fit: BoxFit.fitHeight,
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(),
-                                ),
-                        ),
+                        
                         ElevatedButton(
                             onPressed: () async {
                               XFile? fileVideo = await ImagePicker()
@@ -480,7 +455,10 @@ class CreateReportState extends State<CreateReport> {
                           String _latitude =
                                   currentLocation.latitude.toString(),
                               _longitude = currentLocation.longitude.toString();
-
+                          print("entro al boton");
+                          print(_latitude);
+                          print(_longitude);
+                          print(_arrayImages.length);
                           BlocProvider.of<ReportBloc>(context).add(
                               CreateRepotEvent(
                                   _tipoReporte,
