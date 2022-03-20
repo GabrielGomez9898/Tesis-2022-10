@@ -1,4 +1,5 @@
 Date.prototype.clone = function() { return new Date(this.getTime()) };
+Date.prototype.getDateWithoutTime = function() { return new Date(this.toDateString()) };
 
 /**
  * Generates an array that contains the total number of reports by each of the 7 landmarks of the week
@@ -11,9 +12,9 @@ exports.totalReportsByWeek = async (db) => {
     colombiaTimeOffset  = -5;
     colombiaDate = new Date(utcTime + (3600000 * colombiaTimeOffset));
 
-    const lowerDateObject = colombiaDate.clone();
+    const lowerDateObject = colombiaDate.clone().getDateWithoutTime();
     lowerDateObject.setDate(lowerDateObject.getDate() - 7);
-    const upperDateObject = colombiaDate.clone();
+    const upperDateObject = colombiaDate.clone().getDateWithoutTime();
 
     const docs = await db.collection("reports").get();
 
@@ -61,7 +62,7 @@ exports.totalReportsByMonth = async (db) => {
     colombiaTimeOffset  = -5;
     colombiaDate = new Date(utcTime + (3600000 * colombiaTimeOffset));
     
-    const lowerDateObject = colombiaDate.clone();
+    const lowerDateObject = colombiaDate.clone().getDateWithoutTime();
     lowerDateObject.setDate(lowerDateObject.getDate() - 30);
 
     const docs = await db.collection("reports").get();
@@ -109,7 +110,7 @@ generateMonthGroupedReports = async (db, numberOfMonths) => {
     utcTime = date.getTime() + (date.getTimezoneOffset() * 60000);
     colombiaTimeOffset  = -5
     colombiaDate = new Date(utcTime + (3600000 * colombiaTimeOffset));
-    const currentDateInRangeObject = colombiaDate;
+    const currentDateInRangeObject = colombiaDate.getDateWithoutTime();
     
     numberOfDays = new Date(currentDateInRangeObject.getFullYear(), currentDateInRangeObject.getMonth(), 0).getDate();
     dayOfMonth = currentDateInRangeObject.getDate();
@@ -148,11 +149,17 @@ generateMonthGroupedReports = async (db, numberOfMonths) => {
             lowerDateObject.setMonth(lowerDateObject.getMonth() - 1);
             lowerDateObject.setDate(1);
 
+            console.log("\n");
+            console.log(lowerDateObject.toLocaleDateString("es-CO", {"month":"numeric"}));
+            console.log("\n");
             docs.forEach((doc, i) => {
                 report = doc.data();
                 reportDateStr = report["fecha_hora"].slice(0, report["fecha_hora"].indexOf(" "));
                 reportDateObject = new Date(reportDateStr);
-    
+
+                console.log(`${reportDateObject.toLocaleDateString("es-CO", {"day":"numeric", "month":"numeric", "year":"numeric", "hour":"numeric", "minute":"numeric", "second":"numeric"})} ENTRA ABAJO? -> ${reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject}`);
+                console.log(`[${lowerDateObject.toLocaleDateString("es-CO", {"day":"numeric", "month":"numeric", "year":"numeric", "hour":"numeric", "minute":"numeric", "second":"numeric"})}-${currentDateInRangeObject.toLocaleDateString("es-CO", {"day":"numeric", "month":"numeric", "year":"numeric", "hour":"numeric", "minute":"numeric", "second":"numeric"})}]`)
+
                 if (reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject) {
                     obj["reportes"]++;
                     obj["tipoReportes"].push(report["tipo_reporte"]);
