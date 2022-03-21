@@ -50,6 +50,7 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
 
   @override
   Widget build(BuildContext context) {
+    String? displayContactName;
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -61,24 +62,29 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
           itemBuilder: (context, index) {
             Contact contact = contacts[index];
             String phone = " ";
+            var contactName = "Contacto desconocido";
+            
             try {
               phone = contact.phones!.first.value.toString();
+              contactName = contact.displayName!;
             } catch (e) {
               phone = " ";
+              contactName = "Contacto desconocido";
             }
             return ListTile(
-              title: Text(contact.displayName!),
+              title: Text(contactName),
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
+                
                 if (widget.emergencyContact.uniqueid == " ") {
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       AddContactEvent(
-                          contact.displayName!, phone, widget.idUser));
+                          contactName, phone, widget.idUser));
                   Navigator.pop(context);
                 } else {
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       UpdateContactEvent(widget.emergencyContact.uniqueid,
-                          contact.displayName!, phone));
+                          contactName, phone));
                   Navigator.pop(context);
                 }
               },
