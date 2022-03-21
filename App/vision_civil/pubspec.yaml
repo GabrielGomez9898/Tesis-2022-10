@@ -51,6 +51,7 @@ dependencies:
   contacts_service: ^0.6.3
   permission_handler: ^9.2.0
   smsker: ^0.1.1
+  video_player: ^2.3.0
 
 dev_dependencies:
   flutter_test:
