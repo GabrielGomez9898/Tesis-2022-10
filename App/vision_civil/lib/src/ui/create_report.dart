@@ -367,10 +367,14 @@ class CreateReportState extends State<CreateReport> {
                           onPressed: () {},
                           child: GestureDetector(
                             onTap: () async {
+                              print("quiere tomar desde camara");
                               XFile? image = await imagePicker.pickImage(
                                   source: ImageSource.camera);
+                              print("va a entrar a setstate");
                               setState(() {
                                 _image = File(image!.path);
+                                _arrayImages.add(_image);
+                                print("camera image path: "+image.path);
                               });
                             },
                             child: Icon(
@@ -458,6 +462,9 @@ class CreateReportState extends State<CreateReport> {
                           String _latitude =
                                   currentLocation.latitude.toString(),
                               _longitude = currentLocation.longitude.toString();
+                          
+                          print("array list de imagenes");
+                          print(_arrayImages.length);
 
                           BlocProvider.of<ReportBloc>(context).add(
                               CreateRepotEvent(
