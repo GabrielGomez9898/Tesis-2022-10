@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'dart:io' show Platform;
+
+import 'package:flutter_sms/flutter_sms.dart';
 
 class ContactsDB {
   final db = FirebaseFirestore.instance;
@@ -52,21 +55,46 @@ class ContactsDB {
         _latitude +
         "," +
         _longitude;
-    if (_contactPhone1 != " ") {
-      await _channel.invokeMethod(
-          'sendSms', {'phone': _contactPhone1, 'message': message});
-      print("envio sms a: " + _contactPhone1);
+    if (Platform.isAndroid) {
+      print("Es Android");
+      if (_contactPhone1 != " ") {
+        await _channel.invokeMethod(
+            'sendSms', {'phone': _contactPhone1, 'message': message});
+        print("envio sms a: " + _contactPhone1);
+      }
+      if (_contactPhone2 != " ") {
+        await _channel.invokeMethod(
+            'sendSms', {'phone': _contactPhone2, 'message': message});
+        print("envio sms a: " + _contactPhone2);
+      }
+      if (_contactPhone3 != " ") {
+        await _channel.invokeMethod(
+            'sendSms', {'phone': _contactPhone3, 'message': message});
+        print("envio sms a: " + _contactPhone3);
+      }
+    } else if (Platform.isIOS) {
+      print("enviar mensjaje con IOS");
+      
+      List<String> recipents = [];
+      if(_contactPhone1 != " "){
+        recipents.add(_contactPhone1);
+      }
+      if(_contactPhone2 != " "){
+        recipents.add(_contactPhone2);
+      }
+      if(_contactPhone3 != " "){
+        recipents.add(_contactPhone3);
+      }
+      
+      String _result = await sendSMS(message: message, recipients: recipents)
+      .catchError((onError) {
+            print(onError);
+          });
+      print(_result);
+      print("envio mensajes");
+
     }
-    if (_contactPhone2 != " ") {
-      await _channel.invokeMethod(
-          'sendSms', {'phone': _contactPhone2, 'message': message});
-      print("envio sms a: " + _contactPhone2);
-    }
-    if (_contactPhone3 != " ") {
-      await _channel.invokeMethod(
-          'sendSms', {'phone': _contactPhone3, 'message': message});
-      print("envio sms a: " + _contactPhone3);
-    }
+
   }
 }
 
