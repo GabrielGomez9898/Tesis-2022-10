@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
+import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/register.dart';
@@ -28,6 +29,8 @@ class _LoginScreenState extends State<Login> {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => MultiBlocProvider(providers: [
                 BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
+                BlocProvider(
+                    create: (BuildContext context) => ReportBloc()),
                 BlocProvider(
                     create: (BuildContext context) => ContactsblocBloc())
               ], child: HomePage()),

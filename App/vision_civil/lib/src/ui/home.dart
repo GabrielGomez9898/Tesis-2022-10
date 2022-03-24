@@ -6,6 +6,7 @@ import 'package:permission_handler/permission_handler.dart' as perm;
 import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/models/report.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
 import 'package:vision_civil/src/ui/profile.dart';
@@ -421,39 +422,26 @@ class HomeState extends State<HomePage> {
                   )
                 ],
               ),
-              body: BlocBuilder<UserBloc, UserblocState>(
-                builder: (context, userstate) {
-                  BlocProvider.of<ContactsblocBloc>(context)
-                      .add(GetUserContactsEvent(userstate.userID));
-                  return Column(
-                    children: [
-                      Text('id user: ' +
-                          userstate.userID +
-                          ' ' +
-                          userstate.loginAchieved.toString() +
-                          ' ' +
-                          userstate.userEmail +
-                          ' ' +
-                          userstate.userName +
-                          ' ' +
-                          userstate.userGender +
-                          ' ' +
-                          userstate.userBirthDate +
-                          ' ' +
-                          userstate.userPhone.toString() +
-                          ' ' +
-                          userstate.userRole +
-                          ' ' +
-                          userstate.userDocument +
-                          ' ' +
-                          userstate.idPolice +
-                          ' ' +
-                          userstate.available.toString() +
-                          ' ' +
-                          userstate.onService.toString()),
-                      SizedBox(height: 50),
-                      Text("Reportes")
-                    ],
+              body: BlocBuilder<ReportBloc, ReportblocState>(
+                builder: (context, state) {
+                  BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
+                  return 
+                      ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: state.reports.length,
+                        itemBuilder: (context, index) {
+                          Report report = state.reports[index];
+
+                          return ListTile(
+                            title: Text(report.asunto),
+                            subtitle: Text(report.descripcion),
+                            onTap: () {
+                              print("Selecciono el reporte con id: "+report.id);
+                            },
+                          );
+                        },
+                      
+                    
                   );
                 },
               ));

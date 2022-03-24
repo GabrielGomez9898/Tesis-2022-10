@@ -41,3 +41,6 @@ class CreateRepotEvent extends ReportblocEvent {
     this.userPhone = _userPhone;
   }
 }
+// ignore: must_be_immutable
+class GetReportsEvent extends ReportblocEvent{}
+

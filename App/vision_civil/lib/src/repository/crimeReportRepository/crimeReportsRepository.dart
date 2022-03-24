@@ -73,6 +73,11 @@ class ReportDB {
       });
     }
   }
+
+  Future<QuerySnapshot> getReports(){
+    Future<QuerySnapshot> docs = FirebaseFirestore.instance.collection('reports').get();
+    return docs;
+  }
 }
 
 ReportDB reportdb = ReportDB();

@@ -1,5 +1,6 @@
 part of 'reports_bloc.dart';
 
 class ReportblocState {
-  ReportblocState();
+  List<Report> reports;
+  ReportblocState({required this.reports});
 }
