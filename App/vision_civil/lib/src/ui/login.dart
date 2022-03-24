@@ -55,6 +55,7 @@ class _LoginScreenState extends State<Login> {
           appBar: AppBar(
             centerTitle: true,
             title: Text("¡Bienvenidos!"),
+            automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
             child: Column(
