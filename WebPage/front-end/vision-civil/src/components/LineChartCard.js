@@ -5,49 +5,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 const LineChartCard = () => {
     const timeChartsData = useSelector((state) => state.timeChartsData.value);
 
-    // const sampleData = {
-    //     totalReportsByPeriod: [
-    //         {
-    //             reportes: 20,
-    //             periodo: "Lunes"
-    //         },
-    //         {
-    //             reportes: 3,
-    //             periodo: "Martes"
-    //         },
-    //         {
-    //             reportes: 6,
-    //             periodo: "Miércoles"
-    //         },
-    //         {
-    //             reportes: 2,
-    //             periodo: "Jueves"
-    //         },
-    //         {
-    //             reportes: 1,
-    //             periodo: "Viernes"
-    //         },
-    //         {
-    //             reportes: 23,
-    //             periodo: "Sábado"
-    //         },
-    //         {
-    //             reportes: 9,
-    //             periodo: "Domingo"
-    //         }
-    //     ],
-
-    //     hurtoViviendaByPeriod: [],
-    //     hurtoPersonaByPeriod: [],
-    //     hurtoVehiculoByPeriod: [],
-    //     vandalismoByPeriod: [],
-    //     violacionByPeriod: [],
-    //     homicidioByPeriod: [],
-    //     agresionByPeriod: [],
-    //     otroByPeriod: []
-    // }
-
-    const data = timeChartsData.totalReportsByPeriod;
+    const data = timeChartsData;
 
     return (
         <div className="card-linechart-container">

@@ -1,8 +1,7 @@
 import "../styles/Alert.scss";
 import "../styles/Forms.scss";
 import React, { useState, useCallback } from "react";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../firebase";
+import { useAuth } from "../contexts/AuthContext";
 import Alert from "./Alert";
 
 const SignupForm = () => {
@@ -12,6 +11,8 @@ const SignupForm = () => {
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
+    const { signup } = useAuth();
+
     const register = useCallback(async (e) => {
         e.preventDefault();
 
@@ -19,18 +20,35 @@ const SignupForm = () => {
             if(password === confirmedPassword) {
                 setMessage("");
                 setIsLoading(true);
-                await createUserWithEmailAndPassword(auth, email, password).then( (userCredential) => {
-                    console.log(userCredential);
-                    const user = userCredential.user;
-                    // sessionStorage.setItem("Auth Token", response._tokenResponse.refreshToken);
-                });
+                await signup(email, password);
             }
             else {
                 setMessage("Las contraseñas no coinciden");
             }
         }
-        catch {
-            setMessage("Error al hacer el registro");
+        catch(error) {
+
+            // https://firebase.google.com/docs/auth/admin/errors
+
+            switch (error.code) {
+                case "auth/internal-error":
+                    setMessage("Error interno del servidor");
+                    break;
+                case "auth/invalid-email":
+                    setMessage("El email provisto no tiene un formato válido");
+                    break;
+                case "auth/invalid-password":
+                    setMessage("La contraseña debe tener por lo menos 6 caracteres");
+                    break;
+                case "auth/email-already-exists":
+                    setMessage("El email provisto ya está en uso por otro usuario");
+                    break;
+                default:
+                    setMessage("Error desconocido");
+                    break;
+            }
+
+            console.log(error);
         }
 
         setIsLoading(false);
