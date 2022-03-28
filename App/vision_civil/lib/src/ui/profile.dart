@@ -72,8 +72,13 @@ class ProfileState extends State<Profile> {
                       ],
                     ),
                     SizedBox(height: size.height * 0.07),
+                    state.userRole == "CIUDADANO" ? 
                     Text(
-                        "Solo puedes modificar los Nombre, Celular, Fecha de nacimiento y Genero",
+                        "Solo puedes modificar los campos: Nombre, Celular, Fecha de nacimiento y Genero",
+                        style: TextStyle(fontSize: 16.0, color: Colors.grey))
+                    :
+                    Text(
+                        "Usted como policia no puede modificar sus datos, en caso de cambio de informacion ponerse en contacto con la Alcaldia de Sibate",
                         style: TextStyle(fontSize: 16.0, color: Colors.grey)),
                     SizedBox(height: size.height * 0.02),
                     TextFieldFuntion(
@@ -85,8 +90,16 @@ class ProfileState extends State<Profile> {
                         },
                         tipo: TextInputType.emailAddress,
                         obsText: false),
+                    state.userRole == "CIUDADANO" ? 
                     TextFieldFuntion(
                       hintText: state.userDocument,
+                      onChanged: (value) {},
+                      tipo: TextInputType.name,
+                      obsText: false,
+                      icon: Icons.assignment,
+                      enablded: false,
+                    ) : TextFieldFuntion(
+                      hintText: state.idPolice,
                       onChanged: (value) {},
                       tipo: TextInputType.name,
                       obsText: false,
@@ -153,6 +166,7 @@ class ProfileState extends State<Profile> {
                       },
                       hint: Text(this.gender),
                     ),
+                    state.userRole == "CIUDADANO" ? 
                     ButtoWidget(
                       text: 'Actualizar datos',
                       textColor: Colors.black,
@@ -164,7 +178,9 @@ class ProfileState extends State<Profile> {
                             this.gender,
                             this.phone));
                       },
-                    ),
+                    )
+                    :
+                    Text("Informacion gestionada por la Alacaldia de Sibate"),
                   ],
                 ),
               );

@@ -363,19 +363,6 @@ class HomeState extends State<HomePage> {
           return Scaffold(
               appBar: AppBar(
                 title: Text("Home Visión Civil Policias"),
-                leading: IconButton(
-                  icon: Icon(Icons.contacts),
-                  onPressed: () {
-                    Navigator.of(context).push(MaterialPageRoute(
-                      builder: (_) => MultiBlocProvider(providers: [
-                        BlocProvider.value(
-                            value: BlocProvider.of<UserBloc>(context)),
-                        BlocProvider.value(
-                            value: BlocProvider.of<ContactsblocBloc>(context)),
-                      ], child: ContactsPage()),
-                    ));
-                  },
-                ),
                 actions: <Widget>[
                   BlocBuilder<UserBloc, UserblocState>(
                     builder: (context, state) {
@@ -391,24 +378,6 @@ class HomeState extends State<HomePage> {
                                     birthDate: state.userBirthDate,
                                     gender: state.userGender,
                                     phone: state.userPhone)),
-                          ));
-                        },
-                      );
-                    },
-                  ),
-                  BlocBuilder<UserBloc, UserblocState>(
-                    builder: (context, state) {
-                      return IconButton(
-                        icon: Icon(Icons.create),
-                        onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => MultiBlocProvider(providers: [
-                              BlocProvider.value(
-                                  value: BlocProvider.of<UserBloc>(context)),
-                              BlocProvider(
-                                  create: (BuildContext context) =>
-                                      ReportBloc())
-                            ], child: CreateReport()),
                           ));
                         },
                       );
