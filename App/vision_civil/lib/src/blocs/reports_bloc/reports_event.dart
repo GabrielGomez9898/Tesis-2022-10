@@ -44,3 +44,12 @@ class CreateRepotEvent extends ReportblocEvent {
 // ignore: must_be_immutable
 class GetReportsEvent extends ReportblocEvent{}
 
+// ignore: must_be_immutable
+class GetReportInfoEvent extends ReportblocEvent{
+  String idReport = "";
+
+  GetReportInfoEvent(String idreport){
+    this.idReport = idreport;
+  }
+}
+

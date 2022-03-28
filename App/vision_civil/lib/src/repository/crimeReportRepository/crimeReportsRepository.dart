@@ -78,6 +78,10 @@ class ReportDB {
     Future<QuerySnapshot> docs = FirebaseFirestore.instance.collection('reports').get();
     return docs;
   }
+  Future<DocumentSnapshot> getReportById(String idReport){
+    Future<DocumentSnapshot> report = FirebaseFirestore.instance.collection('reports').doc(idReport).get();
+    return report;
+  }
 }
 
 ReportDB reportdb = ReportDB();

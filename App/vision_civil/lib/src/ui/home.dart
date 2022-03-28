@@ -10,6 +10,7 @@ import 'package:vision_civil/src/models/report.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
 import 'package:vision_civil/src/ui/profile.dart';
+import 'package:vision_civil/src/ui/report_detail.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -394,23 +395,30 @@ class HomeState extends State<HomePage> {
               body: BlocBuilder<ReportBloc, ReportblocState>(
                 builder: (context, state) {
                   BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
-                  return 
-                      ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.reports.length,
-                        itemBuilder: (context, index) {
-                          Report report = state.reports[index];
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: state.reports.length,
+                    itemBuilder: (context, index) {
+                      Report report = state.reports[index];
 
-                          return ListTile(
-                            title: Text(report.asunto),
-                            subtitle: Text(report.descripcion),
-                            onTap: () {
-                              print("Selecciono el reporte con id: "+report.id);
+                      return ListTile(
+                        title: Text(report.tipoReporte),
+                        subtitle: Text(report.asunto),
+                        trailing: ElevatedButton(
+                            onPressed: () {
+                              print(
+                                  "Selecciono el reporte con id: " + report.id);
                             },
-                          );
+                            child: Text("Atender")),
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (_) => BlocProvider.value(
+                                    value: BlocProvider.of<ReportBloc>(context),
+                                    child: ReportDetail(idReport: report.id),
+                                  )));
                         },
-                      
-                    
+                      );
+                    },
                   );
                 },
               ));
