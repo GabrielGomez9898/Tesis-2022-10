@@ -1,17 +1,15 @@
 import "../styles/Navbar.scss";
 import { useNavigate } from "react-router-dom";
-import { signOut } from "firebase/auth";
-import { auth, useAuthState } from "../firebase";
+import { useAuth } from "../contexts/AuthContext";
 
 const Navbar = () => {
     let navigate = useNavigate();
 
-    const { isAuthenticated } = useAuthState();
+    const { logout } = useAuth();
 
-    const exit = () => {
-        signOut(auth);
+    const exit = async () => {
+        await logout();
         navigate("/login");
-        console.log(`AuthenticatedRoute: ${isAuthenticated}`)
     }
 
     return (

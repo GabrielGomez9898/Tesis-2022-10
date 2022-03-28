@@ -9,8 +9,7 @@ import NotificationPage from "./pages/NotificationPage";
 import ControlPage from "./pages/ControlPage";
 import CrimeListPage from "./pages/CrimeListPage";
 import ErrorPage from "./pages/ErrorPage";
-import Navbar from './components/Navbar';
-import { AuthContextProvider, auth } from "./firebase";
+import { AuthContextProvider } from './contexts/AuthContext';
 import AuthenticatedOutlet from './components/AuthenticatedOutlet';
 
 function App() {

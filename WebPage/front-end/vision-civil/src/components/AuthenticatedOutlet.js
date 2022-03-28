@@ -1,10 +1,9 @@
-import { useAuthState } from "../firebase";
-import { Route, Navigate, Outlet } from "react-router-dom";
-import { auth } from "../firebase";
+import { useAuth } from "../contexts/AuthContext";
+import { Navigate, Outlet } from "react-router-dom";
 
 const AuthenticatedOutlet = () => {
-    const { isAuthenticated } = useAuthState()
-    console.log(`AuthenticatedRoute: ${isAuthenticated}`)
+    const { isAuthenticated } = useAuth();
+    console.log(`AuthenticatedRoute: ${isAuthenticated}`);
 
     return (
         isAuthenticated ? <Outlet/> : <Navigate to="/login"/>
