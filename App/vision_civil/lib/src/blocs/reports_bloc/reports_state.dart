@@ -3,5 +3,7 @@ part of 'reports_bloc.dart';
 class ReportblocState {
   List<Report> reports;
   Report report;
-  ReportblocState({required this.reports,required this.report});
+  List<String> imagesIDs;
+  String videoId;
+  ReportblocState({required this.reports,required this.report,required this.imagesIDs,required this.videoId});
 }

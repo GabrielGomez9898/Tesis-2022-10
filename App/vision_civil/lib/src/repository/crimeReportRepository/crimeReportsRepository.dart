@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import 'package:uuid/uuid.dart';
+import 'package:vision_civil/src/models/report.dart';
 
 class ReportDB {
   final db = FirebaseFirestore.instance;
@@ -78,10 +79,7 @@ class ReportDB {
     Future<QuerySnapshot> docs = FirebaseFirestore.instance.collection('reports').get();
     return docs;
   }
-  Future<DocumentSnapshot> getReportById(String idReport){
-    Future<DocumentSnapshot> report = FirebaseFirestore.instance.collection('reports').doc(idReport).get();
-    return report;
-  }
+
 }
 
 ReportDB reportdb = ReportDB();

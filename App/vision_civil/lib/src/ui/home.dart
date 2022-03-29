@@ -46,6 +46,7 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
     return BlocBuilder<UserBloc, UserblocState>(
       builder: (context, state) {
         if (state.userRole == "CIUDADANO") {
@@ -394,7 +395,7 @@ class HomeState extends State<HomePage> {
               ),
               body: BlocBuilder<ReportBloc, ReportblocState>(
                 builder: (context, state) {
-                  BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
+                  
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.reports.length,
@@ -406,17 +407,17 @@ class HomeState extends State<HomePage> {
                         subtitle: Text(report.asunto),
                         trailing: ElevatedButton(
                             onPressed: () {
-                              print(
-                                  "Selecciono el reporte con id: " + report.id);
+                              
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => BlocProvider.value(
+                                        value: BlocProvider.of<ReportBloc>(
+                                            context),
+                                        child:
+                                            ReportDetail(idReport: report.id),
+                                      )));
                             },
-                            child: Text("Atender")),
-                        onTap: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                    value: BlocProvider.of<ReportBloc>(context),
-                                    child: ReportDetail(idReport: report.id),
-                                  )));
-                        },
+                            child: Text("Ver mas")),
+                        onTap: () {},
                       );
                     },
                   );
