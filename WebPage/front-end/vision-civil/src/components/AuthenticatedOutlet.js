@@ -2,8 +2,9 @@ import { useAuth } from "../contexts/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 
 const AuthenticatedOutlet = () => {
-    const { isAuthenticated } = useAuth();
-    console.log(`AuthenticatedRoute: ${isAuthenticated}`);
+    const { isLoading, isAuthenticated } = useAuth();
+
+    if(isLoading) return <></>;
 
     return (
         isAuthenticated ? <Outlet/> : <Navigate to="/login"/>
