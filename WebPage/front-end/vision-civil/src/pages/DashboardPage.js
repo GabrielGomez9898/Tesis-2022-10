@@ -1,4 +1,3 @@
-import CrimeMap from "../components/CrimeMap";
 import DashboardMap from "../components/DashboardMap";
 import Navbar from "../components/Navbar";
 import BarChartCard from "../components/BarChartCard";
