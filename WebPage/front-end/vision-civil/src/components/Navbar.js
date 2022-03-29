@@ -132,7 +132,7 @@ const Navbar = () => {
                 </li>
 
                 <li className="nav-item">
-                    <a className="nav-link" onClick={() => {navigate("/control")}}>
+                    <a className="nav-link" onClick={() => {navigate("/users")}}>
                         <svg
                             aria-hidden="true"
                             focusable="false"
