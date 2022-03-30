@@ -15,7 +15,7 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
   ReportBloc()
       : super(ReportblocState(
             reports: [],
-            report: new Report("inicio", "inicio", "inicio", "inicio", "inicio", "inicio", "inicio", "inicio", "inicio"),
+            report: new Report("", "", "", "", "", "", "", "", ""),
             imagesIDs: [],
             videoId: "")) {
     on<ReportblocEvent>((event, emit) async {
@@ -54,7 +54,7 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             videoId: ""));
       } else if (event is GetReportInfoEvent) {
          List<Report> reports = [];
-        Report reportSave = new Report("nuevo", "nuevo", "nuevo", "nuevo", "nuevo", "nuevo", "nuevo", "nuevo", "nuevo");
+        Report reportSave = new Report("", "", "", "", "", "", "", "", "");
         Future<QuerySnapshot> report = reportdb.getReports();
         await report.then((QuerySnapshot querySnapshot) {
           querySnapshot.docs.forEach((doc) {
@@ -69,16 +69,15 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
                 doc["tipo_reporte"],
                 doc["user_phone"].toString()));
             if (doc.id == event.idReport) {
-              print("id: " + doc.id);
               reportSave.setId(doc.id);
-              print("asunto: " + doc["asunto"]);
               reportSave.setAsunto(doc["asunto"]);
-              print("descripcion: " + doc["descripcion"]);
               reportSave.setDescripcion(doc["descripcion"]);
-              print("estado: " + doc["estado"]);
               reportSave.setEstado(doc["estado"]);
-              print("fecha: " + doc["fecha_hora"]);
               reportSave.setFechaHora(doc["fecha_hora"]);
+              reportSave.setLatitude(doc["latitude"]);
+              reportSave.setLongitude(doc["longitude"]);
+              reportSave.setTipoReporte(doc["tipo_reporte"]);
+              reportSave.setUserphone(doc["user_phone"].toString());
             }
           });
         });
