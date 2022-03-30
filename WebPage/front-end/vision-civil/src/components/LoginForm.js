@@ -1,9 +1,11 @@
 import "../styles/Alert.scss";
 import "../styles/Forms.scss";
 import React, { useState, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Alert from "./Alert";
+import { db } from "../firebase";
+import { collection, query, where, getDocs } from "firebase/firestore";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -13,7 +15,7 @@ const LoginForm = () => {
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
 
-    const { signIn } = useAuth();
+    const { signIn, logout, isAuthenticated } = useAuth();
 
     const login = useCallback(async (e) => {
         e.preventDefault();
@@ -21,8 +23,23 @@ const LoginForm = () => {
         try {
             setMessage("");
             setIsLoading(true);
-            await signIn(email, password);
-            navigate("/");
+            
+            // Create a reference to the functionaries collection
+            const functionariesRef = collection(db, "functionaries");
+            // Create a query to retrieve all the documents in the collection
+            const q = query(functionariesRef);
+            // Execute the query
+            const querySnapshot = await getDocs(q);
+            // SignIn to retrieve userCredential obj
+            const userCredential = await signIn(email, password);
+            //Check if the user that wants to access is a functionary
+            if(querySnapshot.docs.findIndex((doc) => doc.id === userCredential.user.uid) !== -1) {
+                navigate("/");
+            }
+            else {
+                await logout();
+                setMessage("Solo los funcionarios tienen acceso");
+            }
         }
         catch (error) {
 
