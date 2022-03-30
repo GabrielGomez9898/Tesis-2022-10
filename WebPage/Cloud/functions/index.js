@@ -162,6 +162,27 @@ app.get("/users", async (request, response) => {
   }
 });
 
+//createFunctionary
+app.post("/users", async (request, response) => {
+  try {
+    const requestBody = request.body;
+    const id = requestBody["id"];
+
+    // The future db document should not have the id as a field
+    delete requestBody["id"];
+    // Create reference to the functionaries collection
+    const functionariesRef = db.collection("functionaries");
+    // Add a new document to the collection with the specified id
+    await functionariesRef.doc(id).set(requestBody);
+
+    return response.status(200).send(requestBody);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+})
+
 exports.app = functions.https.onRequest(app);
 
 exports.getAllReports = functions.https.onRequest((request, response) => {
