@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import {  browserLocalPersistence, getAuth, setPersistence } from "firebase/auth";
+import { browserLocalPersistence, getAuth, setPersistence } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseApp = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,3 +13,4 @@ const firebaseApp = initializeApp({
 });
 
 export const auth = getAuth(firebaseApp);
+export const db = getFirestore(firebaseApp);
