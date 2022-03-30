@@ -173,15 +173,35 @@ app.post("/users", async (request, response) => {
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
     // Add a new document to the collection with the specified id
-    await functionariesRef.doc(id).set(requestBody);
+    const writeResult = await functionariesRef.doc(id).set(requestBody);
 
-    return response.status(200).send(requestBody);
+    return response.status(200).send(writeResult);
   }
   catch (error) {
     printError(error);
     return response.status(500).send(error);
   }
-})
+});
+
+//updateFunctionary
+app.patch("/users/:userId", async (request, response) => {
+  try {
+    const id = request.params.userId;
+    const requestBody = request.body;
+    const isMaster = requestBody["isMaster"];
+
+    // Create reference to the functionaries collection
+    const functionariesRef = db.collection("functionaries");
+    // Update the document by id
+    const writeResult = await functionariesRef.doc(id).update({isMaster: isMaster});
+
+    return response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
 
 exports.app = functions.https.onRequest(app);
 
