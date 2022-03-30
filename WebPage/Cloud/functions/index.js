@@ -203,6 +203,24 @@ app.patch("/users/:userId", async (request, response) => {
   }
 });
 
+//deleteFunctionary
+app.delete("/users/:userId", async (request, response) => {
+  try {
+    const id = request.params.userId;
+
+    // Create reference to the functionaries collection
+    const functionariesRef = db.collection("functionaries");
+    // Delete the document by id
+    const writeResult = await functionariesRef.doc(id).delete();
+
+    return response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
 exports.app = functions.https.onRequest(app);
 
 exports.getAllReports = functions.https.onRequest((request, response) => {
