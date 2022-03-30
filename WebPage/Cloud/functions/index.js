@@ -144,6 +144,20 @@ app.get("/report/:reportId", async (request, response) => {
     return response.status(200).json(report);
   }
   catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//getAllFunctionaries
+app.get("/users", async (request, response) => {
+  try {
+    const querySnapshot = await db.collection("functionaries").get();
+
+    return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+  }
+  catch (error) {
+    printError(error);
     return response.status(500).send(error);
   }
 });
