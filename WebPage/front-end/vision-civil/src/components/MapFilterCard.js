@@ -26,7 +26,7 @@ const MapFilterCard = () => {
     const getMapData = () => {
         Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/mapData?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
             dispatch(refreshData(response.data));
-        });
+        }).catch((error) => console.log(error));
     }
 
     return (

@@ -17,6 +17,8 @@
     grid-template-columns: 30% 70%;
     margin-left: 20%;
     margin-top: 10%;
+    height: 620px;
+    width: 1150px;
     min-height: 620px;
     max-width: 1150px;
     background-color: $unselected-color;
@@ -47,6 +49,11 @@
     width: 400;
     height: 800;
 }
+.imgu{
+    width: 400;
+    height: 800;
+    margin-top: 160px;
+}
 .modalboton{
     background-color:$btn-color ;
     color: $btn-text-color;
@@ -62,8 +69,29 @@
 .list{
     cursor: pointer;
 }
+.Container-crime{
+    margin-top: 5px;
+    width: 500px;
+    height: 100;
+    align-items: center;
+    margin-left: 32%;
+    background-color: $unselected-color;
+    border-radius: 15px;
+    padding: 1rem;
+}
 
-
-
-
-
+.button .crime-button{
+    margin-left: 50%;
+    width: 100px;
+}
+.description{
+    color: gray;
+}
+.time{
+    color: gray;
+}
+.hora{
+    color: gray;
+    margin-left: 85%;
+    margin-bottom: 1505px;
+}
