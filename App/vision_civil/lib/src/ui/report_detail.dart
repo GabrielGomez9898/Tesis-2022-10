@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
+import 'package:vision_civil/src/ui/map.dart';
 import 'package:vision_civil/storage_service.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -49,21 +50,29 @@ class _ReportDetailState extends State<ReportDetail> {
                       if (snapshot.connectionState == ConnectionState.waiting ||
                           !snapshot.hasData) {
                         return Container(
-                          width: 100,
-                          height: 100,
-                          child: CircularProgressIndicator());
+                            width: 100,
+                            height: 100,
+                            child: CircularProgressIndicator());
                       }
                       return Text("data");
                     }),
-                    Text("ID reporte: "+state.report.id),
-                    Text("Tipo reporte: "+state.report.tipoReporte),
-                    Text("Asunto: "+state.report.asunto),
-                    Text("Descripcion: "+state.report.descripcion),
-                    Text("Fecha hora: "+state.report.fechaHora),
-                    Text("Estado: "+state.report.estado),
-                    Text("latitude: "+state.report.latitude),
-                    Text("longitude: "+state.report.longitude),
-                    Text("celular usuario: "+state.report.userPhone)
+                Text("ID reporte: " + state.report.id),
+                Text("Tipo reporte: " + state.report.tipoReporte),
+                Text("Asunto: " + state.report.asunto),
+                Text("Descripcion: " + state.report.descripcion),
+                Text("Fecha hora: " + state.report.fechaHora),
+                Text("Estado: " + state.report.estado),
+                Text("latitude: " + state.report.latitude),
+                Text("longitude: " + state.report.longitude),
+                Text("celular usuario: " + state.report.userPhone),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Map(latitude: state.report.latitude,longitude: state.report.longitude)),
+                      );
+                    },
+                    child: Text("Ubicacion del caso"))
               ],
             );
           },
