@@ -221,6 +221,49 @@ app.delete("/users/:userId", async (request, response) => {
   }
 });
 
+//getAllReports
+app.get("/reports", async (request, response) => {
+  try {
+    const doc = await db.collection("reports").get();
+    const reports = [];
+    let id = 1;
+    let reporte = undefined;
+    doc.forEach((item ) => {
+      let imagenes = [];
+      let imag = [];
+      reporte = item.data();
+      reporte["id"] = id;
+      if(reporte["images_ids"] != null ){
+        imag.push(reporte["images_ids"].split(",")); 
+        for(let x = 0; x < imag.length; x++){
+          for(let y = 0; y < imag[x].length; y++){
+            if (imag[x][y] != "") {
+              imagenes.push(imag[x][y]);
+            }
+          }
+        }
+        reporte["imagenes"]= imagenes;
+        reporte["hasFotos"] = true;
+      }
+      else {
+        reporte["hasFotos"] = false;
+        reporte["imagenes"]= imagenes;
+      }
+      reporte["fotourl"] = item.id
+      reporte["hora"] = reporte["fecha_hora"].split(" | ")[1];
+      reporte["fecha"] = reporte["fecha_hora"].split(" | ")[0];
+      reports.push(reporte);
+      id += 1;
+    });
+
+    return response.status(200).json(reports);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
 exports.app = functions.https.onRequest(app);
 
 exports.getAllReports = functions.https.onRequest((request, response) => {
