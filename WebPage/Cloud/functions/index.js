@@ -299,9 +299,9 @@ app.post("/cops", async (request, response) => {
 });
 
 //updateCop
-app.patch("/cops/:copsId", async (request, response) => {
+app.patch("/cops/:copId", async (request, response) => {
   try {
-    const id = request.params.copsId;
+    const id = request.params.copId;
     const requestBody = request.body;
 
     // Create reference to the users collection
@@ -310,6 +310,24 @@ app.patch("/cops/:copsId", async (request, response) => {
     const writeResult = await usersRef.doc(id).update(requestBody);
 
     response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//deleteCop
+app.delete("/cops/:copId", async (request, response) => {
+  try {
+    const id = request.params.copId;
+
+    // Create reference to the users collection
+    const usersRef = db.collection("users");
+    // Delete the document by id
+    const writeResult = await usersRef.doc(id).delete();
+
+    return response.status(200).send(writeResult);
   }
   catch (error) {
     printError(error);
