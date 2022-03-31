@@ -150,7 +150,7 @@ app.get("/report/:reportId", async (request, response) => {
 });
 
 //getAllFunctionaries
-app.get("/users", async (request, response) => {
+app.get("/functionaries", async (request, response) => {
   try {
     const querySnapshot = await db.collection("functionaries").get();
 
@@ -163,7 +163,7 @@ app.get("/users", async (request, response) => {
 });
 
 //createFunctionary
-app.post("/users", async (request, response) => {
+app.post("/functionaries", async (request, response) => {
   try {
     const requestBody = request.body;
     const id = requestBody["id"];
@@ -184,9 +184,9 @@ app.post("/users", async (request, response) => {
 });
 
 //updateFunctionary
-app.patch("/users/:userId", async (request, response) => {
+app.patch("/functionaries/:functionaryId", async (request, response) => {
   try {
-    const id = request.params.userId;
+    const id = request.params.functionaryId;
     const requestBody = request.body;
     const isMaster = requestBody["isMaster"];
 
@@ -204,9 +204,9 @@ app.patch("/users/:userId", async (request, response) => {
 });
 
 //deleteFunctionary
-app.delete("/users/:userId", async (request, response) => {
+app.delete("/functionaries/:functionaryId", async (request, response) => {
   try {
-    const id = request.params.userId;
+    const id = request.params.functionaryId;
 
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
@@ -270,6 +270,27 @@ app.get("/cops", async (request, response) => {
     const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
 
     return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//createCop
+app.post("/cops", async (request, response) => {
+  try {
+    const requestBody = request.body;
+    const id = requestBody["id"];
+    
+    // The future db document should not have the id as a field
+    delete requestBody["id"];
+    // Create reference to the users collection
+    const usersReference = db.collection("users");
+    // Add a new document to the collection with the specified id
+    const writeResult = await usersReference.doc(id).set(requestBody);
+
+    return response.status(200).send(writeResult);
   }
   catch (error) {
     printError(error);
