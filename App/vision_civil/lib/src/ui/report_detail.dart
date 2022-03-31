@@ -27,28 +27,45 @@ class _ReportDetailState extends State<ReportDetail> {
         ),
         body: BlocBuilder<ReportBloc, ReportblocState>(
           builder: (context, state) {
-            return FutureBuilder(
-                  future: storage.downloadUrl(state.imagesIDs,idReport),
-                  builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot){
-                    if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.hasData) {
-                      return Container(
-                        height: 200,
-                        width: 200,
-                        child: ListView.builder(
+            return ListView(
+              children: [
+                Text("Informacion del reporte"),
+                FutureBuilder(
+                    future: storage.downloadUrl(state.imagesIDs, idReport),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<String>> snapshot) {
+                      if (snapshot.connectionState == ConnectionState.done &&
+                          snapshot.hasData) {
+                        return Container(
+                          height: 200,
+                          width: 200,
+                          child: ListView.builder(
                               itemCount: snapshot.data!.length,
                               itemBuilder: (BuildContext context, int index) {
                                 return Image.network(snapshot.data![index]);
                               }),
-                      );
-                    }
-                    if (snapshot.connectionState == ConnectionState.waiting ||
-                        !snapshot.hasData) {
-                      return CircularProgressIndicator();
-                    }
-                    return Text("data");
-                  }
-                );
+                        );
+                      }
+                      if (snapshot.connectionState == ConnectionState.waiting ||
+                          !snapshot.hasData) {
+                        return Container(
+                          width: 100,
+                          height: 100,
+                          child: CircularProgressIndicator());
+                      }
+                      return Text("data");
+                    }),
+                    Text("ID reporte: "+state.report.id),
+                    Text("Tipo reporte: "+state.report.tipoReporte),
+                    Text("Asunto: "+state.report.asunto),
+                    Text("Descripcion: "+state.report.descripcion),
+                    Text("Fecha hora: "+state.report.fechaHora),
+                    Text("Estado: "+state.report.estado),
+                    Text("latitude: "+state.report.latitude),
+                    Text("longitude: "+state.report.longitude),
+                    Text("celular usuario: "+state.report.userPhone)
+              ],
+            );
           },
         ));
   }
