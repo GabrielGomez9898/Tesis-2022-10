@@ -19,8 +19,6 @@ class Storage {
       String downloadURL = await storage.ref("reports/9qtfhe3qLJgjJGYWvSPd/media/images/"+imagesIds[i]).getDownloadURL();
       urls.add(downloadURL);
     }
-    print("impresion de urls de firebase");
-    print(urls);
     return urls;
   }
 }

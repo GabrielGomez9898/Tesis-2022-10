@@ -27,23 +27,19 @@ class _ReportDetailState extends State<ReportDetail> {
         ),
         body: BlocBuilder<ReportBloc, ReportblocState>(
           builder: (context, state) {
-            print(state.imagesIDs.length.toString());
-            //print(state.imagesIDs.first);
-            return Column(
-              children: [
-                SizedBox(height: 50),
-                FutureBuilder(
+            return FutureBuilder(
                   future: storage.downloadUrl(state.imagesIDs),
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot){
-                    print("entro al builder");
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData) {
                       return Container(
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          child: Image.network(snapshot.data![1]),
-                        ),
+                        height: 200,
+                        width: 200,
+                        child: ListView.builder(
+                              itemCount: snapshot.data!.length,
+                              itemBuilder: (BuildContext context, int index) {
+                                return Image.network(snapshot.data![index]);
+                              }),
                       );
                     }
                     if (snapshot.connectionState == ConnectionState.waiting ||
@@ -52,9 +48,7 @@ class _ReportDetailState extends State<ReportDetail> {
                     }
                     return Text("data");
                   }
-                )
-              ],
-            );
+                );
           },
         ));
   }
