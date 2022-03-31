@@ -264,6 +264,19 @@ app.get("/reports", async (request, response) => {
   }
 });
 
+//getAllCops
+app.get("/cops", async (request, response) => {
+  try {
+    const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
+
+    return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
 exports.app = functions.https.onRequest(app);
 
 exports.getAllReports = functions.https.onRequest((request, response) => {
