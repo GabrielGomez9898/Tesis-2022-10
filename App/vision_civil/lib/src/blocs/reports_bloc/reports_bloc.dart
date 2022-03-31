@@ -12,11 +12,12 @@ part 'reports_state.dart';
 
 class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
   
+  
   ReportBloc()
       : super(ReportblocState(
             reports: [],
             report: new Report("", "", "", "", "", "", "", "", ""),
-            imagesIDs: [],
+            imagesIDs: ["no","images"],
             videoId: "")) {
     on<ReportblocEvent>((event, emit) async {
       if (event is CreateRepotEvent) {
@@ -50,10 +51,11 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
         emit(ReportblocState(
             reports: reports,
             report: new Report(" ", " ", " ", " ", " ", " ", " ", " ", " "),
-            imagesIDs: [],
+            imagesIDs:["no","images"],
             videoId: ""));
       } else if (event is GetReportInfoEvent) {
-         List<Report> reports = [];
+        List<Report> reports = [];
+        List<String> arrayIds = [];
         Report reportSave = new Report("", "", "", "", "", "", "", "", "");
         Future<QuerySnapshot> report = reportdb.getReports();
         await report.then((QuerySnapshot querySnapshot) {
@@ -78,29 +80,26 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
               reportSave.setLongitude(doc["longitude"]);
               reportSave.setTipoReporte(doc["tipo_reporte"]);
               reportSave.setUserphone(doc["user_phone"].toString());
+
+              try{
+                String imagesids = doc["images_ids"];
+                arrayIds = imagesids.split(",");
+                
+
+              }catch (e){
+                print("No tiene imagenes");
+              }
             }
           });
         });
 
-
         emit(ReportblocState(
             reports: reports,
             report: reportSave,
-            imagesIDs: [],
+            imagesIDs: arrayIds,
             videoId: ""));
-
-        //String imgurl =  await getImageUrl("/reports/"+event.idReport+"/media/images/75d99850-a95d-11ec-b051-d553d0c61748");
-        //String imgurl =  await getImageUrl("/reports/2sR0ALtFAqNqRTlWWbUm/media/images/75d99850-a95d-11ec-b051-d553d0c61748");
-        //guardar en estado
       }
     });
   }
 }
 
-Future<String> getImageUrl(String id) async {
-  final ref = FirebaseStorage.instance.ref().child(id);
-  // no need of the file extension, the name will do fine.
-  var url = await ref.getDownloadURL();
-  print("image url dentro de funcion: " + url);
-  return url;
-}
