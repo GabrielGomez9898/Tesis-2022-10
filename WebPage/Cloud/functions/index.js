@@ -286,11 +286,30 @@ app.post("/cops", async (request, response) => {
     // The future db document should not have the id as a field
     delete requestBody["id"];
     // Create reference to the users collection
-    const usersReference = db.collection("users");
+    const usersRef = db.collection("users");
     // Add a new document to the collection with the specified id
-    const writeResult = await usersReference.doc(id).set(requestBody);
+    const writeResult = await usersRef.doc(id).set(requestBody);
 
     return response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//updateCop
+app.patch("/cops/:copsId", async (request, response) => {
+  try {
+    const id = request.params.copsId;
+    const requestBody = request.body;
+
+    // Create reference to the users collection
+    const usersRef = db.collection("users");
+    // Update the document by id
+    const writeResult = await usersRef.doc(id).update(requestBody);
+
+    response.status(200).send(writeResult);
   }
   catch (error) {
     printError(error);
