@@ -13,10 +13,10 @@ class Storage {
     return results;
   }
 
-  Future<List<String>> downloadUrl(List<String> imagesIds)async{
+  Future<List<String>> downloadUrl(List<String> imagesIds, String idReport)async{
     List<String> urls = [];
     for(var i = 0; i<imagesIds.length-1;i++){
-      String downloadURL = await storage.ref("reports/9qtfhe3qLJgjJGYWvSPd/media/images/"+imagesIds[i]).getDownloadURL();
+      String downloadURL = await storage.ref("reports/"+idReport+"/media/images/"+imagesIds[i]).getDownloadURL();
       urls.add(downloadURL);
     }
     return urls;

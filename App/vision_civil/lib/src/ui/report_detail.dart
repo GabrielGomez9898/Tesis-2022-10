@@ -28,7 +28,7 @@ class _ReportDetailState extends State<ReportDetail> {
         body: BlocBuilder<ReportBloc, ReportblocState>(
           builder: (context, state) {
             return FutureBuilder(
-                  future: storage.downloadUrl(state.imagesIDs),
+                  future: storage.downloadUrl(state.imagesIDs,idReport),
                   builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot){
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData) {
