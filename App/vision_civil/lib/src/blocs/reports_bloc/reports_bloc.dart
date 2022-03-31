@@ -17,7 +17,7 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
       : super(ReportblocState(
             reports: [],
             report: new Report("", "", "", "", "", "", "", "", ""),
-            imagesIDs: ["no","images"],
+            imagesIDs: [],
             videoId: "")) {
     on<ReportblocEvent>((event, emit) async {
       if (event is CreateRepotEvent) {
@@ -51,7 +51,7 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
         emit(ReportblocState(
             reports: reports,
             report: new Report(" ", " ", " ", " ", " ", " ", " ", " ", " "),
-            imagesIDs:["no","images"],
+            imagesIDs:[],
             videoId: ""));
       } else if (event is GetReportInfoEvent) {
         List<Report> reports = [];
