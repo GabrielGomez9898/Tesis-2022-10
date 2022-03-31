@@ -13,13 +13,14 @@ class Storage {
     return results;
   }
 
-  Future<String> downloadUrl(List<String> imagesIds)async{
-    print("entro al download function");
-    for(var i = 0; i<imagesIds.length;i++){
-      print(imagesIds[i]);
+  Future<List<String>> downloadUrl(List<String> imagesIds)async{
+    List<String> urls = [];
+    for(var i = 0; i<imagesIds.length-1;i++){
+      String downloadURL = await storage.ref("reports/9qtfhe3qLJgjJGYWvSPd/media/images/"+imagesIds[i]).getDownloadURL();
+      urls.add(downloadURL);
     }
-    String downloadURL = await storage.ref("reports/9qtfhe3qLJgjJGYWvSPd/media/images/"+imagesIds[1]).getDownloadURL();
-    print(downloadURL);
-    return downloadURL;
+    print("impresion de urls de firebase");
+    print(urls);
+    return urls;
   }
 }

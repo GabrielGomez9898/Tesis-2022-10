@@ -34,7 +34,7 @@ class _ReportDetailState extends State<ReportDetail> {
                 SizedBox(height: 50),
                 FutureBuilder(
                   future: storage.downloadUrl(state.imagesIDs),
-                  builder: (BuildContext context, AsyncSnapshot<String> snapshot){
+                  builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot){
                     print("entro al builder");
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.hasData) {
@@ -42,7 +42,7 @@ class _ReportDetailState extends State<ReportDetail> {
                         child: Container(
                           width: 100,
                           height: 100,
-                          child: Image.network(snapshot.data!),
+                          child: Image.network(snapshot.data![1]),
                         ),
                       );
                     }
