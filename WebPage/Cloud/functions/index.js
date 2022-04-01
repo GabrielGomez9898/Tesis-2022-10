@@ -199,6 +199,7 @@ app.patch("/functionaries/:functionaryId", async (request, response) => {
     const functionariesRef = db.collection("functionaries");
     // Update the document by id
     const writeResult = await functionariesRef.doc(id).update({isMaster: isMaster});
+    console.log(writeResult);
 
     return response.status(200).send(writeResult);
   }
