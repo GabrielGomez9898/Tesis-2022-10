@@ -154,7 +154,12 @@ app.get("/functionaries", async (request, response) => {
   try {
     const querySnapshot = await db.collection("functionaries").get();
 
-    return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+    return response.status(200).json(querySnapshot.docs.map((doc) => {
+      const functionaryObj = doc.data();
+      functionaryObj["id"] = doc.id;
+      
+      return functionaryObj;
+    }));
   }
   catch (error) {
     printError(error);
@@ -269,7 +274,12 @@ app.get("/cops", async (request, response) => {
   try {
     const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
 
-    return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+    return response.status(200).json(querySnapshot.docs.map((doc) => {
+      const copObj = doc.data();
+      copObj["id"] = doc.id;
+
+      return copObj;
+    }));
   }
   catch (error) {
     printError(error);
