@@ -7,12 +7,14 @@ import { Provider } from 'react-redux';
 import mapDataReducer from './features/MapData'
 import typeChartsDataReducer from './features/TypeChartsData';
 import timeChartsDataReducer from "./features/TimeChartsData";
+import editFunctionaryModalDataReducer from './features/EditFunctionaryModalData';
 
 const store = configureStore({
   reducer: {
     mapData: mapDataReducer,
     typeChartsData: typeChartsDataReducer,
-    timeChartsData: timeChartsDataReducer
+    timeChartsData: timeChartsDataReducer,
+    editFunctionaryModalData: editFunctionaryModalDataReducer
   }
 })
 
