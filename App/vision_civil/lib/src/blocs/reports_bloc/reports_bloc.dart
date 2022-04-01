@@ -11,8 +11,6 @@ part 'reports_event.dart';
 part 'reports_state.dart';
 
 class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
-  
-  
   ReportBloc()
       : super(ReportblocState(
             reports: [],
@@ -51,11 +49,12 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
         emit(ReportblocState(
             reports: reports,
             report: new Report(" ", " ", " ", " ", " ", " ", " ", " ", " "),
-            imagesIDs:[],
+            imagesIDs: [],
             videoId: ""));
       } else if (event is GetReportInfoEvent) {
         List<Report> reports = [];
         List<String> arrayIds = [];
+        String videoId = " ";
         Report reportSave = new Report("", "", "", "", "", "", "", "", "");
         Future<QuerySnapshot> report = reportdb.getReports();
         await report.then((QuerySnapshot querySnapshot) {
@@ -81,13 +80,16 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
               reportSave.setTipoReporte(doc["tipo_reporte"]);
               reportSave.setUserphone(doc["user_phone"].toString());
 
-              try{
+              try {
                 String imagesids = doc["images_ids"];
                 arrayIds = imagesids.split(",");
-                
-
-              }catch (e){
+              } catch (e) {
                 print("No tiene imagenes");
+              }
+              try {
+                videoId = doc["video_id"];
+              } catch (e) {
+                print("No tiene video");
               }
             }
           });
@@ -97,9 +99,8 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             reports: reports,
             report: reportSave,
             imagesIDs: arrayIds,
-            videoId: ""));
+            videoId: videoId));
       }
     });
   }
 }
-

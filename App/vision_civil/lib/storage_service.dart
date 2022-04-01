@@ -21,4 +21,12 @@ class Storage {
     }
     return urls;
   }
+
+  Future<String> listVideoPath(String idReport,String idVideo)async{
+    //List<String> urls = [];
+    String downloadVideoURL = await storage.ref("reports/"+idReport+"/media/video/"+idVideo).getDownloadURL();
+    //urls.add(downloadURL);
+    return downloadVideoURL;
+  }
 }
+

@@ -56,11 +56,16 @@ class ReportDB {
       await documentReference.update({'images_ids': imagesids});
 
       // se guarda el video
+      String videoIDSave = "";
       var videoID = Uuid().v1();
+      videoIDSave = videoID;
       var videoPath = "/reports/$idReport/media/video/$videoID";
       final Reference storageReference =
           FirebaseStorage.instance.ref().child(videoPath);
       storageReference.putFile(video);
+
+      await documentReference.update({'video_id': videoIDSave});
+      
     } else {
       await db.collection('reports').add({
         'asunto': asunto,
