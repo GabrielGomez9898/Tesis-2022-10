@@ -33,7 +33,7 @@ class ButtoWidget extends StatelessWidget {
           primary: Colors.white,
           padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
           textStyle: TextStyle(
-              color: textColor, fontSize: 14, fontWeight: FontWeight.w500)),
+              color: textColor, fontSize: 13, fontWeight: FontWeight.w500)),
     );
   }
 }

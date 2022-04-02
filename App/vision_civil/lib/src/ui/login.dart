@@ -21,7 +21,7 @@ class _LoginScreenState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
+    double screenWidth = MediaQuery.of(context).size.width;
     return BlocListener<UserBloc, UserblocState>(
       listener: (context, state) {
         switch (state.loginAchieved) {
@@ -29,8 +29,7 @@ class _LoginScreenState extends State<Login> {
             Navigator.of(context).push(MaterialPageRoute(
               builder: (_) => MultiBlocProvider(providers: [
                 BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
-                BlocProvider(
-                    create: (BuildContext context) => ReportBloc()),
+                BlocProvider(create: (BuildContext context) => ReportBloc()),
                 BlocProvider(
                     create: (BuildContext context) => ContactsblocBloc())
               ], child: HomePage()),
@@ -57,19 +56,20 @@ class _LoginScreenState extends State<Login> {
           backgroundColor: Colors.transparent,
           appBar: AppBar(
             centerTitle: true,
-            title: Text("¡Bienvenidos!"),
+            title: Text("¡Bienvenido!"),
             automaticallyImplyLeading: false,
           ),
           body: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(height: screenWidth * 0.24),
                 Container(
                   child: Image.asset('assets/images/LogoConNombre.jpg',
-                      width: 260.0, height: 190.0, scale: 1),
+                      width: 260.0, height: 110.0, scale: 1),
                 ),
-                SizedBox(height: size.height * 0.1),
+                SizedBox(height: screenWidth * 0.2),
                 TextFieldFuntion(
-                  hintText: 'Correo electronico',
+                  hintText: 'Correo electrónico',
                   onChanged: (String value) {
                     setState(() {
                       _email = value.trim();
@@ -79,7 +79,7 @@ class _LoginScreenState extends State<Login> {
                   tipo: TextInputType.emailAddress,
                   obsText: false,
                 ),
-                SizedBox(height: 3),
+                SizedBox(height: screenWidth * 0.03),
                 TextFieldFuntion(
                   hintText: 'Contraseña',
                   onChanged: (value) {
@@ -91,43 +91,33 @@ class _LoginScreenState extends State<Login> {
                   tipo: TextInputType.visiblePassword,
                   obsText: true,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    SizedBox(
-                      width: 230,
-                      height: 20,
-                      child: ButtonHyperlink(
-                          text: "¿Olvidaste tu contraseña?", press: () => true),
-                    ),
-                  ],
-                ),
                 SizedBox(
-                  height: size.height * 0.09,
+                  height: screenWidth * 0.09,
                 ),
                 ButtoWidget(
                     text: "Ingresar",
                     textColor: Colors.black,
                     press: () {
+                      // showAlertDialog(context);
                       setState(() {
                         _loginText = "Validando usuario...";
                       });
                       BlocProvider.of<UserBloc>(context)
                           .add(LoginEvent(_email, _password));
                     }),
-                SizedBox(height: 20),
+                SizedBox(height: screenWidth * 0.08),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      "¿No tienes cuenta?    |",
+                      "¿No tienes cuenta?  |",
                       style: TextStyle(color: Colors.white),
                     ),
                     SizedBox(
-                      width: 100,
-                      height: 20,
+                      width: 110,
+                      height: 30,
                       child: ButtonHyperlink(
-                          text: "Registrarse",
+                          text: "Regístrate",
                           press: () {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (_) => BlocProvider.value(
@@ -138,7 +128,13 @@ class _LoginScreenState extends State<Login> {
                     ),
                   ],
                 ),
-                Text(_loginText)
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  _loginText,
+                  style: TextStyle(color: Colors.white),
+                )
               ],
             ),
           ),
@@ -148,22 +144,12 @@ class _LoginScreenState extends State<Login> {
   }
 }
 
+//se puede usar para el usuario o contraseña incorrectos
 showAlertDialog(BuildContext context) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
-
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Usuario no encontrado"),
-    content: Text('El usuario o contraseña puede estar mal escrito'),
-    actions: [
-      okButton,
-    ],
+    title: Text("Estado"),
+    content: Text('Validando usuario y contraseña'),
   );
 
   // show the dialog

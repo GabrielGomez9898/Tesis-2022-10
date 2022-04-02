@@ -21,6 +21,7 @@ class TextFieldFuntion extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: TextField(
+        textAlignVertical: TextAlignVertical.bottom,
         keyboardType: tipo,
         obscureText: obsText,
         enabled: enablded,
@@ -42,7 +43,7 @@ class TextFieldFuntion extends StatelessWidget {
           ),
         ),
         style: TextStyle(
-          height: 0.7,
+          height: 0.3,
         ),
         onChanged: onChanged,
       ),
