@@ -100,6 +100,10 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             report: reportSave,
             imagesIDs: arrayIds,
             videoId: videoId));
+      }else if(event is AsignPoliceReport){
+        print("Evento: policia va a atender caso");
+        print("id police: "+event.idPolice);
+        print("id report: "+event.idReport);
       }
     });
   }

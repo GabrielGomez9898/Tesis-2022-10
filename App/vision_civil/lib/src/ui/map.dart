@@ -36,7 +36,7 @@ class MapState extends State<Map> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Maps in Flutter'),
+          title: Text('Ubicación del caso'),
           centerTitle: true,
         ),
         body: Stack(

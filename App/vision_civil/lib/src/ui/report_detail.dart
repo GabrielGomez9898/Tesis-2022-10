@@ -1,37 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:video_player/video_player.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/ui/map.dart';
 import 'package:vision_civil/src/ui/report_video.dart';
 import 'package:vision_civil/storage_service.dart';
 
 class ReportDetail extends StatefulWidget {
-  const ReportDetail({Key? key, required this.idReport}) : super(key: key);
+  const ReportDetail({Key? key, required this.idReport, required this.idPolice}) : super(key: key);
 
+  final String idPolice;
   final String idReport;
   @override
-  State<ReportDetail> createState() => _ReportDetailState(idReport);
+  State<ReportDetail> createState() => _ReportDetailState(idReport,idPolice);
 }
 
 class _ReportDetailState extends State<ReportDetail> {
-  VideoPlayerController? _controller;
   String idReport = "";
-  _ReportDetailState(String idReport) {
+  String idPolice = "";
+  _ReportDetailState(String idReport,String idPolice) {
     this.idReport = idReport;
+    this.idPolice = idPolice;
   }
 
-  @override
-  void initState() {
-    super.initState();
-
-    _controller = VideoPlayerController.network(
-        'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
-      ..initialize().then((_) {
-        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-        setState(() {});
-      });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -127,23 +117,13 @@ class _ReportDetailState extends State<ReportDetail> {
                       } else {
                         return Text("No tiene video");
                       }
-                    })
+                    }),
+                    ElevatedButton(onPressed: (){
+                      BlocProvider.of<ReportBloc>(context).add(AsignPoliceReport(this.idPolice, this.idReport));
+                    }, child: Text("Atender caso"))
               ],
             );
           },
         ));
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _controller?.dispose();
-  }
-
-  VideoPlayerController upDateVideoUrl(String videoPath) {
-    VideoPlayerController controller = VideoPlayerController.network(videoPath)
-      ..initialize().then((_) {});
-
-    return controller;
   }
 }

@@ -395,7 +395,6 @@ class HomeState extends State<HomePage> {
               ),
               body: BlocBuilder<ReportBloc, ReportblocState>(
                 builder: (context, state) {
-                  
                   return ListView.builder(
                     shrinkWrap: true,
                     itemCount: state.reports.length,
@@ -405,18 +404,21 @@ class HomeState extends State<HomePage> {
                       return ListTile(
                         title: Text(report.tipoReporte),
                         subtitle: Text(report.asunto),
-                        trailing: ElevatedButton(
-                            onPressed: () {
-                              
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => BlocProvider.value(
-                                        value: BlocProvider.of<ReportBloc>(
-                                            context),
-                                        child:
-                                            ReportDetail(idReport: report.id),
-                                      )));
-                            },
-                            child: Text("Ver mas")),
+                        trailing: BlocBuilder<UserBloc, UserblocState>(
+                          builder: (context, state) {
+                            return ElevatedButton(
+                                onPressed: () {
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (_) => BlocProvider.value(
+                                            value: BlocProvider.of<ReportBloc>(
+                                                context),
+                                            child: ReportDetail(
+                                                idReport: report.id, idPolice: state.idPolice),
+                                          )));
+                                },
+                                child: Text("Ver mas"));
+                          },
+                        ),
                         onTap: () {},
                       );
                     },
