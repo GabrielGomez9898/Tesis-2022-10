@@ -87,20 +87,32 @@ class ReportDB {
 
   void asignReport(String idPoliceUser, String idReport) async {
     var police = FirebaseFirestore.instance.collection('users');
-    police.doc(idPoliceUser) 
-        .update({'disponible':false,'id_report': idReport}) 
-        .catchError((error) => print('Update failed: $error'));
+    police
+        .doc(idPoliceUser)
+        .update({'disponible': false, 'id_report': idReport}).catchError(
+            (error) => print('Update failed: $error'));
     var report = FirebaseFirestore.instance.collection('reports');
-    report.doc(idReport) 
-        .update({'estado': 'EN PROCESO'}) 
-        .catchError((error) => print('Update failed: $error'));
-    print("Vinculo el reporte: "+idReport+" al policia: "+idPoliceUser);
+    report.doc(idReport).update({'estado': 'EN PROCESO'}).catchError(
+        (error) => print('Update failed: $error'));
+    print("Vinculo el reporte: " + idReport + " al policia: " + idPoliceUser);
   }
 
-    Future<QuerySnapshot> getUsers() {
+  Future<QuerySnapshot> getUsers() {
     Future<QuerySnapshot> docs =
         FirebaseFirestore.instance.collection('users').get();
     return docs;
+  }
+
+  void finishReport(String idPoliceUser, String idReport) async{
+    var police = FirebaseFirestore.instance.collection('users');
+    police
+        .doc(idPoliceUser)
+        .update({'disponible': true, 'id_report': ''}).catchError(
+            (error) => print('Update failed: $error'));
+    var report = FirebaseFirestore.instance.collection('reports');
+    report.doc(idReport).update({'estado': 'FINALIZADO'}).catchError(
+        (error) => print('Update failed: $error'));
+    print("Se finalizo el reporte: " + idReport + " del policia: " + idPoliceUser);
   }
 }
 

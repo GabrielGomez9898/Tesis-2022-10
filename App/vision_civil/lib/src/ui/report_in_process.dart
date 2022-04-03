@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/map.dart';
 import 'package:vision_civil/src/ui/report_video.dart';
 import 'package:vision_civil/storage_service.dart';
@@ -121,6 +122,35 @@ class _ProcessReportState extends State<ProcessReport> {
                           return Text("No tiene video");
                         }
                       }),
+                  BlocBuilder<ReportBloc, ReportblocState>(
+                    builder: (context, state) {
+                      return BlocBuilder<UserBloc, UserblocState>(
+                        builder: (context, userstate) {
+                          return ElevatedButton(
+                              onPressed: () {
+                                BlocProvider.of<UserBloc>(context).add(
+                                    UpdateUserState(
+                                        userstate.userID,
+                                        userstate.userEmail,
+                                        userstate.userName,
+                                        userstate.userPhone,
+                                        userstate.userGender,
+                                        userstate.userBirthDate,
+                                        userstate.userRole,
+                                        userstate.userDocument,
+                                        userstate.idPolice,
+                                        true,
+                                        userstate.onService,
+                                        userstate.loginAchieved));
+                                BlocProvider.of<ReportBloc>(context).add(
+                                    FinishReportEvent(
+                                        this.idUserPolice, state.report.id));
+                              },
+                              child: Text("Finalizar caso"));
+                        },
+                      );
+                    },
+                  )
                 ],
               );
             } else {

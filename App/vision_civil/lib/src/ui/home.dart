@@ -366,6 +366,7 @@ class HomeState extends State<HomePage> {
           return Scaffold(
               appBar: AppBar(
                 title: Text("Home Visión Civil Policias"),
+                automaticallyImplyLeading: false,
                 actions: <Widget>[
                   BlocBuilder<UserBloc, UserblocState>(
                     builder: (context, state) {
@@ -373,10 +374,12 @@ class HomeState extends State<HomePage> {
                         icon: Icon(Icons.my_library_books),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                                value: BlocProvider.of<ReportBloc>(context),
-                                child:
-                                    ProcessReport(idUserPolice: state.userID)),
+                            builder: (_) => MultiBlocProvider(providers: [
+                              BlocProvider.value(
+                                  value: BlocProvider.of<UserBloc>(context)),
+                                  BlocProvider.value(
+                                  value: BlocProvider.of<ReportBloc>(context))  
+                            ], child: ProcessReport(idUserPolice: state.userID)),
                           ));
                         },
                       );

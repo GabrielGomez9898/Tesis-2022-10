@@ -171,6 +171,8 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             videoId: ""));
         }
         
+      }else if(event is FinishReportEvent){
+        reportdb.finishReport(event.idPoliceUser, event.idReport);
       }
     });
   }
