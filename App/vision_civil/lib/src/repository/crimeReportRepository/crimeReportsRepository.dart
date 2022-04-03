@@ -25,7 +25,7 @@ class ReportDB {
       List<File> images,
       File video,
       double userPhone) async {
-        print("entro a guardar reporte");
+    print("entro a guardar reporte");
     if (images.length > 0) {
       var documentReference = await db.collection('reports').add({
         'asunto': asunto,
@@ -65,7 +65,6 @@ class ReportDB {
       storageReference.putFile(video);
 
       await documentReference.update({'video_id': videoIDSave});
-      
     } else {
       await db.collection('reports').add({
         'asunto': asunto,
@@ -80,13 +79,23 @@ class ReportDB {
     }
   }
 
-  Future<QuerySnapshot> getReports(){
-    Future<QuerySnapshot> docs = FirebaseFirestore.instance.collection('reports').get();
+  Future<QuerySnapshot> getReports() {
+    Future<QuerySnapshot> docs =
+        FirebaseFirestore.instance.collection('reports').get();
     return docs;
   }
 
-  
-
+  void asignReport(String idPoliceUser, String idReport) async {
+    var police = FirebaseFirestore.instance.collection('users');
+    police.doc(idPoliceUser) 
+        .update({'disponible':false,'id_report': idReport}) 
+        .catchError((error) => print('Update failed: $error'));
+    var report = FirebaseFirestore.instance.collection('reports');
+    report.doc(idReport) 
+        .update({'estado': 'EN PROCESO'}) 
+        .catchError((error) => print('Update failed: $error'));
+    print("Vinculo el reporte: "+idReport+" al policia: "+idPoliceUser);
+  }
 }
 
 ReportDB reportdb = ReportDB();

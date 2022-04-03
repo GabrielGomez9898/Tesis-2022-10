@@ -409,12 +409,18 @@ class HomeState extends State<HomePage> {
                             return ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                      builder: (_) => BlocProvider.value(
-                                            value: BlocProvider.of<ReportBloc>(
-                                                context),
-                                            child: ReportDetail(
-                                                idReport: report.id, idPolice: state.idPolice),
-                                          )));
+                                    builder: (_) =>
+                                        MultiBlocProvider(providers: [
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<UserBloc>(
+                                              context)),
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<ReportBloc>(
+                                              context)),
+                                    ], child: ReportDetail(
+                                                idReport: report.id,
+                                                idPoliceUser: state.userID)),
+                                  ));
                                 },
                                 child: Text("Ver mas"));
                           },

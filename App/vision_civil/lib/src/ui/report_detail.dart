@@ -1,27 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
+import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/map.dart';
 import 'package:vision_civil/src/ui/report_video.dart';
 import 'package:vision_civil/storage_service.dart';
 
 class ReportDetail extends StatefulWidget {
-  const ReportDetail({Key? key, required this.idReport, required this.idPolice}) : super(key: key);
+  const ReportDetail(
+      {Key? key, required this.idReport, required this.idPoliceUser})
+      : super(key: key);
 
-  final String idPolice;
+  final String idPoliceUser;
   final String idReport;
   @override
-  State<ReportDetail> createState() => _ReportDetailState(idReport,idPolice);
+  State<ReportDetail> createState() =>
+      _ReportDetailState(idReport, idPoliceUser);
 }
 
 class _ReportDetailState extends State<ReportDetail> {
   String idReport = "";
-  String idPolice = "";
-  _ReportDetailState(String idReport,String idPolice) {
+  String idPoliceUser = "";
+  _ReportDetailState(String idReport, String idPoliceUser) {
     this.idReport = idReport;
-    this.idPolice = idPolice;
+    this.idPoliceUser = idPoliceUser;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -118,9 +121,26 @@ class _ReportDetailState extends State<ReportDetail> {
                         return Text("No tiene video");
                       }
                     }),
-                    ElevatedButton(onPressed: (){
-                      BlocProvider.of<ReportBloc>(context).add(AsignPoliceReport(this.idPolice, this.idReport));
-                    }, child: Text("Atender caso"))
+                BlocBuilder<UserBloc, UserblocState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                        onPressed: () {
+                          if(state.onService == false){
+                            //mostrar alert de la situacion
+                            print("No puede atender el caso, usted esta fuera de servicio");
+                          }else if(state.available == false){
+                            //mostrar alert de la situacion
+                            print("No puede atender el caso, usted tiene otro en proceso");
+                          }else{
+                            BlocProvider.of<UserBloc>(context).add(UpdateUserState(state.userID, state.userEmail, state.userName, state.userPhone, state.userGender, state.userBirthDate, state.userRole, state.userDocument, state.idPolice, false, state.onService, state.loginAchieved));
+                            BlocProvider.of<ReportBloc>(context).add(
+                              AsignPoliceReport(
+                                  this.idPoliceUser, this.idReport));
+                          }
+                        },
+                        child: Text("Atender caso"));
+                  },
+                )
               ],
             );
           },

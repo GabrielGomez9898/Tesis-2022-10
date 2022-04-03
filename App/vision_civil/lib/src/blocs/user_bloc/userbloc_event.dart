@@ -55,3 +55,36 @@ class UpdateUserEvent extends UserblocEvent {
     this.phone = phone;
   }
 }
+
+// ignore: must_be_immutable
+class UpdateUserState extends UserblocEvent{
+  String userID = "";
+  String userEmail = "";
+  String userName = "";
+  double userPhone = 0;
+  String userGender = "";
+  String userBirthDate = "";
+  String userRole = "";
+  String userDocument = "";
+
+  String idPolice = "";
+  bool available = false;
+  bool onService = false;
+
+  bool loginAchieved = false;
+
+  UpdateUserState(String userID,String userEmail,String userName,double userPhone,String userGender,String userBirthDate,String userRole,String userDocument,String idPolice,bool available,bool onService, bool loginAchieved){
+    this.userID = userID;
+    this.userEmail = userEmail;
+    this.userName = userName;
+    this.userPhone = userPhone;
+    this.userGender = userGender;
+    this.userBirthDate = userBirthDate;
+    this.userRole = userRole;
+    this.userDocument = userDocument;
+    this.idPolice = idPolice;
+    this.available = available;
+    this.onService = onService;
+    this.loginAchieved = loginAchieved;
+  }
+}

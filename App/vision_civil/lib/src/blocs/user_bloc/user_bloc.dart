@@ -135,6 +135,20 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             idPolice: " ",
             available: false,
             onService: false));
+      }else if(event is UpdateUserState){
+        emit(UserblocState(
+            userID: event.userID,
+            loginAchieved: event.loginAchieved,
+            userEmail: event.userEmail,
+            userName: event.userName,
+            userPhone: event.userPhone,
+            userGender: event.userGender,
+            userBirthDate: event.userBirthDate,
+            userRole: event.userRole,
+            userDocument: event.userDocument,
+            idPolice: event.idPolice,
+            available: event.available,
+            onService: event.onService));
       }
     });
   }
