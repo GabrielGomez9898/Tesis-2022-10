@@ -129,13 +129,9 @@ class _ReportDetailState extends State<ReportDetail> {
                           return ElevatedButton(
                               onPressed: () {
                                 if (state.onService == false) {
-                                  //mostrar alert de la situacion
-                                  print(
-                                      "No puede atender el caso, usted esta fuera de servicio");
+                                  outOfService(context);
                                 } else if (state.available == false) {
-                                  //mostrar alert de la situacion
-                                  print(
-                                      "No puede atender el caso, usted tiene otro en proceso");
+                                  reportAlreadyInProcess(context);
                                 } else {
                                   BlocProvider.of<UserBloc>(context).add(
                                       UpdateUserState(
@@ -157,9 +153,10 @@ class _ReportDetailState extends State<ReportDetail> {
                                 }
                               },
                               child: Text("Atender caso"));
-                        } else if(reportstate.report.estado == "EN PROCESO"){
-                          return Text("Este caso ya esta en proceso por otro policia");
-                        }else{
+                        } else if (reportstate.report.estado == "EN PROCESO") {
+                          return Text(
+                              "Este caso ya esta en proceso por otro policia");
+                        } else {
                           return Text("Este caso ya fue atendido");
                         }
                       },
@@ -172,3 +169,86 @@ class _ReportDetailState extends State<ReportDetail> {
         ));
   }
 }
+
+alertAttendReport(BuildContext context) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Caso en nombre suyo"),
+    content: Text("Por favor dirijase al lugar del caso"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+reportAlreadyInProcess(BuildContext context) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("No se puede atender"),
+    content: Text("Usted ya tiene un caso en proceso, terminelo antes de atender otro caso"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+outOfService(BuildContext context) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).pop();
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("No se puede atender"),
+    content: Text("Usted se encuentra fuera de servicio, inicie su jornada para atender un caso"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+
