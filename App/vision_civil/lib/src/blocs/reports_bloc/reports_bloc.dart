@@ -56,8 +56,8 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
         List<String> arrayIds = [];
         String videoId = " ";
         Report reportSave = new Report("", "", "", "", "", "", "", "", "");
-        Future<QuerySnapshot> report = reportdb.getReports();
-        await report.then((QuerySnapshot querySnapshot) {
+        Future<QuerySnapshot> getreports = reportdb.getReports();
+        await getreports.then((QuerySnapshot querySnapshot) {
           querySnapshot.docs.forEach((doc) {
             reports.add(Report(
                 doc.id,
@@ -100,11 +100,77 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             report: reportSave,
             imagesIDs: arrayIds,
             videoId: videoId));
-      }else if(event is AsignPoliceReport){
-        print("Evento: policia va a atender caso");
-        print("id police: "+event.idPoliceUser);
-        print("id report: "+event.idReport);
+      } else if (event is AsignPoliceReport) {
         reportdb.asignReport(event.idPoliceUser, event.idReport);
+      } else if (event is GetPoliceProcessReport) {
+        String idReport = "";
+        List<Report> reports = [];
+        List<String> arrayIds = [];
+        String videoId = " ";
+        Report reportSave = new Report("", "", "", "", "", "", "", "", "");
+        Future<QuerySnapshot> users = reportdb.getUsers();
+        await users.then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            try {
+              if (doc.id == event.idPoliceUser) {
+                idReport = doc["id_report"];
+              }
+            } catch (e) {}
+          });
+        });
+        print("encontro el reporte con id: " + idReport);
+        Future<QuerySnapshot> getreports = reportdb.getReports();
+        await getreports.then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            reports.add(Report(
+                doc.id,
+                doc["asunto"],
+                doc["descripcion"],
+                doc["estado"],
+                doc["fecha_hora"],
+                doc["latitude"],
+                doc["longitude"],
+                doc["tipo_reporte"],
+                doc["user_phone"].toString()));
+            if (doc.id == idReport) {
+              reportSave.setId(doc.id);
+              reportSave.setAsunto(doc["asunto"]);
+              reportSave.setDescripcion(doc["descripcion"]);
+              reportSave.setEstado(doc["estado"]);
+              reportSave.setFechaHora(doc["fecha_hora"]);
+              reportSave.setLatitude(doc["latitude"]);
+              reportSave.setLongitude(doc["longitude"]);
+              reportSave.setTipoReporte(doc["tipo_reporte"]);
+              reportSave.setUserphone(doc["user_phone"].toString());
+
+              try {
+                String imagesids = doc["images_ids"];
+                arrayIds = imagesids.split(",");
+              } catch (e) {
+                print("No tiene imagenes");
+              }
+              try {
+                videoId = doc["video_id"];
+              } catch (e) {
+                print("No tiene video");
+              }
+            }
+          });
+        });
+        if(idReport != ""){
+          emit(ReportblocState(
+            reports: reports,
+            report: reportSave,
+            imagesIDs: arrayIds,
+            videoId: videoId));
+        }else{
+          emit(ReportblocState(
+            reports: reports,
+            report: new Report(" ", " ", " ", " ", " ", " ", " ", " ", " "),
+            imagesIDs: [],
+            videoId: ""));
+        }
+        
       }
     });
   }

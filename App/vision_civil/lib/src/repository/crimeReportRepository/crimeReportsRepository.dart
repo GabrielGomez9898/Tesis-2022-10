@@ -96,6 +96,12 @@ class ReportDB {
         .catchError((error) => print('Update failed: $error'));
     print("Vinculo el reporte: "+idReport+" al policia: "+idPoliceUser);
   }
+
+    Future<QuerySnapshot> getUsers() {
+    Future<QuerySnapshot> docs =
+        FirebaseFirestore.instance.collection('users').get();
+    return docs;
+  }
 }
 
 ReportDB reportdb = ReportDB();

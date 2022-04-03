@@ -65,3 +65,12 @@ class AsignPoliceReport extends ReportblocEvent{
 
 }
 
+// ignore: must_be_immutable
+class GetPoliceProcessReport extends ReportblocEvent{
+  String idPoliceUser = "";
+
+  GetPoliceProcessReport(String idPoliceUser){
+    this.idPoliceUser = idPoliceUser;
+  }
+}
+

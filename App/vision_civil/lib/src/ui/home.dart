@@ -11,6 +11,7 @@ import 'package:vision_civil/src/ui/contacts.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 import 'package:vision_civil/src/ui/report_detail.dart';
+import 'package:vision_civil/src/ui/report_in_process.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -369,6 +370,21 @@ class HomeState extends State<HomePage> {
                   BlocBuilder<UserBloc, UserblocState>(
                     builder: (context, state) {
                       return IconButton(
+                        icon: Icon(Icons.my_library_books),
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<ReportBloc>(context),
+                                child:
+                                    ProcessReport(idUserPolice: state.userID)),
+                          ));
+                        },
+                      );
+                    },
+                  ),
+                  BlocBuilder<UserBloc, UserblocState>(
+                    builder: (context, state) {
+                      return IconButton(
                         icon: Icon(Icons.accessibility),
                         onPressed: () async {
                           Navigator.of(context).push(MaterialPageRoute(
@@ -409,17 +425,19 @@ class HomeState extends State<HomePage> {
                             return ElevatedButton(
                                 onPressed: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) =>
-                                        MultiBlocProvider(providers: [
-                                      BlocProvider.value(
-                                          value: BlocProvider.of<UserBloc>(
-                                              context)),
-                                      BlocProvider.value(
-                                          value: BlocProvider.of<ReportBloc>(
-                                              context)),
-                                    ], child: ReportDetail(
-                                                idReport: report.id,
-                                                idPoliceUser: state.userID)),
+                                    builder: (_) => MultiBlocProvider(
+                                        providers: [
+                                          BlocProvider.value(
+                                              value: BlocProvider.of<UserBloc>(
+                                                  context)),
+                                          BlocProvider.value(
+                                              value:
+                                                  BlocProvider.of<ReportBloc>(
+                                                      context)),
+                                        ],
+                                        child: ReportDetail(
+                                            idReport: report.id,
+                                            idPoliceUser: state.userID)),
                                   ));
                                 },
                                 child: Text("Ver mas"));
