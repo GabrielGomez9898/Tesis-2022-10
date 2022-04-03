@@ -123,22 +123,47 @@ class _ReportDetailState extends State<ReportDetail> {
                     }),
                 BlocBuilder<UserBloc, UserblocState>(
                   builder: (context, state) {
-                    return ElevatedButton(
-                        onPressed: () {
-                          if(state.onService == false){
-                            //mostrar alert de la situacion
-                            print("No puede atender el caso, usted esta fuera de servicio");
-                          }else if(state.available == false){
-                            //mostrar alert de la situacion
-                            print("No puede atender el caso, usted tiene otro en proceso");
-                          }else{
-                            BlocProvider.of<UserBloc>(context).add(UpdateUserState(state.userID, state.userEmail, state.userName, state.userPhone, state.userGender, state.userBirthDate, state.userRole, state.userDocument, state.idPolice, false, state.onService, state.loginAchieved));
-                            BlocProvider.of<ReportBloc>(context).add(
-                              AsignPoliceReport(
-                                  this.idPoliceUser, this.idReport));
-                          }
-                        },
-                        child: Text("Atender caso"));
+                    return BlocBuilder<ReportBloc, ReportblocState>(
+                      builder: (context, reportstate) {
+                        if (reportstate.report.estado == "PENDIENTE") {
+                          return ElevatedButton(
+                              onPressed: () {
+                                if (state.onService == false) {
+                                  //mostrar alert de la situacion
+                                  print(
+                                      "No puede atender el caso, usted esta fuera de servicio");
+                                } else if (state.available == false) {
+                                  //mostrar alert de la situacion
+                                  print(
+                                      "No puede atender el caso, usted tiene otro en proceso");
+                                } else {
+                                  BlocProvider.of<UserBloc>(context).add(
+                                      UpdateUserState(
+                                          state.userID,
+                                          state.userEmail,
+                                          state.userName,
+                                          state.userPhone,
+                                          state.userGender,
+                                          state.userBirthDate,
+                                          state.userRole,
+                                          state.userDocument,
+                                          state.idPolice,
+                                          false,
+                                          state.onService,
+                                          state.loginAchieved));
+                                  BlocProvider.of<ReportBloc>(context).add(
+                                      AsignPoliceReport(
+                                          this.idPoliceUser, this.idReport));
+                                }
+                              },
+                              child: Text("Atender caso"));
+                        } else if(reportstate.report.estado == "EN PROCESO"){
+                          return Text("Este caso ya esta en proceso por otro policia");
+                        }else{
+                          return Text("Este caso ya fue atendido");
+                        }
+                      },
+                    );
                   },
                 )
               ],
