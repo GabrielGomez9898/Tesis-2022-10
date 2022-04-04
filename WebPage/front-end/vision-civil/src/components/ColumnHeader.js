@@ -1,7 +1,14 @@
+import { useState } from "react";
+import Axios from "axios";
+import CreateFunctionaryModal from "./CreateFunctionaryModal";
+import CreateCopModal from "./CreateCopModal";
+
 const ColumnHeader = ({columnText}) => {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className="users-table-column-header">
-            <a onClick={() => { }}>
+            <a onClick={() => setIsModalOpen(true)}>
                 <svg
                     aria-hidden="true"
                     focusable="false"
@@ -27,8 +34,10 @@ const ColumnHeader = ({columnText}) => {
                 </svg>
             </a>
             <h1>{columnText}</h1>
+            { (isModalOpen && columnText === "Funcionarios") ? <CreateFunctionaryModal onClose={() => setIsModalOpen(false)} /> : null }
+            { (isModalOpen && columnText === "Policías") ? <CreateCopModal onClose={() => setIsModalOpen(false)} /> : null }
         </div>
-    )
+    );
 }
 
 export default ColumnHeader
