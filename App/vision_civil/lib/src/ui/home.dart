@@ -15,9 +15,7 @@ import 'package:vision_civil/src/ui/report_in_process.dart';
 import 'package:vision_civil/src/ui/servicio_policia.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage(
-      {Key? key})
-      : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   HomeState createState() => HomeState();
@@ -52,10 +50,10 @@ class HomeState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
     return BlocBuilder<UserBloc, UserblocState>(
       builder: (context, state) {
-        
         if (state.userRole == "CIUDADANO") {
           return Container(
             decoration: BoxDecoration(
@@ -92,9 +90,13 @@ class HomeState extends State<HomePage> {
                                 scale: 1),
                           ),
                           SizedBox(height: 18),
-                          Text("Seleccione la acción que quiera realizar",
-                              style: TextStyle(
-                                  fontSize: 16.0, color: Colors.grey)),
+                          Container(
+                            width: size.width * 0.9,
+                            child: Text(
+                                "Seleccione la acción que quiera realizar",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                          ),
                           SizedBox(height: 25),
                           BlocBuilder<ContactsblocBloc, ContactsblocState>(
                             builder: (context, contactsstate) {
@@ -173,7 +175,9 @@ class HomeState extends State<HomePage> {
                                                     AssetImage(
                                                         'assets/images/AlertarContactos.png'),
                                                     size: 80),
-                                                Text("Alertar Contactos"),
+                                                FittedBox(
+                                                    child: Text(
+                                                        "Alertar Contactos")),
                                               ],
                                             ),
                                           ),
@@ -234,7 +238,9 @@ class HomeState extends State<HomePage> {
                                                       AssetImage(
                                                           'assets/images/GenerarReporte.png'),
                                                       size: 80),
-                                                  Text("Generar Reporte"),
+                                                  FittedBox(
+                                                      child: Text(
+                                                          "Generar Reporte")),
                                                 ],
                                               ),
                                             ),

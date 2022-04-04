@@ -44,7 +44,6 @@ class ProfileState extends State<Profile> {
           image: DecorationImage(
               image: AssetImage("assets/images/fondo.jpg"), fit: BoxFit.cover)),
       child: Container(
-        margin: const EdgeInsets.only(left: 13.0, right: 13.0),
         child: Scaffold(
           appBar: AppBar(
             centerTitle: true,
@@ -60,26 +59,46 @@ class ProfileState extends State<Profile> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Container(
-                          child: Image.asset('assets/images/logo.jpg',
-                              width: 100.0, height: 100.0, scale: 1.0),
+                        Column(
+                          children: [
+                            Container(
+                              child: Image.asset('assets/images/logo.jpg',
+                                  width: 100.0, height: 100.0, scale: 1.0),
+                            ),
+                          ],
                         ),
-                        Text("Mi perfil",
-                            style: TextStyle(
-                                fontSize: 35.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600)),
+                        Column(
+                          children: [
+                            Text("Mi perfil",
+                                style: TextStyle(
+                                    fontSize: 35.0,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500)),
+                            Text("Rol: " + state.userRole,
+                                style: TextStyle(
+                                    fontSize: 15.0,
+                                    color: Colors.grey,
+                                    fontWeight: FontWeight.w400)),
+                          ],
+                        ),
                       ],
                     ),
                     SizedBox(height: size.height * 0.07),
-                    state.userRole == "CIUDADANO" ? 
-                    Text(
-                        "Solo puedes modificar los campos: Nombre, Celular, Fecha de nacimiento y Genero",
-                        style: TextStyle(fontSize: 16.0, color: Colors.grey))
-                    :
-                    Text(
-                        "Usted como policia no puede modificar sus datos, en caso de cambio de informacion ponerse en contacto con la Alcaldia de Sibate",
-                        style: TextStyle(fontSize: 16.0, color: Colors.grey)),
+                    state.userRole == "CIUDADANO"
+                        ? Container(
+                            width: size.width * 0.9,
+                            child: Text(
+                                "Solo puedes modificar los campos: Nombre, Celular, Fecha de nacimiento y Genero",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                          )
+                        : Container(
+                            width: size.width * 0.9,
+                            child: Text(
+                                "Usted como policia no puede modificar sus datos, en caso de cambio de informacion ponerse en contacto con la Alcaldia de Sibate",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                          ),
                     SizedBox(height: size.height * 0.02),
                     TextFieldFuntion(
                         hintText: state.userName,
@@ -90,22 +109,23 @@ class ProfileState extends State<Profile> {
                         },
                         tipo: TextInputType.emailAddress,
                         obsText: false),
-                    state.userRole == "CIUDADANO" ? 
-                    TextFieldFuntion(
-                      hintText: state.userDocument,
-                      onChanged: (value) {},
-                      tipo: TextInputType.name,
-                      obsText: false,
-                      icon: Icons.assignment,
-                      enablded: false,
-                    ) : TextFieldFuntion(
-                      hintText: state.idPolice,
-                      onChanged: (value) {},
-                      tipo: TextInputType.name,
-                      obsText: false,
-                      icon: Icons.assignment,
-                      enablded: false,
-                    ),
+                    state.userRole == "CIUDADANO"
+                        ? TextFieldFuntion(
+                            hintText: state.userDocument,
+                            onChanged: (value) {},
+                            tipo: TextInputType.name,
+                            obsText: false,
+                            icon: Icons.assignment,
+                            enablded: false,
+                          )
+                        : TextFieldFuntion(
+                            hintText: state.idPolice,
+                            onChanged: (value) {},
+                            tipo: TextInputType.name,
+                            obsText: false,
+                            icon: Icons.assignment,
+                            enablded: false,
+                          ),
                     TextFieldFuntion(
                       hintText: state.userEmail,
                       onChanged: (value) {},
@@ -125,18 +145,14 @@ class ProfileState extends State<Profile> {
                         icon: Icons.aod,
                         obsText: false),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Rol del Usuario: ",
-                            style: TextStyle(
-                                fontSize: 18.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500)),
-                        Text(state.userRole,
-                            style: TextStyle(
-                                fontSize: 16.0,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500)),
+                        Container(
+                          padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                          child: Text(
+                            "Fecha de nacimento:",
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          ),
+                        ),
                       ],
                     ),
                     TextButton(
@@ -147,40 +163,102 @@ class ProfileState extends State<Profile> {
                               maxTime: DateTime(2019, 6, 7),
                               onChanged: (date) {}, onConfirm: (date) {
                             setState(() {
-                              this.birthDate = date.toString();
+                              this.birthDate = DateTime.parse(date.toString())
+                                      .year
+                                      .toString() +
+                                  "-" +
+                                  DateTime.parse(date.toString())
+                                      .month
+                                      .toString() +
+                                  "-" +
+                                  DateTime.parse(date.toString())
+                                      .day
+                                      .toString();
                             });
                           },
                               currentTime: DateTime.now(),
                               locale: LocaleType.es);
                         },
-                        child: Text(this.birthDate)),
-                    DropdownButton(
-                      items: _genders.map((String gender) {
-                        return DropdownMenuItem(
-                            child: Text(gender), value: gender);
-                      }).toList(),
-                      onChanged: (_value) {
-                        setState(() {
-                          this.gender = _value.toString();
-                        });
-                      },
-                      hint: Text(this.gender),
+                        child: Container(
+                            height: 50,
+                            width: 200,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Center(
+                              child: Text(
+                                this.birthDate,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color.fromARGB(125, 255, 255, 255),
+                                    fontSize: 15),
+                              ),
+                            ))),
+                    SizedBox(height: 20),
+                    Row(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                          child: Text(
+                            "Género: ",
+                            style: TextStyle(color: Colors.white, fontSize: 14),
+                          ),
+                        ),
+                      ],
                     ),
-                    state.userRole == "CIUDADANO" ? 
-                    ButtoWidget(
-                      text: 'Actualizar datos',
-                      textColor: Colors.black,
-                      press: () {
-                        BlocProvider.of<UserBloc>(context).add(UpdateUserEvent(
-                            this.email,
-                            this.name,
-                            this.birthDate,
-                            this.gender,
-                            this.phone));
-                      },
-                    )
-                    :
-                    Text("Informacion gestionada por la Alacaldia de Sibate"),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          items: _genders.map((String gender) {
+                            return DropdownMenuItem(
+                                child: Text(gender), value: gender);
+                          }).toList(),
+                          onChanged: (_value) {
+                            setState(() {
+                              this.gender = _value.toString();
+                            });
+                          },
+                          hint: Container(
+                            height: 50,
+                            width: 200,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Text(
+                              this.gender,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color.fromARGB(125, 255, 255, 255),
+                                  fontSize: 15),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    state.userRole == "CIUDADANO"
+                        ? ButtoWidget(
+                            text: 'Actualizar datos',
+                            textColor: Colors.black,
+                            press: () {
+                              BlocProvider.of<UserBloc>(context).add(
+                                  UpdateUserEvent(this.email, this.name,
+                                      this.birthDate, this.gender, this.phone));
+                            },
+                          )
+                        : Container(
+                            width: size.width * 0.9,
+                            child: Text(
+                                "Informacion gestionada por la Alacaldia de Sibate, por favor pongase en contacto"),
+                          ),
+                    SizedBox(height: size.height * 0.05),
                   ],
                 ),
               );

@@ -209,7 +209,8 @@ reportAlreadyInProcess(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("No se puede atender"),
-    content: Text("Usted ya tiene un caso en proceso, terminelo antes de atender otro caso"),
+    content: Text(
+        "Usted ya tiene un caso en proceso, terminelo antes de atender otro caso"),
     actions: [
       okButton,
     ],
@@ -236,7 +237,8 @@ outOfService(BuildContext context) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("No se puede atender"),
-    content: Text("Usted se encuentra fuera de servicio, inicie su jornada para atender un caso"),
+    content: Text(
+        "Usted se encuentra fuera de servicio, inicie su jornada para atender un caso"),
     actions: [
       okButton,
     ],
@@ -250,5 +252,3 @@ outOfService(BuildContext context) {
     },
   );
 }
-
-

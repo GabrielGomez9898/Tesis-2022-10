@@ -183,12 +183,13 @@ class _RegisterState extends State<Register> {
                     Container(
                       padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                       child: Text(
-                        "Género: ",
+                        "Género: \n(presione la fecha para cambiar)",
                         style: TextStyle(color: Colors.white, fontSize: 14),
                       ),
                     ),
                   ],
                 ),
+                SizedBox(height: 15),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
