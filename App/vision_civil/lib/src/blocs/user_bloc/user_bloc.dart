@@ -149,7 +149,9 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             idPolice: event.idPolice,
             available: event.available,
             onService: event.onService));
-      }
+      } else if(event is UpdatePoliceService){
+        userdb.updatePoliceService(event.userID, event.onService);
+      } 
     });
   }
   void dispose() {

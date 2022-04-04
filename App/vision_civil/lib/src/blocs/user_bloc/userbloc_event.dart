@@ -88,3 +88,16 @@ class UpdateUserState extends UserblocEvent{
     this.loginAchieved = loginAchieved;
   }
 }
+
+// ignore: must_be_immutable
+class UpdatePoliceService extends UserblocEvent{
+
+  String userID = "";
+  bool onService = false;
+
+  UpdatePoliceService(String userID,bool onService){
+    this.userID = userID;
+    this.onService = onService;
+  }
+
+}

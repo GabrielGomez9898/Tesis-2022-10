@@ -12,8 +12,13 @@ import 'package:vision_civil/src/ui/create_report.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 import 'package:vision_civil/src/ui/report_detail.dart';
 import 'package:vision_civil/src/ui/report_in_process.dart';
+import 'package:vision_civil/src/ui/servicio_policia.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage(
+      {Key? key})
+      : super(key: key);
+
   @override
   HomeState createState() => HomeState();
 }
@@ -50,6 +55,7 @@ class HomeState extends State<HomePage> {
     BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
     return BlocBuilder<UserBloc, UserblocState>(
       builder: (context, state) {
+        
         if (state.userRole == "CIUDADANO") {
           return Container(
             decoration: BoxDecoration(
@@ -365,21 +371,36 @@ class HomeState extends State<HomePage> {
         } else {
           return Scaffold(
               appBar: AppBar(
-                title: Text("Home Visión Civil Policias"),
+                title: Text("Home Policias"),
                 automaticallyImplyLeading: false,
                 actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.room_service),
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => BlocProvider.value(
+                            value: BlocProvider.of<UserBloc>(context),
+                            child: PoliceService()),
+                      ));
+                    },
+                  ),
                   BlocBuilder<UserBloc, UserblocState>(
                     builder: (context, state) {
                       return IconButton(
                         icon: Icon(Icons.my_library_books),
                         onPressed: () {
                           Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => MultiBlocProvider(providers: [
-                              BlocProvider.value(
-                                  value: BlocProvider.of<UserBloc>(context)),
+                            builder: (_) => MultiBlocProvider(
+                                providers: [
                                   BlocProvider.value(
-                                  value: BlocProvider.of<ReportBloc>(context))  
-                            ], child: ProcessReport(idUserPolice: state.userID)),
+                                      value:
+                                          BlocProvider.of<UserBloc>(context)),
+                                  BlocProvider.value(
+                                      value:
+                                          BlocProvider.of<ReportBloc>(context))
+                                ],
+                                child:
+                                    ProcessReport(idUserPolice: state.userID)),
                           ));
                         },
                       );
@@ -443,7 +464,7 @@ class HomeState extends State<HomePage> {
                                             idPoliceUser: state.userID)),
                                   ));
                                 },
-                                child: Text("Ver mas"));
+                                child: Text("Ver más"));
                           },
                         ),
                         onTap: () {},

@@ -88,6 +88,25 @@ class UserDB {
 
     return userReturn;
   }
+
+  void updatePoliceService(String idPoliceUser, bool onService)async{
+    var police = FirebaseFirestore.instance.collection('users');
+    police
+        .doc(idPoliceUser)
+        .update({'enServicio': onService}).catchError(
+            (error) => print('Update failed: $error'));
+  }
+
+  Future<QueryDocumentSnapshot> updateUserBlocState(String userEmail)async{
+        //Get userupdated to refresh bloc states
+    QuerySnapshot querySnapReturn = await FirebaseFirestore.instance
+        .collection('users')
+        .where('email', isEqualTo: userEmail)
+        .get();
+    QueryDocumentSnapshot userReturn = querySnapReturn.docs[0];
+
+    return userReturn;
+  }
 }
 
 UserDB userdb = UserDB();
