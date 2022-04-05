@@ -154,7 +154,7 @@ const getListadoByFilter = () => {
             <span className="description">{item.descripcion}</span>
             <br></br>
             <button
-              style={{ marginLeft: "70%", width: "150px", backgroundColor: "white", color: "black", borderRadius: "43%" }}
+              style={{ marginLeft: "70%", width: "150px", color: "black", borderRadius: "43%" }}
               className="crime-button"
               key={item.id}
               onClick={() => {
