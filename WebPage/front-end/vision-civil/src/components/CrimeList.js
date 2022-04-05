@@ -3,21 +3,40 @@ import "../styles/Crime_list.scss";
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
 import Axios from "axios";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
+import { collection, doc, onSnapshot } from "firebase/firestore";
+import {db} from "../firebase"
 
 const CrimeList = () => {
   //funcion para sacar los reportes del back
   function getListadoData() {
-    Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reports')
+    Axios.get('http://localhost:5001/miproyecto-5cf83/us-central1/app/reports')
       .then((response) => {
         setListado(response.data)
         console.log(response)
-        setFetch(false)
       })
   }
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    getListadoByFilter();
+}
+
+const getListadoByFilter = () => {
+  Axios.get(`http://localhost:5001/miproyecto-5cf83/us-central1/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
+      listado.pop();
+      console.log(listado);
+      setListado(response.data)
+      console.log(listado)
+      console.log(response.data)
+      //dispatch(refreshData(response.data));
+  }).catch((error) => console.log(error));
+}
   const [showModal, setShowModal] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
   const [listado, setListado] = useState([])
-  const [isFetch, setFetch] = useState(true)
+  const [lowerDate, setLowerDate] = useState("");
+  const [upperDate, setUpperDate] = useState("");
+  const [reportType, setReportType] = useState("TODOS");
   const [container, setContainer] = useState("modal-container")
   function getClass(index) {
     return index === activeObject?.id ? "active" : "inactive";
@@ -26,7 +45,7 @@ const CrimeList = () => {
     width: "43.5%",
     height: "46%"
   }
-  async function getFotos(id, imagesids, setListadofotos, listadofotos) {
+  async function getFotos(id, imagesids, setListadofotos) {
     let aux = [];
     const storage = getStorage();
 
@@ -45,12 +64,12 @@ const CrimeList = () => {
     setListadofotos(aux);
 
   }
-
+  let num = 0;
   const Modal = (props) => {
 
     const [listadofotos, setListadofotos] = useState([])
     useEffect(() => {
-      getFotos(props.object.fotourl, props.object.imagenes, setListadofotos, listadofotos);
+      getFotos(props.object.fotourl, props.object.imagenes, setListadofotos);
     }, [])
     return (
       <div id="CrimeListtModal" className="active modal" >
@@ -70,7 +89,7 @@ const CrimeList = () => {
             <br></br>
             <span className="fecha">{props.object.fecha} {props.object.hora}</span>
             <br></br>
-            <span className="hora">{props.object.user_phone}</span>
+            <span className="horam">{props.object.user_phone}</span>
             <br></br>
             <Map google={google} zoom={16} style={mapStyles} initialCenter={{ lat: parseFloat(props.object.latitude), lng: parseFloat(props.object.longitude) }}>
               <Marker position={{ lat: props.object.latitude, lng: props.object.longitude }} />
@@ -86,9 +105,47 @@ const CrimeList = () => {
     <>
 
       <h1 className="title"> Listado de crimenes</h1>
+      <form className="card-mapfilter-container" onSubmit={handleSubmit}>
+                <div>
+                    <label htmlFor="lowerDate">Desde</label><br/>
+                    <input id="lowerDate" type="date" required onChange={(e) => {setLowerDate(e.target.value)}} />
+                </div>
+                <div>
+                    <label htmlFor="upperDate">Hasta</label><br/>
+                    <input id="upperDate" type="date" required onChange={(e) => {setUpperDate(e.target.value)}}/>
+                </div>
+                <div>
+                    <label htmlFor="reportType">Tipo de reporte</label><br/>
+                    <select id="reportType" required onChange={(e) => {setReportType(e.target.value)}}>
+                        <option key="todos" value="TODOS">Todos</option>
+                        <option key="hurtoVivienda" value="HURTO_VIVIENDA">Hurto Vivienda</option>
+                        <option key="hurtoPersona" value="HURTO_PERSONA">Hurto Persona</option>
+                        <option key="hurtoVehiculo" value="HURTO_VEHICULO">Hurto Vehículo</option>
+                        <option key="vandalismo" value="VANDALISMO">Vandalismo</option>
+                        <option key="violacion" value="VIOLACION">Violación</option>
+                        <option key="homicidio" value="HOMICIDIO">Homicidio</option>
+                        <option key="agresion" value="AGRESION">Agresión</option>
+                        <option key="otro" value="OTRO">Otro</option>
+                    </select>
+                </div>
+                <button type="submit">Aplicar filtros a la lista</button>
+            </form>
+            <br></br>
+
       {useEffect(() => {
-        getListadoData();
+        if(num == 0){
+          getListadoData();
+          num += 1;
+        }else{
+          const ref = collection(db , "reports")
+          onSnapshot(ref , (snapshot) => {
+            alert("Se realizo un nuevo reporte")
+            getListadoData();
+          })
+          
+        }
       }, [])}
+
       <ul className="list-menu">
         {listado.map((item) => (
           <div className="Container-crime">

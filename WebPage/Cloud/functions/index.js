@@ -14,7 +14,11 @@ const cors = require("cors");
 
 const app = express();
 app.use(cors({ origin: true }));
-admin.initializeApp();
+var serviceAccount = require("../miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
+
+admin.initializeApp(
+  {credential: admin.credential.cert(serviceAccount)}
+);
 const db = admin.firestore();
 
 const printError = (error) => {
@@ -255,6 +259,11 @@ app.get("/reports", async (request, response) => {
       reports.push(reporte);
       id += 1;
     });
+  
+    reports.sort(function(a,b) {
+      return new Date(b.fecha) - new Date(a.fecha);
+    })
+
 
     return response.status(200).json(reports);
   }
@@ -335,6 +344,123 @@ app.delete("/cops/:copId", async (request, response) => {
   }
 });
 
+//notification
+app.post("/notification", async (request, response) => {
+  try {
+
+    const queryParams = request.query;
+    const title = queryParams["title"]
+    const description = queryParams["description"]
+
+    console.log("este es el token",admin.messaging().getToken());
+    var FCMToken = "AAAAM0G-m9Q:APA91bEShPUHNT5yKa4I-pGc902vpEaV-nOr7bUTbbe0PqZnc88abktPlEvkHYLwKjxogOxUIlbbmqNiwytL0loXb2dpuwVdUDTBWw-aI_vTtfIO2zbqvJHase8CrJ8ZT8DGyJldayUU"
+    var payload = {
+      notification: {
+        title: "This is a Notification",
+        body: "This is the body of the notification message."
+      }
+    };
+    const message = {
+      data: {
+        title: 'title',
+        body: 'description',
+      }
+    }
+    var options = {
+      priority: "high",
+      timeToLive: 60 * 60 *24
+    };
+    try{
+
+      admin.messaging().sendToDevice(FCMToken, message, options).then(function(response){
+        console.log("sirvio",response )
+      }).catch(function(error){
+        console.log("no sirvio", error)
+      })
+    }catch(error){
+      printError(error)
+    }
+
+     //const response = admin.messaging().send(FCMToken,payload,options)//.then(function(response){
+    //   console.log("Successfully sent message:", response);
+    // }).catch(function(error) {
+    //   console.log("Error sending message:", error);
+    // });
+
+    
+
+    //functions.logger.info('FCM Message', payload)
+
+    // https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-multiple-devices
+
+    //return response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+//getReportsByFilter
+app.get("/reportByFilter", async (request, response) => {
+  try {
+    const queryParams = request.query;
+    const lowerDate = queryParams["lowerDate"].replace("-", "/");
+    const upperDate = queryParams["upperDate"].replace("-", "/");
+    const reportType = queryParams["reportType"];
+    
+    const lowerDateObject = new Date(lowerDate);
+    const upperDateObject = new Date(upperDate);
+
+    let docs = undefined;
+    (reportType != "TODOS") ?
+      (docs = await db.collection("reports").where("tipo_reporte", "==", reportType).get()) :
+      (docs = await db.collection("reports").get());
+    
+    const reports = [];
+    let id = 1;
+    docs.forEach((item) => {
+      report = item.data();
+      reportDate = report["fecha_hora"].split(" | ")[0];
+      reportDateObject = new Date(reportDate);
+      let imagenes = [];
+      let imag = [];
+      reporte = item.data();
+      reporte["id"] = id;
+      if(reporte["images_ids"] != null ){
+        imag.push(reporte["images_ids"].split(",")); 
+        for(let x = 0; x < imag.length; x++){
+          for(let y = 0; y < imag[x].length; y++){
+            if (imag[x][y] != "") {
+              imagenes.push(imag[x][y]);
+            }
+          }
+        }
+        reporte["imagenes"]= imagenes;
+        reporte["hasFotos"] = true;
+      }
+      else {
+        reporte["hasFotos"] = false;
+        reporte["imagenes"]= imagenes;
+      }
+      reporte["fotourl"] = item.id
+      reporte["hora"] = reporte["fecha_hora"].split(" | ")[1];
+      reporte["fecha"] = reporte["fecha_hora"].split(" | ")[0];
+
+      if (reportDateObject >= lowerDateObject && reportDateObject <= upperDateObject) {
+        reports.push(reporte);
+        id += 1;
+      }
+    });
+
+    return response.status(200).json(reports);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
 exports.app = functions.https.onRequest(app);
 
 exports.getAllReports = functions.https.onRequest((request, response) => {
@@ -348,3 +474,22 @@ exports.getAllReports = functions.https.onRequest((request, response) => {
     response.send(tempDoc);
   });
 });
+
+// exports.sendNotification = functions.database.ref("users/{docId}").onWrite( event =>{
+//   const payload = {
+//     notification: {
+//       title: `New message by `,
+//       body: text
+//         ? text.length <= 100 ? text : text.substring(0, 97) + "..."
+//         : ""
+//     }
+//   };
+//   return admin.database().ref("users/{docID}").once('value').then(data => {
+//     if(data.val().notificationKey){
+//       return admin.messaging().sendToDevice(data.val().notificationKey, payload)
+//     }
+
+//   })
+// }
+ 
+// )
