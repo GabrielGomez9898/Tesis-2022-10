@@ -4,7 +4,7 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
 import Axios from "axios";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { collection, doc, onSnapshot } from "firebase/firestore";
-import {db} from "../firebase"
+import {db, storage} from "../firebase"
 
 const CrimeList = () => {
   //funcion para sacar los reportes del back
@@ -47,7 +47,6 @@ const getListadoByFilter = () => {
   }
   async function getFotos(id, imagesids, setListadofotos) {
     let aux = [];
-    const storage = getStorage();
 
     for (const imag of imagesids) {
       const URL = await getDownloadURL(ref(storage, "reports/" + id + "/media/images/" + imag));
