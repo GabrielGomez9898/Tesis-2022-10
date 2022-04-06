@@ -1,6 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { browserLocalPersistence, getAuth, setPersistence } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import { getStorage } from "firebase/storage";
 
 /* Main Firebase app for functionaries to authenticate, signIn and logout */
 const firebaseApp = initializeApp({
@@ -17,6 +18,8 @@ const firebaseApp = initializeApp({
 export const auth = getAuth(firebaseApp);
 
 export const db = getFirestore(firebaseApp);
+
+export const storage = getStorage(firebaseApp);
 
 /* Secondary Firebase app so the current logged in master functionary 
 is able to create other users without being kicked out */
