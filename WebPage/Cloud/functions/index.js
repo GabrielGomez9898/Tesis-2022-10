@@ -171,10 +171,14 @@ app.get("/functionaries", async (request, response) => {
 app.post("/functionaries", async (request, response) => {
   try {
     const requestBody = request.body;
+    const functionaryId = requestBody["id"];
+
+    // The id should not be a field of the new functionary document
+    delete requestBody["id"];
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
-    // Add a new document to the collection with an auto-generated id
-    const writeResult = await functionariesRef.add(requestBody);
+    // Add a new document to the collection with the id obtained from the front-end
+    const writeResult = await functionariesRef.doc(functionaryId).set(requestBody);
 
     return response.status(200).send(writeResult);
   }
@@ -288,10 +292,14 @@ app.get("/cops", async (request, response) => {
 app.post("/cops", async (request, response) => {
   try {
     const requestBody = request.body;
+    const copId = requestBody["id"];
+
+    // The id should not be a field of the new cop document
+    delete requestBody["id"];
     // Create reference to the users collection
     const usersRef = db.collection("users");
-    // Add a new document to the collection with the specified id
-    const writeResult = await usersRef.add(requestBody);
+    // Add a new document to the collection with the id obtained from the front-end
+    const writeResult = await usersRef.doc(copId).set(requestBody);
 
     return response.status(200).send(writeResult);
   }
