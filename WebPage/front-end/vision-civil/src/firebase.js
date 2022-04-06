@@ -20,7 +20,7 @@ export const db = getFirestore(firebaseApp);
 
 /* Secondary Firebase app so the current logged in master functionary 
 is able to create other users without being kicked out */
-const firebaseUserCreatorApp = initializeApp({
+export const firebaseUserCreatorApp = initializeApp({
     apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
     authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
     projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
