@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { Component, useState, useEffect, useRef } from "react";
 import "../styles/Crime_list.scss";
 import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
 import Axios from "axios";
@@ -64,7 +64,7 @@ const getListadoByFilter = () => {
     setListadofotos(aux);
 
   }
-  let num = 0;
+  let num =0;
   const Modal = (props) => {
 
     const [listadofotos, setListadofotos] = useState([])
@@ -137,9 +137,9 @@ const getListadoByFilter = () => {
           getListadoData();
           num += 1;
         }else{
-          const ref = collection(db , "reports")
+          const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
-            alert("Se realizo un nuevo reporte")
+            alert("Se realizo un nuevo reporte");
             getListadoData();
           })
           
@@ -154,7 +154,7 @@ const getListadoByFilter = () => {
             <span className="description">{item.descripcion}</span>
             <br></br>
             <button
-              style={{ marginLeft: "70%", width: "150px", color: "black", borderRadius: "43%" }}
+              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%" }}
               className="crime-button"
               key={item.id}
               onClick={() => {
