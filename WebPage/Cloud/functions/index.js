@@ -1,3 +1,4 @@
+// Dependencies
 const {
   totalReportsByWeek, 
   totalReportsByMonth, 
@@ -9,16 +10,18 @@ const {
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
-const { response } = require("express");
 const cors = require("cors");
 
+// Use Express.ja with cloud functions
 const app = express();
-app.use(cors({ origin: true }));
-var serviceAccount = require("../miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
 
-admin.initializeApp(
-  {credential: admin.credential.cert(serviceAccount)}
-);
+// Enable Cross Origin to prevent CORS error when doing request from the front-end
+app.use(cors({ origin: true }));
+
+// Initialize the firebase app
+const firebaseApp = admin.initializeApp();
+
+// Obtain the firestore reference in order to query and manage the db
 const db = admin.firestore();
 
 const printError = (error) => {
@@ -158,7 +161,12 @@ app.get("/functionaries", async (request, response) => {
   try {
     const querySnapshot = await db.collection("functionaries").get();
 
-    return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+    return response.status(200).json(querySnapshot.docs.map((doc) => {
+      const functionaryObj = doc.data();
+      functionaryObj["id"] = doc.id;
+      
+      return functionaryObj;
+    }));
   }
   catch (error) {
     printError(error);
@@ -170,14 +178,14 @@ app.get("/functionaries", async (request, response) => {
 app.post("/functionaries", async (request, response) => {
   try {
     const requestBody = request.body;
-    const id = requestBody["id"];
+    const functionaryId = requestBody["id"];
 
-    // The future db document should not have the id as a field
+    // The id should not be a field of the new functionary document
     delete requestBody["id"];
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
-    // Add a new document to the collection with the specified id
-    const writeResult = await functionariesRef.doc(id).set(requestBody);
+    // Add a new document to the collection with the id obtained from the front-end
+    const writeResult = await functionariesRef.doc(functionaryId).set(requestBody);
 
     return response.status(200).send(writeResult);
   }
@@ -198,6 +206,7 @@ app.patch("/functionaries/:functionaryId", async (request, response) => {
     const functionariesRef = db.collection("functionaries");
     // Update the document by id
     const writeResult = await functionariesRef.doc(id).update({isMaster: isMaster});
+    console.log(writeResult);
 
     return response.status(200).send(writeResult);
   }
@@ -212,12 +221,22 @@ app.delete("/functionaries/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
 
+    /* Delete the functionary from the functionaries Firestore collection */
+    
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
     // Delete the document by id
     const writeResult = await functionariesRef.doc(id).delete();
 
-    return response.status(200).send(writeResult);
+    /* Delete the functionary from the authentication tier in Firebase */
+
+    // Delete the user with the provided uid and managing success and failure with .then() and .catch()
+    admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
+      return response.status(200).send(writeResult);
+    }).catch((error) => {
+      printError(error);
+      return response.status(500).send(error);
+    });
   }
   catch (error) {
     printError(error);
@@ -278,7 +297,12 @@ app.get("/cops", async (request, response) => {
   try {
     const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
 
-    return response.status(200).json(querySnapshot.docs.map((doc) => doc.data()));
+    return response.status(200).json(querySnapshot.docs.map((doc) => {
+      const copObj = doc.data();
+      copObj["id"] = doc.id;
+
+      return copObj;
+    }));
   }
   catch (error) {
     printError(error);
@@ -290,14 +314,14 @@ app.get("/cops", async (request, response) => {
 app.post("/cops", async (request, response) => {
   try {
     const requestBody = request.body;
-    const id = requestBody["id"];
-    
-    // The future db document should not have the id as a field
+    const copId = requestBody["id"];
+
+    // The id should not be a field of the new cop document
     delete requestBody["id"];
     // Create reference to the users collection
     const usersRef = db.collection("users");
-    // Add a new document to the collection with the specified id
-    const writeResult = await usersRef.doc(id).set(requestBody);
+    // Add a new document to the collection with the id obtained from the front-end
+    const writeResult = await usersRef.doc(copId).set(requestBody);
 
     return response.status(200).send(writeResult);
   }
@@ -331,12 +355,22 @@ app.delete("/cops/:copId", async (request, response) => {
   try {
     const id = request.params.copId;
 
+    /* Delete the cop from the cops Firestore collection */
+
     // Create reference to the users collection
     const usersRef = db.collection("users");
     // Delete the document by id
     const writeResult = await usersRef.doc(id).delete();
 
-    return response.status(200).send(writeResult);
+    /* Delete the cop from the authentication tier in Firebase */
+
+    // Delete the user with the provided uid and managing success and failure with .then() and .catch()
+    admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
+      return response.status(200).send(writeResult);
+    }).catch((error) => {
+      printError(error);
+      return response.status(500).send(error);
+    });
   }
   catch (error) {
     printError(error);
