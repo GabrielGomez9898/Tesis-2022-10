@@ -1,5 +1,5 @@
 import "../styles/Modals.scss";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import Axios from "axios";
 
@@ -10,9 +10,15 @@ const EditFunctionaryModal = (props) => {
         return Axios.patch(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries/${props.functionaryId}`, {isMaster: isMaster});
     };
 
+    const initialRenderDone = useRef(false);
     useEffect( async () => {
-        await updateFunctionary();
-        props.onClose();
+        if(!initialRenderDone.current) {
+            initialRenderDone.current = true;
+        }
+        else {
+            await updateFunctionary();
+            props.onClose();
+        }
     }, [isMaster])
 
     return createPortal(
