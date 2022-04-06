@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Axios from "axios";
 
 const DeleteFunctionaryModal = (props) => {
-
     const deleteFunctionary = async () => {
         await Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries/${props.functionaryId}`);
         props.onClose();

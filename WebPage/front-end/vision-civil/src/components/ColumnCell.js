@@ -1,6 +1,8 @@
 import { useState } from "react";
 import DeleteFunctionaryModal from "./DeleteFunctionaryModal";
 import EditFunctionaryModal from "./EditFunctionaryModal";
+import DeleteCopModal from "./DeleteCopModal";
+import EditCopModal from "./EditCopModal";
 
 const ColumnCell = (props) => {
     const [isEditFunctionaryModalOpen, setIsEditFunctionaryModalOpen] = useState(false);
@@ -53,10 +55,13 @@ const ColumnCell = (props) => {
                 <div className="users-table-column-cell-data">
                     <h2>{props["nameText"]}</h2>
                     <p>{props["emailText"]}</p>
-                    <p>{props["idText"]}</p>
+                    <p>{props["badgeNumberText"]}</p>
+                    <p>{props["phoneText"]}</p>
+                    <p>{props["birthDateText"]}</p>
+                    <p>{props["genderText"]}</p>
                 </div>
                 <div className="users-table-column-cell-actions">
-                    <a onClick={() => { }}>
+                    <a onClick={() => setIsEditCopModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                             <path
                                 fill="currentColor"
@@ -64,7 +69,7 @@ const ColumnCell = (props) => {
                                 class="fa-secondary-red-users" />
                         </svg>
                     </a>
-                    <a onClick={() => { }}>
+                    <a onClick={() => setIsDeleteCopModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path
                                 fill="currentColor"
@@ -73,6 +78,14 @@ const ColumnCell = (props) => {
                         </svg>
                     </a>
                 </div>
+                {isEditCopModalOpen ? <EditCopModal copIdText={props.copIdText}
+                                                    birthDateText={props.birthDateText}
+                                                    genderText={props.genderText}
+                                                    badgeNumberText={props.badgeNumberText}
+                                                    nameText={props.nameText}
+                                                    phoneText={props.phoneText}
+                                                    onClose={() => setIsEditCopModalOpen(false)}/> : null}
+                {isDeleteCopModalOpen ? <DeleteCopModal copIdText={props.copIdText} onClose={() => setIsDeleteCopModalOpen(false)}/> : null}
             </div>
         )
     );

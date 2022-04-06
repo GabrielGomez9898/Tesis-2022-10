@@ -1,3 +1,4 @@
+// Dependencies
 const {
   totalReportsByWeek, 
   totalReportsByMonth, 
@@ -9,12 +10,18 @@ const {
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
-const { response } = require("express");
 const cors = require("cors");
 
+// Use Express.ja with cloud functions
 const app = express();
+
+// Enable Cross Origin to prevent CORS error when doing request from the front-end
 app.use(cors({ origin: true }));
-admin.initializeApp();
+
+// Initialize the firebase app
+const firebaseApp = admin.initializeApp();
+
+// Obtain the firestore reference in order to query and manage the db
 const db = admin.firestore();
 
 const printError = (error) => {
@@ -214,12 +221,22 @@ app.delete("/functionaries/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
 
+    /* Delete the functionary from the functionaries Firestore collection */
+    
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
     // Delete the document by id
     const writeResult = await functionariesRef.doc(id).delete();
 
-    return response.status(200).send(writeResult);
+    /* Delete the functionary from the authentication tier in Firebase */
+
+    // Delete the user with the provided uid and managing success and failure with .then() and .catch()
+    admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
+      return response.status(200).send(writeResult);
+    }).catch((error) => {
+      printError(error);
+      return response.status(500).send(error);
+    });
   }
   catch (error) {
     printError(error);
@@ -333,12 +350,22 @@ app.delete("/cops/:copId", async (request, response) => {
   try {
     const id = request.params.copId;
 
+    /* Delete the cop from the cops Firestore collection */
+
     // Create reference to the users collection
     const usersRef = db.collection("users");
     // Delete the document by id
     const writeResult = await usersRef.doc(id).delete();
 
-    return response.status(200).send(writeResult);
+    /* Delete the cop from the authentication tier in Firebase */
+
+    // Delete the user with the provided uid and managing success and failure with .then() and .catch()
+    admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
+      return response.status(200).send(writeResult);
+    }).catch((error) => {
+      printError(error);
+      return response.status(500).send(error);
+    });
   }
   catch (error) {
     printError(error);
