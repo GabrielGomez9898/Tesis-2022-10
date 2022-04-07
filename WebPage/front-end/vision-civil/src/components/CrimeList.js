@@ -9,7 +9,7 @@ import {db, storage} from "../firebase"
 const CrimeList = () => {
   //funcion para sacar los reportes del back
   function getListadoData() {
-    Axios.get('http://localhost:5001/miproyecto-5cf83/us-central1/app/reports')
+    Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reports')
       .then((response) => {
         setListado(response.data)
         console.log(response)
@@ -22,7 +22,7 @@ const CrimeList = () => {
 }
 
 const getListadoByFilter = () => {
-  Axios.get(`http://localhost:5001/miproyecto-5cf83/us-central1/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
+  Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
       listado.pop();
       console.log(listado);
       setListado(response.data)
@@ -63,7 +63,8 @@ const getListadoByFilter = () => {
     setListadofotos(aux);
 
   }
-  let num =0;
+  const num = useRef(0);
+  console.log("aca estoy" , num);
   const Modal = (props) => {
 
     const [listadofotos, setListadofotos] = useState([])
@@ -132,16 +133,15 @@ const getListadoByFilter = () => {
             <br></br>
 
       {useEffect(() => {
-        if(num == 0){
+        if(num.current === 0){
           getListadoData();
-          num += 1;
+          num.current += 1;          
         }else{
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
-            alert("Se realizo un nuevo reporte");
             getListadoData();
-          })
-          
+            alert("Se realizo un nuevo reporte");
+          });
         }
       }, [])}
 
