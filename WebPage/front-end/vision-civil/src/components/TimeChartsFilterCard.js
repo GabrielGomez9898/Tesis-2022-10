@@ -1,13 +1,13 @@
 import "../styles/Forms.scss";
 import { useDispatch } from "react-redux";
 import { refreshData } from "../features/TimeChartsData";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Axios from "axios";
 
 const TimeChartsFilterCard = () => {
     const dispatch = useDispatch();
 
-    const [period, setPeriod] = useState("ESTA_SEMANA");
+    const [period, setPeriod] = useState("ESTE_TRIMESTRE");
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -20,6 +20,10 @@ const TimeChartsFilterCard = () => {
         })
     }
 
+    useEffect(() => {
+        getTimeChartsData();
+    }, []);
+
     return (
         <form className="card-timechartfilter-container" onSubmit={handleSubmit}>
             <div>
@@ -27,7 +31,7 @@ const TimeChartsFilterCard = () => {
                 <select id="period" required onChange={(e) => {setPeriod(e.target.value)}}>
                     <option key="ultimos7dias" value="ESTA_SEMANA">Últimos 7 días</option>
                     <option key="ultimos30dias" value="ESTE_MES">Últimos 30 días</option>
-                    <option key="esteTrimestre" value="ESTE_TRIMESTRE">Este trimestre</option>
+                    <option key="esteTrimestre" value="ESTE_TRIMESTRE" selected>Este trimestre</option>
                     <option key="esteSemestre" value="ESTE_SEMESTRE">Este semestre</option>
                     <option key="esteAnio" value="ESTE_AÑO">Este año</option>
                     <option key="dePorVida" value="DE_POR_VIDA">De por vida</option>
