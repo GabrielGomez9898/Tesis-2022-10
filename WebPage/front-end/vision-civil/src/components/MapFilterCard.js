@@ -1,21 +1,15 @@
 import "../styles/Forms.scss";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { refreshData } from "../features/MapData";
+import { getTodayFormattedDate, generateDaysAgoFormattedDate } from "../util/dateUtil";
 import Axios from "axios";
 
 const MapFilterCard = () => {
     const dispatch = useDispatch();
 
-    const generateDaysAgoFormattedDate = (daysToSubtract) => {
-        const date = new Date();
-        date.setDate(date.getDate() - daysToSubtract);
-
-        return `${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`;
-    } 
-
-    const [lowerDate, setLowerDate] = useState("");
-    const [upperDate, setUpperDate] = useState("");
+    const [lowerDate, setLowerDate] = useState(generateDaysAgoFormattedDate(60));
+    const [upperDate, setUpperDate] = useState(getTodayFormattedDate());
     const [reportType, setReportType] = useState("TODOS");
 
     const handleSubmit = (e) => {
@@ -29,15 +23,19 @@ const MapFilterCard = () => {
         }).catch((error) => console.log(error));
     }
 
+    useEffect(() => {
+        getMapData();
+    }, []);
+
     return (
             <form className="card-mapfilter-container" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="lowerDate">Desde</label><br/>
-                    <input id="lowerDate" type="date" required onChange={(e) => {setLowerDate(e.target.value)}} />
+                    <input id="lowerDate" type="date" defaultValue={generateDaysAgoFormattedDate(60)} required onChange={(e) => {setLowerDate(e.target.value)}} />
                 </div>
                 <div>
                     <label htmlFor="upperDate">Hasta</label><br/>
-                    <input id="upperDate" type="date" required onChange={(e) => {setUpperDate(e.target.value)}}/>
+                    <input id="upperDate" type="date" defaultValue={getTodayFormattedDate()} required onChange={(e) => {setUpperDate(e.target.value)}}/>
                 </div>
                 <div>
                     <label htmlFor="reportType">Tipo de reporte</label><br/>
