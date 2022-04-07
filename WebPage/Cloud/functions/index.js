@@ -21,7 +21,7 @@ app.use(cors({ origin: true }));
 // Initialize the firebase app
 var serviceAccount = require("./miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
 
-admin.initializeApp(
+const firebaseApp = admin.initializeApp(
   {credential: admin.credential.cert(serviceAccount)}
 );
 // Obtain the firestore reference in order to query and manage the db
@@ -389,6 +389,8 @@ app.post("/notification", async (request, response) => {
     const description = queryParams["description"];
 
     var FCMToken = "dqkJmwSuQnG50GXQ4oOFV6:APA91bGpxzURjNyMXAFtNlzN0aVRGKhuhpPPLL2T6--hHyAj5etYKnRKITO8vjeTDS-guj_E_NVCsqCzc44AJ_iEdmpUYq1VY1OLfk4aUYaK6peArsgjmHvwD7a1fCW5BdQg4YyinvX1"
+    var token2 = "dEgnLTU8TZiXTo8I7x5Mzr:APA91bEqnI1OXXq7jcJ1w6zmiDTRBY1TL8E-ccHCeOsHG58MwmWEZs_kzGQAgQNxOfSORnnwXgexBX222ULfdL5KfuCqpTWujlng7Epmbe0DvoirzXNx5bJvyZfRadmtfsbmx6oOx97K"
+    const arr = [FCMToken,token2]
     var payload = {
       notification: {
         title: title,
@@ -400,11 +402,12 @@ app.post("/notification", async (request, response) => {
       //timeToLive: 60 * 60 *24
     };
     try{
-
-      admin.messaging().sendToDevice(FCMToken, payload, options).then(function(response){
-        console.log("sirvio",response )
-      }).catch(function(error){
-        console.log("no sirvio", error)
+      arr.map((item,i) => {
+        admin.messaging().sendToDevice(item, payload, options).then(function(response){
+          console.log("sirvio",response )
+        }).catch(function(error){
+          console.log("no sirvio", error)
+        })
       })
     }catch(error){
       printError(error)
