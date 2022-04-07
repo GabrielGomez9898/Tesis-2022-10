@@ -19,8 +19,11 @@ const app = express();
 app.use(cors({ origin: true }));
 
 // Initialize the firebase app
-const firebaseApp = admin.initializeApp();
+var serviceAccount = require("./miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
 
+admin.initializeApp(
+  {credential: admin.credential.cert(serviceAccount)}
+);
 // Obtain the firestore reference in order to query and manage the db
 const db = admin.firestore();
 
@@ -381,32 +384,24 @@ app.delete("/cops/:copId", async (request, response) => {
 //notification
 app.post("/notification", async (request, response) => {
   try {
-
     const queryParams = request.query;
-    const title = queryParams["title"]
-    const description = queryParams["description"]
+    const title = queryParams["title"];
+    const description = queryParams["description"];
 
-    console.log("este es el token",admin.messaging().getToken());
-    var FCMToken = "AAAAM0G-m9Q:APA91bEShPUHNT5yKa4I-pGc902vpEaV-nOr7bUTbbe0PqZnc88abktPlEvkHYLwKjxogOxUIlbbmqNiwytL0loXb2dpuwVdUDTBWw-aI_vTtfIO2zbqvJHase8CrJ8ZT8DGyJldayUU"
+    var FCMToken = "dqkJmwSuQnG50GXQ4oOFV6:APA91bGpxzURjNyMXAFtNlzN0aVRGKhuhpPPLL2T6--hHyAj5etYKnRKITO8vjeTDS-guj_E_NVCsqCzc44AJ_iEdmpUYq1VY1OLfk4aUYaK6peArsgjmHvwD7a1fCW5BdQg4YyinvX1"
     var payload = {
       notification: {
-        title: "This is a Notification",
-        body: "This is the body of the notification message."
+        title: title,
+        body: description
       }
     };
-    const message = {
-      data: {
-        title: 'title',
-        body: 'description',
-      }
-    }
     var options = {
       priority: "high",
-      timeToLive: 60 * 60 *24
+      //timeToLive: 60 * 60 *24
     };
     try{
 
-      admin.messaging().sendToDevice(FCMToken, message, options).then(function(response){
+      admin.messaging().sendToDevice(FCMToken, payload, options).then(function(response){
         console.log("sirvio",response )
       }).catch(function(error){
         console.log("no sirvio", error)
@@ -414,20 +409,6 @@ app.post("/notification", async (request, response) => {
     }catch(error){
       printError(error)
     }
-
-     //const response = admin.messaging().send(FCMToken,payload,options)//.then(function(response){
-    //   console.log("Successfully sent message:", response);
-    // }).catch(function(error) {
-    //   console.log("Error sending message:", error);
-    // });
-
-    
-
-    //functions.logger.info('FCM Message', payload)
-
-    // https://firebase.google.com/docs/cloud-messaging/send-message#send-messages-to-multiple-devices
-
-    //return response.status(200).send(writeResult);
   }
   catch (error) {
     printError(error);
