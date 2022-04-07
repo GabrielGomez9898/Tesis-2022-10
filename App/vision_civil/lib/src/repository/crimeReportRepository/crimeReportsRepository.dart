@@ -114,6 +114,10 @@ class ReportDB {
         (error) => print('Update failed: $error'));
     print("Se finalizo el reporte: " + idReport + " del policia: " + idPoliceUser);
   }
+
+  void deleteReport(String idReport) async {
+    await db.collection('reports').doc(idReport).delete();
+  }
 }
 
 ReportDB reportdb = ReportDB();

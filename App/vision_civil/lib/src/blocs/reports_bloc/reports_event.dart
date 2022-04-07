@@ -85,3 +85,11 @@ class FinishReportEvent extends ReportblocEvent{
   }
 }
 
+// ignore: must_be_immutable
+class DeleteReportEvent extends ReportblocEvent{
+  String idReport = "";
+
+  DeleteReportEvent(String idReport){
+    this.idReport = idReport;
+  }  
+}

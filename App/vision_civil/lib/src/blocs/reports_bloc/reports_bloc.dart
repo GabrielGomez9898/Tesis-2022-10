@@ -173,6 +173,9 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
         
       }else if(event is FinishReportEvent){
         reportdb.finishReport(event.idPoliceUser, event.idReport);
+      }else if(event is DeleteReportEvent){
+        reportdb.deleteReport(event.idReport);
+        print("Se elimino el reporte: "+event.idReport);
       }
     });
   }

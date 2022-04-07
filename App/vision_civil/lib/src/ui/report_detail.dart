@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/map.dart';
 import 'package:vision_civil/src/ui/report_video.dart';
 import 'package:vision_civil/storage_service.dart';
@@ -25,6 +26,8 @@ class _ReportDetailState extends State<ReportDetail> {
     this.idReport = idReport;
     this.idPoliceUser = idPoliceUser;
   }
+
+  bool timeToReturn = false;
 
   @override
   Widget build(BuildContext context) {
@@ -162,6 +165,19 @@ class _ReportDetailState extends State<ReportDetail> {
                       },
                     );
                   },
+                ),
+                BlocBuilder<ReportBloc, ReportblocState>(
+                  builder: (context, state) {
+                    return ElevatedButton(
+                        onPressed: () {
+                          BlocProvider.of<ReportBloc>(context)
+                              .add(DeleteReportEvent(state.report.id));
+                          BlocProvider.of<ReportBloc>(context)
+                              .add(GetReportsEvent());
+                          reportDeleted(context);
+                        },
+                        child: Text("Eliminar reporte"));
+                  },
                 )
               ],
             );
@@ -239,6 +255,38 @@ outOfService(BuildContext context) {
     title: Text("No se puede atender"),
     content: Text(
         "Usted se encuentra fuera de servicio, inicie su jornada para atender un caso"),
+    actions: [
+      okButton,
+    ],
+  );
+
+  // show the dialog
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return alert;
+    },
+  );
+}
+
+reportDeleted(BuildContext context) {
+  // set up the button
+  Widget okButton = TextButton(
+    child: Text("OK"),
+    onPressed: () {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (_) => MultiBlocProvider(providers: [
+          BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
+          BlocProvider.value(value: BlocProvider.of<ReportBloc>(context)),
+        ], child: HomePage()),
+      ));
+    },
+  );
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Reporte eliminado"),
+    content: Text("Este caso fue eliminado exitosamente"),
     actions: [
       okButton,
     ],
