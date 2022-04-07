@@ -9,6 +9,7 @@ import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/models/report.dart';
 import 'package:vision_civil/src/ui/contacts.dart';
 import 'package:vision_civil/src/ui/create_report.dart';
+import 'package:vision_civil/src/ui/login.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 import 'package:vision_civil/src/ui/report_detail.dart';
 import 'package:vision_civil/src/ui/report_in_process.dart';
@@ -71,6 +72,12 @@ class HomeState extends State<HomePage> {
                       icon: Icon(Icons.logout),
                       onPressed: () {
                         BlocProvider.of<UserBloc>(context).add(LogoutEvent());
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => MultiBlocProvider(providers: [
+                            BlocProvider(
+                                create: (BuildContext context) => UserBloc()),
+                          ], child: Login()),
+                        ));
                       },
                     )
                   ],
@@ -374,7 +381,7 @@ class HomeState extends State<HomePage> {
                   },
                 )),
           );
-        } else {
+        } else if (state.userRole == "POLICIA") {
           return Scaffold(
               appBar: AppBar(
                 title: Text("Home Policias"),
@@ -435,6 +442,12 @@ class HomeState extends State<HomePage> {
                     icon: Icon(Icons.logout),
                     onPressed: () {
                       BlocProvider.of<UserBloc>(context).add(LogoutEvent());
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => MultiBlocProvider(providers: [
+                            BlocProvider(
+                                create: (BuildContext context) => UserBloc()),
+                          ], child: Login()),
+                        ));
                     },
                   )
                 ],
@@ -479,6 +492,27 @@ class HomeState extends State<HomePage> {
                   );
                 },
               ));
+        } else {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text("Vision Civil"),
+            ),
+            body: Center(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: 200,
+                  ),
+                  Container(
+                      width: 100,
+                      height: 100,
+                      child: CircularProgressIndicator()),
+                  SizedBox(height: 50),
+                  Text("Cargando... por favor espere")
+                ],
+              ),
+            ),
+          );
         }
       },
     );
