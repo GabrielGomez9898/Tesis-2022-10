@@ -1,43 +1,42 @@
-//import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-//import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:vision_civil/src/app.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/login.dart';
-//import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-// const AndroidNotificationChannel channel = AndroidNotificationChannel(
-//     'high_importance_channel', 'High Importance Notifications',
-//     importance: Importance.high, playSound: true);
+const AndroidNotificationChannel channel = AndroidNotificationChannel(
+    'high_importance_channel', 'High Importance Notifications',
+    importance: Importance.high, playSound: true);
 
-// final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
-//     FlutterLocalNotificationsPlugin();
+final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
+    FlutterLocalNotificationsPlugin();
 
-// Future<void> _firebaseMessaginBackgroundHandler(RemoteMessage message) async {
-//   await Firebase.initializeApp();
-//   print('un mensaje en segundo plano se mostro: ${message.messageId}');
-// }
+Future<void> _firebaseMessaginBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('un mensaje en segundo plano se mostro: ${message.messageId}');
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  // FirebaseMessaging.onBackgroundMessage(_firebaseMessaginBackgroundHandler);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessaginBackgroundHandler);
 
-  // await FlutterLocalNotificationsPlugin()
-  //     .resolvePlatformSpecificImplementation<
-  //         AndroidFlutterLocalNotificationsPlugin>()
-  //     ?.createNotificationChannel(channel);
+  await FlutterLocalNotificationsPlugin()
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
 
-  // await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-  //     alert: true, badge: true, sound: true);
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+      alert: true, badge: true, sound: true);
 
-  runApp(App());
-  //runApp(MyApp());
+  //runApp(App());
+  runApp(MyApp());
 }
 
-/*
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -150,4 +149,4 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
-}*/
+}

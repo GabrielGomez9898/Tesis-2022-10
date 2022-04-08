@@ -89,16 +89,20 @@ class UserDB {
     return userReturn;
   }
 
-  void updatePoliceService(String idPoliceUser, bool onService)async{
+  void updatePoliceService(String idPoliceUser, bool onService) async {
     var police = FirebaseFirestore.instance.collection('users');
-    police
-        .doc(idPoliceUser)
-        .update({'enServicio': onService}).catchError(
-            (error) => print('Update failed: $error'));
+    police.doc(idPoliceUser).update({'enServicio': onService}).catchError(
+        (error) => print('Update failed: $error'));
   }
 
-  Future<QueryDocumentSnapshot> updateUserBlocState(String userEmail)async{
-        //Get userupdated to refresh bloc states
+  void updateTokenPhone(String user, String token) async {
+    var police = FirebaseFirestore.instance.collection('users');
+    police.doc(user).update({'phoneToken': token}).catchError(
+        (error) => print('Update failed: $error'));
+  }
+
+  Future<QueryDocumentSnapshot> updateUserBlocState(String userEmail) async {
+    //Get userupdated to refresh bloc states
     QuerySnapshot querySnapReturn = await FirebaseFirestore.instance
         .collection('users')
         .where('email', isEqualTo: userEmail)

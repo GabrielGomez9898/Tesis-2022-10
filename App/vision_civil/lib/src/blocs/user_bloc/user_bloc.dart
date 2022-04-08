@@ -135,7 +135,7 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             idPolice: " ",
             available: false,
             onService: false));
-      }else if(event is UpdateUserState){
+      } else if (event is UpdateUserState) {
         emit(UserblocState(
             userID: event.userID,
             loginAchieved: event.loginAchieved,
@@ -149,9 +149,11 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
             idPolice: event.idPolice,
             available: event.available,
             onService: event.onService));
-      } else if(event is UpdatePoliceService){
+      } else if (event is UpdatePoliceService) {
         userdb.updatePoliceService(event.userID, event.onService);
-      } 
+      } else if (event is AddPhoneToken) {
+        userdb.updateTokenPhone(event.user, event.token);
+      }
     });
   }
   void dispose() {

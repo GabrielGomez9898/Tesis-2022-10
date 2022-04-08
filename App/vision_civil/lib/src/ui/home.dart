@@ -14,6 +14,7 @@ import 'package:vision_civil/src/ui/profile.dart';
 import 'package:vision_civil/src/ui/report_detail.dart';
 import 'package:vision_civil/src/ui/report_in_process.dart';
 import 'package:vision_civil/src/ui/servicio_policia.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -46,6 +47,16 @@ class HomeState extends State<HomePage> {
     await _getPermission();
   }
 
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  void _getTokenPhone(String userID) async {
+    var token =
+        await _firebaseMessaging.getToken(); //persistir en la bd el token
+    BlocProvider.of<UserBloc>(context)
+        .add(AddPhoneToken(userID, token.toString()));
+
+    print("EN EL LOGIN: $token");
+  }
+
   String contactPhone1 = "", contactPhone2 = "", contactPhone3 = "";
   var location = new Location();
 
@@ -55,6 +66,7 @@ class HomeState extends State<HomePage> {
     BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
     return BlocBuilder<UserBloc, UserblocState>(
       builder: (context, state) {
+        _getTokenPhone(state.userID);
         if (state.userRole == "CIUDADANO") {
           return Container(
             decoration: BoxDecoration(
@@ -399,6 +411,7 @@ class HomeState extends State<HomePage> {
                   ),
                   BlocBuilder<UserBloc, UserblocState>(
                     builder: (context, state) {
+                      _getTokenPhone(state.userID);
                       return IconButton(
                         icon: Icon(Icons.my_library_books),
                         onPressed: () {

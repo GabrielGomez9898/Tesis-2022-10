@@ -57,7 +57,7 @@ class UpdateUserEvent extends UserblocEvent {
 }
 
 // ignore: must_be_immutable
-class UpdateUserState extends UserblocEvent{
+class UpdateUserState extends UserblocEvent {
   String userID = "";
   String userEmail = "";
   String userName = "";
@@ -73,7 +73,19 @@ class UpdateUserState extends UserblocEvent{
 
   bool loginAchieved = false;
 
-  UpdateUserState(String userID,String userEmail,String userName,double userPhone,String userGender,String userBirthDate,String userRole,String userDocument,String idPolice,bool available,bool onService, bool loginAchieved){
+  UpdateUserState(
+      String userID,
+      String userEmail,
+      String userName,
+      double userPhone,
+      String userGender,
+      String userBirthDate,
+      String userRole,
+      String userDocument,
+      String idPolice,
+      bool available,
+      bool onService,
+      bool loginAchieved) {
     this.userID = userID;
     this.userEmail = userEmail;
     this.userName = userName;
@@ -90,14 +102,23 @@ class UpdateUserState extends UserblocEvent{
 }
 
 // ignore: must_be_immutable
-class UpdatePoliceService extends UserblocEvent{
-
+class UpdatePoliceService extends UserblocEvent {
   String userID = "";
   bool onService = false;
 
-  UpdatePoliceService(String userID,bool onService){
+  UpdatePoliceService(String userID, bool onService) {
     this.userID = userID;
     this.onService = onService;
   }
+}
 
+// ignore: must_be_immutable
+class AddPhoneToken extends UserblocEvent {
+  String user = "";
+  String token = "";
+
+  AddPhoneToken(String user, String token) {
+    this.user = user;
+    this.token = token;
+  }
 }
