@@ -21,9 +21,10 @@ app.use(cors({ origin: true }));
 // Initialize the firebase app
 var serviceAccount = require("./miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
 
-admin.initializeApp(
+const firebaseApp = admin.initializeApp(
   {credential: admin.credential.cert(serviceAccount)}
 );
+
 // Obtain the firestore reference in order to query and manage the db
 const db = admin.firestore();
 

@@ -8,6 +8,7 @@ import CrimeListPage from "./pages/CrimeListPage";
 import ErrorPage from "./pages/ErrorPage";
 import { AuthContextProvider } from './contexts/AuthContext';
 import AuthenticatedOutlet from './components/AuthenticatedOutlet';
+import MasterOutlet from './components/MasterOutlet';
 
 function App() {
   return (
@@ -26,7 +27,9 @@ function App() {
             <Route path="" element={<NotificationPage/>} />
           </Route>
           <Route path="/users" element={<AuthenticatedOutlet/>}>
-            <Route path="" element={<UsersPage/>} />
+            <Route path="" element={<MasterOutlet/>}>
+              <Route path="" element={<UsersPage/>} />
+            </Route>
           </Route>
 
           <Route path="*" element={<ErrorPage/>} />
