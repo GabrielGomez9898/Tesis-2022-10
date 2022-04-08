@@ -77,11 +77,13 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               onTap: () {
                 
                 if (widget.emergencyContact.uniqueid == " ") {
+                  showNewEmergencyContact(context,contactName,phone);
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       AddContactEvent(
                           contactName, phone, widget.idUser));
                   Navigator.pop(context);
                 } else {
+                  showNewEmergencyContact(context,contactName,phone);
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       UpdateContactEvent(widget.emergencyContact.uniqueid,
                           contactName, phone));
@@ -95,28 +97,21 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
 }
 
 showNewEmergencyContact(BuildContext context, name, phone) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  );
+
 
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text('Contacto de emrgencia agregado'),
     content: Text('Nombre: ' + name + '\n' + 'Celular: ' + phone),
-    actions: [
-      okButton,
-    ],
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }

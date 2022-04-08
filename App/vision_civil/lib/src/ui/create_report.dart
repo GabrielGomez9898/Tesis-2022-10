@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:location/location.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
+import 'package:vision_civil/src/ui/report_message.dart';
 
 class CreateReport extends StatefulWidget {
   @override
@@ -592,6 +593,11 @@ class CreateReportState extends State<CreateReport> {
                                     _arrayImages,
                                     _video,
                                     _userPhone));
+                            Navigator.of(context).push(MaterialPageRoute(
+                            builder: (_) => BlocProvider.value(
+                                value: BlocProvider.of<UserBloc>(context),
+                                child: ReportMessage()),
+                          ));
                           },
                           child: Text(
                             "Generar reporte",
