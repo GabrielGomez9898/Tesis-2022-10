@@ -1,11 +1,9 @@
 import "../styles/Alert.scss";
 import "../styles/Forms.scss";
 import React, { useState, useCallback } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import Alert from "./Alert";
-import { db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -24,21 +22,9 @@ const LoginForm = () => {
             setMessage("");
             setIsLoading(true);
             
-            // Create a reference to the functionaries collection
-            const functionariesRef = collection(db, "functionaries");
-            // Create a query to retrieve all the documents in the collection
-            const q = query(functionariesRef);
-            // Execute the query
-            const querySnapshot = await getDocs(q);
-            // SignIn to retrieve userCredential obj
-            const userCredential = await signIn(email, password);
-            //Check if the user that wants to access is a functionary
-            if(querySnapshot.docs.findIndex((doc) => doc.id === userCredential.user.uid) !== -1) {
+            const isSuccessful = await signIn(email, password);
+            if(isSuccessful) {
                 navigate("/");
-            }
-            else {
-                await logout();
-                setMessage("Solo los funcionarios tienen acceso");
             }
         }
         catch (error) {
@@ -57,6 +43,9 @@ const LoginForm = () => {
                     break;
                 case "auth/too-many-requests":
                     setMessage("Demasiados intentos");
+                    break;
+                case "auth/user-not-functionary":
+                    setMessage("Solo los funcionarios tienen acceso");
                     break;
                 default:
                     setMessage("Error desconocido");
