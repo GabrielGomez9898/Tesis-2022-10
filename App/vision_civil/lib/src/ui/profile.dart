@@ -248,6 +248,7 @@ class ProfileState extends State<Profile> {
                             text: 'Actualizar datos',
                             textColor: Colors.black,
                             press: () {
+                              upDateInfoAlert(context);
                               BlocProvider.of<UserBloc>(context).add(
                                   UpdateUserEvent(this.email, this.name,
                                       this.birthDate, this.gender, this.phone));
@@ -268,4 +269,24 @@ class ProfileState extends State<Profile> {
       ),
     );
   }
+}
+
+upDateInfoAlert(BuildContext context) {
+
+
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("¡Datos actualizados!"),
+    content: Text(""),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }
