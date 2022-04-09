@@ -19,7 +19,7 @@
     margin-top: 10%;
     height: 625px;
     width: 1150px;
-    min-height: 625px;
+    min-height: 645px;
     max-width: 1150px;
     background-color: $unselected-color;
     border-radius: 1%;
@@ -28,7 +28,7 @@
 .modal-container-withoutphotos{
     margin-left: 30%;
     margin-top: 10%;
-    min-height: 615px;
+    min-height: 645px;
     max-width: 800px;
     background-color: $unselected-color;
     border-radius: 1%;
@@ -78,6 +78,8 @@
     background-color: white;
     border-radius: 15px;
     padding: 1rem;
+    border-style: solid;
+    border-width: 3px;
 }
 
 .button .crime-button{
@@ -94,4 +96,36 @@
     color: gray;
     margin-left: 85%;
     margin-bottom: 1505px;
+}
+.asunto{
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+.TipoAlerta{
+    display: block;
+    text-align: center;
+}
+.Descripcion{
+    display: block;
+    text-align: center;
+    margin-top: -17px;
+}
+.fecha{
+    display: block;
+    text-align: center;
+    margin-top: -17px;
+}
+.horam{
+    display: block;
+    text-align: center;
+    margin-top: -17px;
+}
+.carga{
+    width: 300;
+    height: 300; 
+    margin-top: 160px; 
+    margin-left : 40%;
+    display: block;
+    text-align: center;
 }

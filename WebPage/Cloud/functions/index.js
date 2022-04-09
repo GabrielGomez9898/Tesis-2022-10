@@ -38,14 +38,14 @@ app.get("/mapData", async (request, response) => {
     const queryParams = request.query;
     const lowerDate = queryParams["lowerDate"].replaceAll("-", "/");
     const upperDate = queryParams["upperDate"].replaceAll("-", "/");
-    const reportType = queryParams["reportType"];
+    const tipo_reporte = queryParams["tipo_reporte"];
 
     const lowerDateObject = new Date(lowerDate);
     const upperDateObject = new Date(upperDate);
 
     let docs = undefined;
-    (reportType != "TODOS") ?
-      (docs = await db.collection("reports").where("tipo_reporte", "==", reportType).get()) :
+    (tipo_reporte != "TODOS") ?
+      (docs = await db.collection("reports").where("tipo_reporte", "==", tipo_reporte).get()) :
       (docs = await db.collection("reports").get());
     
     const mapData = [];
@@ -55,7 +55,7 @@ app.get("/mapData", async (request, response) => {
       reportDateObject = new Date(reportDate);
 
       if (reportDateObject >= lowerDateObject && reportDateObject <= upperDateObject) {
-        mapData.push({ "lat": report["latitude"], "lng": report["longitude"], "reportType": report["tipo_reporte"] });
+        mapData.push({ "lat": report["latitude"], "lng": report["longitude"], "tipo_reporte": report["tipo_reporte"] });
       }
     });
 
@@ -254,11 +254,36 @@ app.get("/reports", async (request, response) => {
     const reports = [];
     let id = 1;
     let reporte = undefined;
+    let color = "";
     doc.forEach((item ) => {
       let imagenes = [];
       let imag = [];
       reporte = item.data();
       reporte["id"] = id;
+      if(reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
+        color = "#00b7ff";
+    }
+    else if(reporte["tipo_reporte"] === "HURTO_PERSONA") {
+        color = "#001aff";
+    }
+    else if(reporte["tipo_reporte"] === "HURTO_VEHICULO") {
+        color = "#008000";
+    }
+    else if(reporte["tipo_reporte"] === "VANDALISMO") {
+        color = "#4d0080";
+    }
+    else if(reporte["tipo_reporte"] === "VIOLACION") {
+        color = "#ff00ff";
+    }
+    else if(reporte["tipo_reporte"] === "HOMICIDIO") {
+        color = "#ff0000";
+    }
+    else if(reporte["tipo_reporte"] === "AGRESION") {
+        color = "#ff8800";
+    }
+    else if(reporte["tipo_reporte"] === "OTRO") {
+        color = "#000000";
+    }
       if(reporte["images_ids"] != null ){
         imag.push(reporte["images_ids"].split(",")); 
         for(let x = 0; x < imag.length; x++){
@@ -276,6 +301,7 @@ app.get("/reports", async (request, response) => {
         reporte["imagenes"]= imagenes;
       }
       reporte["fotourl"] = item.id
+      reporte["color"] = color;
       reporte["hora"] = reporte["fecha_hora"].split(" | ")[1];
       reporte["fecha"] = reporte["fecha_hora"].split(" | ")[0];
       reports.push(reporte);
@@ -388,9 +414,16 @@ app.post("/notification", async (request, response) => {
     const title = queryParams["title"];
     const description = queryParams["description"];
 
-    var FCMToken = "dqkJmwSuQnG50GXQ4oOFV6:APA91bGpxzURjNyMXAFtNlzN0aVRGKhuhpPPLL2T6--hHyAj5etYKnRKITO8vjeTDS-guj_E_NVCsqCzc44AJ_iEdmpUYq1VY1OLfk4aUYaK6peArsgjmHvwD7a1fCW5BdQg4YyinvX1"
-    var token2 = "dEgnLTU8TZiXTo8I7x5Mzr:APA91bEqnI1OXXq7jcJ1w6zmiDTRBY1TL8E-ccHCeOsHG58MwmWEZs_kzGQAgQNxOfSORnnwXgexBX222ULfdL5KfuCqpTWujlng7Epmbe0DvoirzXNx5bJvyZfRadmtfsbmx6oOx97K"
-    const arr = [FCMToken,token2]
+    const usersRef = await db.collection("users").get();
+    let user = undefined;
+    let tokens = [];
+    usersRef.forEach((item) => {
+      user = item.data();
+      if(user["phoneToken"] != null) {
+        tokens.push(user["phoneToken"]);
+      }
+    })
+
     var payload = {
       notification: {
         title: title,
@@ -402,7 +435,7 @@ app.post("/notification", async (request, response) => {
       //timeToLive: 60 * 60 *24
     };
     try{
-      arr.map((item,i) => {
+      tokens.map((item,i) => {
         admin.messaging().sendToDevice(item, payload, options).then(function(response){
           console.log("sirvio",response )
         }).catch(function(error){
@@ -424,24 +457,52 @@ app.get("/reportByFilter", async (request, response) => {
   try {
     const queryParams = request.query;
     const lowerDate = queryParams["lowerDate"].replace("-", "/");
+    printError(lowerDate)
     const upperDate = queryParams["upperDate"].replace("-", "/");
-    const reportType = queryParams["reportType"];
+    printError(upperDate)
+    const tipo_reporte = queryParams["reportType"];
+    printError(tipo_reporte)
     
     const lowerDateObject = new Date(lowerDate);
     const upperDateObject = new Date(upperDate);
 
     let docs = undefined;
-    (reportType != "TODOS") ?
-      (docs = await db.collection("reports").where("tipo_reporte", "==", reportType).get()) :
+    (tipo_reporte != "TODOS") ?
+      (docs = await db.collection("reports").where("tipo_reporte", "==", tipo_reporte).get()) :
       (docs = await db.collection("reports").get());
     
     const reports = [];
     let id = 1;
+    let color = "";
     docs.forEach((item) => {
-      report = item.data();
-      reportDate = report["fecha_hora"].split(" | ")[0];
+      reporte = item.data();
+      reportDate = reporte["fecha_hora"].split(" | ")[0];
       reportDateObject = new Date(reportDate);
       let imagenes = [];
+      if(reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
+        color = "#00b7ff";
+    }
+    else if(reporte["tipo_reporte"] === "HURTO_PERSONA") {
+        color = "#001aff";
+    }
+    else if(reporte["tipo_reporte"] === "HURTO_VEHICULO") {
+        color = "#008000";
+    }
+    else if(reporte["tipo_reporte"] === "VANDALISMO") {
+        color = "#4d0080";
+    }
+    else if(reporte["tipo_reporte"] === "VIOLACION") {
+        color = "#ff00ff";
+    }
+    else if(reporte["tipo_reporte"] === "HOMICIDIO") {
+        color = "#ff0000";
+    }
+    else if(reporte["tipo_reporte"] === "AGRESION") {
+        color = "#ff8800";
+    }
+    else if(reporte["tipo_reporte"] === "OTRO") {
+        color = "#000000";
+    }
       let imag = [];
       reporte = item.data();
       reporte["id"] = id;
@@ -462,6 +523,7 @@ app.get("/reportByFilter", async (request, response) => {
         reporte["imagenes"]= imagenes;
       }
       reporte["fotourl"] = item.id
+      reporte["color"] = color;
       reporte["hora"] = reporte["fecha_hora"].split(" | ")[1];
       reporte["fecha"] = reporte["fecha_hora"].split(" | ")[0];
 
@@ -491,6 +553,50 @@ exports.getAllReports = functions.https.onRequest((request, response) => {
     response.set("Access-Control-Allow-Origin", "*");
     response.send(tempDoc);
   });
+});
+
+exports.sendNotification = functions.https.onRequest(async (request, response) =>{ 
+  try {
+    const queryParams = request.query;
+    //const title = queryParams["title"];
+    //const description = queryParams["description"];
+
+    const usersRef = await db.collection("users").where("role" , "==" , "POLICIA").get();
+    let user = undefined;
+    let tokens = [];
+    usersRef.forEach((item) => {
+      user = item.data();
+      if(user["phoneToken"] != null) {
+        tokens.push(user["phoneToken"]);
+      }
+    })
+
+    var payload = {
+      notification: {
+        title: "title",
+        body: "description"
+      }
+    };
+    var options = {
+      priority: "high",
+      //timeToLive: 60 * 60 *24
+    };
+    try{
+      tokens.map((item,i) => {
+        admin.messaging().sendToDevice(item, payload, options).then(function(response){
+          console.log("sirvio",response )
+        }).catch(function(error){
+          console.log("no sirvio", error)
+        })
+      })
+    }catch(error){
+      printError(error)
+    }
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
 });
 
 // exports.sendNotification = functions.database.ref("users/{docId}").onWrite( event =>{

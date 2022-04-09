@@ -5,6 +5,10 @@ import Axios from "axios";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { collection, doc, onSnapshot } from "firebase/firestore";
 import {db, storage} from "../firebase"
+import {LazyLoadImage} from "react-lazy-load-image-component"
+import 'react-lazy-load-image-component/src/effects/blur.css'
+import Gif from '../Loading2.gif';
+
 
 const CrimeList = () => {
   //funcion para sacar los reportes del back
@@ -13,25 +17,24 @@ const CrimeList = () => {
       .then((response) => {
         setListado(response.data)
         console.log(response)
+        num.current += 1;
       })
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log("tipo reporte",reportType)
     getListadoByFilter();
 }
 
 const getListadoByFilter = () => {
   Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
       listado.pop();
-      console.log(listado);
       setListado(response.data)
-      console.log(listado)
-      console.log(response.data)
-      //dispatch(refreshData(response.data));
   }).catch((error) => console.log(error));
 }
   const [showModal, setShowModal] = useState(false);
+  const [showLoading, setShowLoading] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
   const [listado, setListado] = useState([])
   const [lowerDate, setLowerDate] = useState("");
@@ -64,32 +67,37 @@ const getListadoByFilter = () => {
 
   }
   const num = useRef(0);
-  console.log("aca estoy" , num);
   const Modal = (props) => {
 
     const [listadofotos, setListadofotos] = useState([])
     useEffect(() => {
       getFotos(props.object.fotourl, props.object.imagenes, setListadofotos);
     }, [])
+    
     return (
       <div id="CrimeListtModal" className="active modal" >
         <div className={props.container}>
           <div className="fotos">
-            {listadofotos.map((imagen, i) => (
-              <img src={listadofotos[i]} className="img" style={{ width: 300, height: 300 }}></img>
-            ))
+            {props.object.hasFotos && listadofotos.length == 0 ? (<img src={Gif} style={{ width: 300, height: 300 , marginTop: 160 }}/>) : "" }
+                
+            {listadofotos.length == 1 ?
+              <LazyLoadImage src={listadofotos[0]} effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" className="imgu" style={{ width: 300, height: 300 }}></LazyLoadImage>
+             :
+             (listadofotos.map((image,i) => (
+              <LazyLoadImage src={listadofotos[i]} className="img" effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" style={{ width: 300, height: 300 }}></LazyLoadImage>
+            ) ))  
             }
           </div>
           <div className="report">
             <button className="modalboton" onClick={() => setShowModal(false)}>X</button>
-            <h1>{props.object.asunto}</h1>
-            <span className="TipoAlerta">{props.object.tipo_reporte}</span>
+            <h1 className="asunto" style={{color : props.object.color}}>{props.object.asunto}</h1>
+            <span className="TipoAlerta" style={{color : props.object.color}}>{props.object.tipo_reporte}</span>
             <br></br>
-            <span className="Descripcion">{props.object.descripcion}</span>
+            <span className="Descripcion" style={{color : props.object.color}}>{props.object.descripcion}</span>
             <br></br>
-            <span className="fecha">{props.object.fecha} {props.object.hora}</span>
+            <span className="fecha" style={{color : props.object.color}}>{props.object.fecha} {props.object.hora}</span>
             <br></br>
-            <span className="horam">{props.object.user_phone}</span>
+            <span className="horam" style={{color : props.object.color}}>{props.object.user_phone}</span>
             <br></br>
             <Map google={google} zoom={16} style={mapStyles} initialCenter={{ lat: parseFloat(props.object.latitude), lng: parseFloat(props.object.longitude) }}>
               <Marker position={{ lat: props.object.latitude, lng: props.object.longitude }} />
@@ -133,21 +141,21 @@ const getListadoByFilter = () => {
             <br></br>
 
       {useEffect(() => {
-        if(num.current === 0){
-          getListadoData();
-          num.current += 1;          
-        }else{
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
+            listado.pop();
             getListadoData();
-            alert("Se realizo un nuevo reporte");
+            setShowLoading(true)
           });
-        }
+         getListadoData(); 
+         if(showLoading)        
+         alert("Se realizo un nuevo reporte"); 
+        
       }, [])}
-
+      {listado.length == 0 ? <img src={Gif} className="carga"/> : ""}
       <ul className="list-menu">
         {listado.map((item) => (
-          <div className="Container-crime">
+          <div className="Container-crime" style={{borderColor : item.color}}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
             <h2>{item.asunto}</h2>
             <span className="description">{item.descripcion}</span>
