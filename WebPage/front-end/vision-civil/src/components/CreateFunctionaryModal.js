@@ -92,8 +92,8 @@ const CreateFunctionaryModal = ({ onClose }) => {
                     <label htmlFor="emailInput">Correo del nuevo funcionario</label>
                     <input type="email" id="emailInput" placeholder="Ingrese el email" required onChange={(e) => setEmail(e.target.value)} />
                     <label htmlFor="isMasterRadio">Seleccione el tipo de funcionario</label>
-                    <input type="radio" name="isMasterRadio" value={false} required onChange={(e) => setIsMaster(e.target.value)} />Funcionario normal
-                    <input type="radio" name="isMasterRadio" value={true} required onChange={(e) => setIsMaster(e.target.value)} />Funcionario master
+                    <input type="radio" name="isMasterRadio" value={false} required onChange={(e) => setIsMaster(Boolean(e.target.value))} />Funcionario normal
+                    <input type="radio" name="isMasterRadio" value={true} required onChange={(e) => setIsMaster(Boolean(e.target.value))} />Funcionario master
                     {message && <Alert text={message} alertType="danger" isDeletable={true} />}
                     <label htmlFor="passwordInput">Contraseña del nuevo funcionario</label>
                     <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" required onChange={(e) => setPassword(e.target.value)} />

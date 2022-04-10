@@ -3,6 +3,8 @@ import "../styles/Forms.scss";
 import React, { useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/react";
 import Alert from "./Alert";
 
 const LoginForm = () => {
@@ -12,8 +14,9 @@ const LoginForm = () => {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonClassName, setButtonClassName] = useState("");
 
-    const { signIn, logout, isAuthenticated } = useAuth();
+    const { signIn } = useAuth();
 
     const login = useCallback(async (e) => {
         e.preventDefault();
@@ -21,6 +24,7 @@ const LoginForm = () => {
         try {
             setMessage("");
             setIsLoading(true);
+            setButtonClassName("button-loading")
             
             const isSuccessful = await signIn(email, password);
             if(isSuccessful) {
@@ -54,9 +58,14 @@ const LoginForm = () => {
 
             console.log(error.code);
         }
-
+        
         setIsLoading(false);
+        setButtonClassName("");
     }, [email, password]);
+
+    const style = css`
+        z-index: 1000;
+    `;
 
     return (
         <>
@@ -66,7 +75,9 @@ const LoginForm = () => {
                 <input type="email" id="email" name="email" placeholder="Ingrese su email" required onChange={(e) => { setEmail(e.target.value) }} /><br />
                 <label htmlFor="password" id="password-label">Contraseña</label><br />
                 <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required onChange={(e) => { setPassword(e.target.value) }} /><br />
-                <button type="submit" disabled={isLoading}>Acceder</button>
+                <button type="submit" className={buttonClassName} disabled={isLoading}>
+                    {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Acceder"}
+                </button>
             </form>
         </>
     )
