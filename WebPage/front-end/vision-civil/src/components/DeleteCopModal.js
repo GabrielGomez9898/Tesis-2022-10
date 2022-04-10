@@ -1,11 +1,34 @@
+import { useState } from "react";
 import { createPortal } from "react-dom";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/react";
 import Axios from "axios";
 
 const DeleteCopModal = (props) => {
-    const deleteCop = async () => {
-        await Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/cops/${props.copIdText}`);
-        props.onClose();
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonClassName, setButtonClassName] = useState("accept-btn");
+    const [hideCancelButton, setHideCancelButton] = useState(false);
+
+    const deleteCop = () => {
+        return Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/cops/${props.copIdText}`);
+        
     };
+
+    const handleClick = async () => {
+        setIsLoading(true);
+        setButtonClassName("button-loading");
+        setHideCancelButton(true);
+
+        await deleteCop();
+        props.onClose();
+        setIsLoading(false);
+        setButtonClassName("accept-btn");
+        setHideCancelButton(false);
+    };
+
+    const style = css`
+        z-index: 1000;
+    `;
 
     return createPortal(
         <div className="modal-background">
@@ -14,8 +37,10 @@ const DeleteCopModal = (props) => {
                 <h1>Estás seguro que deseas eliminar a este policía?</h1>
                 <p>El policía ya no podrá acceder a la aplicación móvil de Visión Civil, para que vuelva a poder acceder tendrá que agregarlo de nuevo</p>
                 <div className="modal-body-horizontal">
-                    <button className="cancel-btn" onClick={props.onClose}>Cancelar</button>
-                    <button className="accept-btn" onClick={() => deleteCop()}>Aceptar</button>
+                    <button className="cancel-btn" hidden={hideCancelButton} onClick={props.onClose}>Cancelar</button>
+                    <button className={buttonClassName} onClick={handleClick}>
+                        {isLoading ? <ClipLoader css={style} color="#2FB986" size={20} loading /> : "Aceptar"}
+                    </button>
                 </div>
             </div>
         </div>,

@@ -2,6 +2,8 @@ import "../styles/Modals.scss";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { createPortal } from "react-dom";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/react";
 import Alert from "./Alert";
 import Axios from "axios";
 
@@ -13,6 +15,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonClassName, setButtonClassName] = useState("");
 
     const { signup } = useAuth();
 
@@ -31,6 +34,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
             await createFunctionary();
             onClose();
             setIsLoading(false);
+            setButtonClassName("");
         }
     }, [id]);
 
@@ -45,6 +49,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
             if(password === confirmedPassword) {
                 setMessage("");
                 setIsLoading(true);
+                setButtonClassName("button-loading");
     
                 const userCredential = await signup(email, password);
                 setId(userCredential.user.uid);
@@ -78,8 +83,14 @@ const CreateFunctionaryModal = ({ onClose }) => {
                     setMessage("Error desconocido");
                     break;
             }
+            setIsLoading(false);
+            setButtonClassName("");
         }
     }, [email, password, confirmedPassword]);
+
+    const style = css`
+        z-index: 1000;
+    `;
 
     return createPortal(
         <>
@@ -99,7 +110,9 @@ const CreateFunctionaryModal = ({ onClose }) => {
                     <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" required onChange={(e) => setPassword(e.target.value)} />
                     <label htmlFor="confirmedPasswordInput">Confirmación de contraseña</label>
                     <input type="password" id="confirmedPasswordInput" placeholder="Confirme la contraseña" required onChange={(e) => setConfirmedPassword(e.target.value)} />
-                    <button type="submit" disabled={isLoading}>Crear funcionario</button>
+                    <button type="submit" className={buttonClassName} disabled={isLoading}>
+                        {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear funcionario"}
+                    </button>
                 </form>
             </div>
         </>,

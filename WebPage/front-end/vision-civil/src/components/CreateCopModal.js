@@ -1,6 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/react";
 import Alert from "./Alert";
 import Axios from "axios";
 
@@ -16,6 +18,7 @@ const CreateCopModal = ({onClose}) => {
     const [confirmedPassword, setConfirmedPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonClassName, setButtonClassName] =  useState("");
 
     const { signup } = useAuth();
 
@@ -41,6 +44,7 @@ const CreateCopModal = ({onClose}) => {
             await createCop();
             onClose();
             setIsLoading(false);
+            setButtonClassName("");
         }
     }, [id]);
 
@@ -55,6 +59,7 @@ const CreateCopModal = ({onClose}) => {
             if (password === confirmedPassword) {
                 setMessage("")
                 setIsLoading(true);
+                setButtonClassName("button-loading");
 
                 const userCredential = await signup(email, password);
                 setId(userCredential.user.uid);
@@ -87,12 +92,15 @@ const CreateCopModal = ({onClose}) => {
                 default:
                     setMessage("Error desconocido");
                     break;
-            }
-        }
-    },
-        [email, password, confirmedPassword],
-    );
+                }
+                setIsLoading(false);
+                setButtonClassName("");
+            }    
+    }, [email, password, confirmedPassword]);
 
+    const style = css`
+        z-index: 1000;
+    `;
 
     return createPortal(
         <>
@@ -121,7 +129,9 @@ const CreateCopModal = ({onClose}) => {
                     <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" required onChange={(e) => setPassword(e.target.value)} />
                     <label htmlFor="confirmedPasswordInput">Confirmación de contraseña</label>
                     <input type="password" id="confirmedPasswordInput" placeholder="Confirme la contraseña" required onChange={(e) => setConfirmedPassword(e.target.value)} />
-                    <button type="submit" disabled={isLoading}>Crear policía</button>
+                    <button type="submit" className={buttonClassName} disabled={isLoading}>
+                        {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear policía"}
+                    </button>
                 </form>
             </div>
         </>,
