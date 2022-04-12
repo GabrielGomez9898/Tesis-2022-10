@@ -1,11 +1,15 @@
 import "../styles/Modals.scss";
 import { createPortal } from "react-dom"
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { deleteItem } from "../features/FunctionaryList";
 import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
 import Axios from "axios";
 
 const DeleteFunctionaryModal = (props) => {
+    const dispatch = useDispatch();
+
     const [isLoading, setIsLoading] = useState(false);
     const [buttonClassName, setButtonClassName] = useState("accept-btn");
     const [hideCancelButton, setHideCancelButton] = useState(false);
@@ -19,6 +23,7 @@ const DeleteFunctionaryModal = (props) => {
         setButtonClassName("button-loading");
         setHideCancelButton(true);
 
+        dispatch(deleteItem({id: props.functionaryId}));
         await deleteFunctionary();
         props.onClose();
         setIsLoading(false);

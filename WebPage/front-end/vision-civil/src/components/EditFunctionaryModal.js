@@ -1,11 +1,15 @@
 import "../styles/Modals.scss";
 import { useEffect, useRef, useState } from "react";
+import { useDispatch } from "react-redux";
+import { editItem } from "../features/FunctionaryList";
 import { createPortal } from "react-dom";
 import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
 import Axios from "axios";
 
 const EditFunctionaryModal = (props) => {
+    const dispatch = useDispatch();
+
     const [isMaster, setIsMaster] = useState();
     const [isLoading, setIsLoading] = useState(false);
     const [buttonClassName, setButtonClassName] = useState("");
@@ -18,6 +22,7 @@ const EditFunctionaryModal = (props) => {
             initialRenderDone.current = true;
         }
         else {
+            dispatch(editItem({id: props.functionaryId, isMaster: isMaster}));
             await updateFunctionary();
             props.onClose();
             setIsLoading(false);
