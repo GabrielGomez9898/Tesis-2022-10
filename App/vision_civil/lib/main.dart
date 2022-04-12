@@ -137,11 +137,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: screenWidth, height: 190.0, scale: 1),
               ),
               SizedBox(
-                height: screenheight * 0.2,
+                height: screenheight * 0.17,
               ),
               Container(
                 child: Image.asset('assets/images/LogoAlcaldia.jpg',
-                    width: 200.0, height: 170.0, scale: 1),
+                    width: 200.0, height: 150.0, scale: 1),
               ),
             ],
           ),

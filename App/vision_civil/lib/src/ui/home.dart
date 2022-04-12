@@ -1,3 +1,4 @@
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -25,7 +26,7 @@ class HomePage extends StatefulWidget {
 
 class HomeState extends State<HomePage> {
   final auth = FirebaseAuth.instance;
-
+  final functions = FirebaseFunctions.instance;
   @override
   void initState() {
     super.initState();
@@ -53,7 +54,6 @@ class HomeState extends State<HomePage> {
         await _firebaseMessaging.getToken(); //persistir en la bd el token
     BlocProvider.of<UserBloc>(context)
         .add(AddPhoneToken(userID, token.toString()));
-
     print("EN EL LOGIN: $token");
   }
 
@@ -66,8 +66,8 @@ class HomeState extends State<HomePage> {
     BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
     return BlocBuilder<UserBloc, UserblocState>(
       builder: (context, state) {
-        _getTokenPhone(state.userID);
         if (state.userRole == "CIUDADANO") {
+          _getTokenPhone(state.userID);
           return Container(
             decoration: BoxDecoration(
                 image: DecorationImage(
@@ -455,12 +455,12 @@ class HomeState extends State<HomePage> {
                     icon: Icon(Icons.logout),
                     onPressed: () {
                       BlocProvider.of<UserBloc>(context).add(LogoutEvent());
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => MultiBlocProvider(providers: [
-                            BlocProvider(
-                                create: (BuildContext context) => UserBloc()),
-                          ], child: Login()),
-                        ));
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => MultiBlocProvider(providers: [
+                          BlocProvider(
+                              create: (BuildContext context) => UserBloc()),
+                        ], child: Login()),
+                      ));
                     },
                   )
                 ],

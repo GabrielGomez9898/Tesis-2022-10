@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:location/location.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/report_message.dart';
+import 'package:http/http.dart' as http;
 
 class CreateReport extends StatefulWidget {
   @override
@@ -13,6 +15,19 @@ class CreateReport extends StatefulWidget {
 }
 
 class CreateReportState extends State<CreateReport> {
+  Future<http.Response> sendNotification(String title) {
+    return http.post(
+      Uri.parse(
+          'https://us-central1-miproyecto-5cf83.cloudfunctions.net/sendNotification'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        'title': title,
+      }),
+    );
+  }
+
   bool hurtoViviendaSelected = false;
   bool hurtoPersonaSelected = false;
   bool hurtoVehiculoSelected = false;
@@ -448,8 +463,6 @@ class CreateReportState extends State<CreateReport> {
                         },
                       ),
                       Container(
-                        width: 300,
-                        height: 50,
                         child: FittedBox(
                           child: Text(
                             "¿ Deseo adjuntar mi numero celular ?",
@@ -594,10 +607,11 @@ class CreateReportState extends State<CreateReport> {
                                     _video,
                                     _userPhone));
                             Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                                value: BlocProvider.of<UserBloc>(context),
-                                child: ReportMessage()),
-                          ));
+                              builder: (_) => BlocProvider.value(
+                                  value: BlocProvider.of<UserBloc>(context),
+                                  child: ReportMessage()),
+                            ));
+                            sendNotification(_tipoReporte);
                           },
                           child: Text(
                             "Generar reporte",
