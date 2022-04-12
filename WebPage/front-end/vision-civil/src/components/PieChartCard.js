@@ -1,9 +1,11 @@
 import "../styles/Dashboard.scss";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { refreshData } from "../features/FunctionaryList";
 import React, { PureComponent } from "react";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend , LabelList, Tooltip, Customized} from 'recharts';
 
 const PieChartCard = () => {
+    const dispatch = useDispatch();
     const typeChartsData = useSelector((state) => state.typeChartsData.value)
 
     // const sampleData = {

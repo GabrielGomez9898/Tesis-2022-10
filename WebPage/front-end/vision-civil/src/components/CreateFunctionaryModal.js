@@ -1,5 +1,7 @@
 import "../styles/Modals.scss";
 import { useState, useCallback, useRef, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../features/FunctionaryList";
 import { useAuth } from "../contexts/AuthContext";
 import { createPortal } from "react-dom";
 import { ClipLoader } from "react-spinners";
@@ -8,6 +10,8 @@ import Alert from "./Alert";
 import Axios from "axios";
 
 const CreateFunctionaryModal = ({ onClose }) => {
+    const dispatch = useDispatch();
+
     const [id, setId] = useState("");
     const [email, setEmail] = useState("");
     const [isMaster, setIsMaster] = useState(false);
@@ -31,6 +35,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
             initialRenderDone.current = true;
         }
         else {
+            dispatch(addItem(functionary));
             await createFunctionary();
             onClose();
             setIsLoading(false);
