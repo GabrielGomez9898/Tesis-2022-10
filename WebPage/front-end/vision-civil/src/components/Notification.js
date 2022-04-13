@@ -15,7 +15,7 @@ const handleSubmit = (e) => {
   const [description, setDescription] = useState("");
 
   const sendNotification= () => {
-    Axios.post(`http://localhost:5001/miproyecto-5cf83/us-central1/app/notification?title=${title}&description=${description}`).then((response) =>{
+    Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/notification?title=${title}&description=${description}`).then((response) =>{
       
     console.log(response)
   }).catch((error) => console.log(error));

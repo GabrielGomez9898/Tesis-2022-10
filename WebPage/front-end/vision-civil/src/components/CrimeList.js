@@ -7,7 +7,7 @@ import { collection, doc, onSnapshot } from "firebase/firestore";
 import {db, storage} from "../firebase"
 import {LazyLoadImage} from "react-lazy-load-image-component"
 import 'react-lazy-load-image-component/src/effects/blur.css'
-import Gif from '../Loading2.gif';
+import SyncLoader from "react-spinners/SyncLoader";
 
 
 const CrimeList = () => {
@@ -73,12 +73,12 @@ const getListadoByFilter = () => {
     useEffect(() => {
       getFotos(props.object.fotourl, props.object.imagenes, setListadofotos);
     }, [])
-    
+
     return (
       <div id="CrimeListtModal" className="active modal" >
         <div className={props.container}>
           <div className="fotos">
-            {props.object.hasFotos && listadofotos.length == 0 ? (<img src={Gif} style={{ width: 300, height: 300 , marginTop: 160 }}/>) : "" }
+            {props.object.hasFotos && listadofotos.length == 0 ?  <div style={{marginTop : "75%"}}><SyncLoader sizeUnit={'px'} size={40} color={props.object.color} loading={true} /> </div>: "" }
                 
             {listadofotos.length == 1 ?
               <LazyLoadImage src={listadofotos[0]} effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" className="imgu" style={{ width: 300, height: 300 }}></LazyLoadImage>
@@ -141,6 +141,8 @@ const getListadoByFilter = () => {
             <br></br>
 
       {useEffect(() => {
+        setTimeout(() => {
+          
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
             listado.pop();
@@ -149,10 +151,11 @@ const getListadoByFilter = () => {
           });
          getListadoData(); 
          if(showLoading)        
-         alert("Se realizo un nuevo reporte"); 
+         alert("Se realizo un nuevo reporte");     
+        }, 4000);
         
       }, [])}
-      {listado.length == 0 ? <img src={Gif} className="carga"/> : ""}
+      {listado.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color={'grey'} loading={true} className="carga"/> </div> : ""}
       <ul className="list-menu">
         {listado.map((item) => (
           <div className="Container-crime" style={{borderColor : item.color}}>

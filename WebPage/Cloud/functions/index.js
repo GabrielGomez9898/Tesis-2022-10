@@ -533,6 +533,10 @@ app.get("/reportByFilter", async (request, response) => {
       }
     });
 
+    reports.sort(function(a,b) {
+      return new Date(b.fecha) - new Date(a.fecha);
+    })
+
     return response.status(200).json(reports);
   }
   catch (error) {
@@ -557,10 +561,10 @@ exports.getAllReports = functions.https.onRequest((request, response) => {
 
 exports.sendNotification = functions.https.onRequest(async (request, response) =>{ 
   try {
-    const queryParams = request.query;
-    //const title = queryParams["title"];
-    //const description = queryParams["description"];
-
+    let title = null;
+    ({title} = request.body)
+    
+    title.replace("_" , " ");
     const usersRef = await db.collection("users").where("role" , "==" , "POLICIA").get();
     let user = undefined;
     let tokens = [];
@@ -573,8 +577,8 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
 
     var payload = {
       notification: {
-        title: "title",
-        body: "description"
+        title: "Nuevo reporte!",
+        body: "De tipo : " + title  
       }
     };
     var options = {
@@ -598,22 +602,3 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
     return response.status(500).send(error);
   }
 });
-
-// exports.sendNotification = functions.database.ref("users/{docId}").onWrite( event =>{
-//   const payload = {
-//     notification: {
-//       title: `New message by `,
-//       body: text
-//         ? text.length <= 100 ? text : text.substring(0, 97) + "..."
-//         : ""
-//     }
-//   };
-//   return admin.database().ref("users/{docID}").once('value').then(data => {
-//     if(data.val().notificationKey){
-//       return admin.messaging().sendToDevice(data.val().notificationKey, payload)
-//     }
-
-//   })
-// }
- 
-// )

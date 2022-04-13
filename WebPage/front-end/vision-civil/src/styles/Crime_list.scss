@@ -44,6 +44,8 @@
     overflow: auto;
     justify-content: center;
     overflow-y: scroll;
+    display: block;
+    text-align: center;
 }
 .img{
     width: 400;
@@ -124,8 +126,11 @@
 .carga{
     width: 300;
     height: 300; 
-    margin-top: 160px; 
+    margin-top: 150px; 
     margin-left : 40%;
     display: block;
     text-align: center;
+}
+.loader{
+    margin-top: 150 px;
 }
