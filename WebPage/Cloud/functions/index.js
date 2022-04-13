@@ -24,6 +24,7 @@ var serviceAccount = require("./miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c37
 const firebaseApp = admin.initializeApp(
   {credential: admin.credential.cert(serviceAccount)}
 );
+
 // Obtain the firestore reference in order to query and manage the db
 const db = admin.firestore();
 

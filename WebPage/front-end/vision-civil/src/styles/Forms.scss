@@ -39,6 +39,10 @@ button {
     background-color: $btn-color;
 }
 
+.button-loading {
+    background-color: lightgray;
+}
+
 button:hover {
     cursor: pointer;
 }

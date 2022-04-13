@@ -1,11 +1,11 @@
 import "../styles/Alert.scss";
 import "../styles/Forms.scss";
 import React, { useState, useCallback } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/react";
 import Alert from "./Alert";
-import { db } from "../firebase";
-import { collection, query, where, getDocs } from "firebase/firestore";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -14,8 +14,9 @@ const LoginForm = () => {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonClassName, setButtonClassName] = useState("");
 
-    const { signIn, logout, isAuthenticated } = useAuth();
+    const { signIn } = useAuth();
 
     const login = useCallback(async (e) => {
         e.preventDefault();
@@ -23,22 +24,11 @@ const LoginForm = () => {
         try {
             setMessage("");
             setIsLoading(true);
+            setButtonClassName("button-loading")
             
-            // Create a reference to the functionaries collection
-            const functionariesRef = collection(db, "functionaries");
-            // Create a query to retrieve all the documents in the collection
-            const q = query(functionariesRef);
-            // Execute the query
-            const querySnapshot = await getDocs(q);
-            // SignIn to retrieve userCredential obj
-            const userCredential = await signIn(email, password);
-            //Check if the user that wants to access is a functionary
-            if(querySnapshot.docs.findIndex((doc) => doc.id === userCredential.user.uid) !== -1) {
+            const isSuccessful = await signIn(email, password);
+            if(isSuccessful) {
                 navigate("/");
-            }
-            else {
-                await logout();
-                setMessage("Solo los funcionarios tienen acceso");
             }
         }
         catch (error) {
@@ -58,6 +48,9 @@ const LoginForm = () => {
                 case "auth/too-many-requests":
                     setMessage("Demasiados intentos");
                     break;
+                case "auth/user-not-functionary":
+                    setMessage("Solo los funcionarios tienen acceso");
+                    break;
                 default:
                     setMessage("Error desconocido");
                     break;
@@ -65,9 +58,14 @@ const LoginForm = () => {
 
             console.log(error.code);
         }
-
+        
         setIsLoading(false);
+        setButtonClassName("");
     }, [email, password]);
+
+    const style = css`
+        z-index: 1000;
+    `;
 
     return (
         <>
@@ -77,7 +75,9 @@ const LoginForm = () => {
                 <input type="email" id="email" name="email" placeholder="Ingrese su email" required onChange={(e) => { setEmail(e.target.value) }} /><br />
                 <label htmlFor="password" id="password-label">Contraseña</label><br />
                 <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required onChange={(e) => { setPassword(e.target.value) }} /><br />
-                <button type="submit" disabled={isLoading}>Acceder</button>
+                <button type="submit" className={buttonClassName} disabled={isLoading}>
+                    {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Acceder"}
+                </button>
             </form>
         </>
     )

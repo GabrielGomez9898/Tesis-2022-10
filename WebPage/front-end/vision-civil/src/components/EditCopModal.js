@@ -1,6 +1,8 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import { ClipLoader } from "react-spinners";
+import { css } from "@emotion/react";
 import Axios from "axios";
 
 
@@ -11,6 +13,7 @@ const EditCopModal = (props) => {
     const [name, setName] = useState(props["nameText"]);
     const [phone, setPhone] = useState(props["phoneText"]);
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonClassName, setButtonClassName] = useState("");
 
     const cop = {
         birth_date: birthDate,
@@ -28,10 +31,16 @@ const EditCopModal = (props) => {
         e.preventDefault();
         
         setIsLoading(true);
+        setButtonClassName("button-loading");
         await updateCop();
         props.onClose();
         setIsLoading(false);
+        setButtonClassName("");
     }
+
+    const style = css`
+        z-index: 1000;
+    `;
 
     return createPortal(
         <>
@@ -82,7 +91,9 @@ const EditCopModal = (props) => {
                     }
                     <label htmlFor="policeIdInput">Numero de placa policial</label>
                     <input type="text" id="policeIdInput" placeholder="Ingrese el numero" defaultValue={props["badgeNumberText"]} required onChange={(e) => setPoliceId(e.target.value)} />
-                    <button type="submit" disabled={isLoading}>Actualizar policía</button>
+                    <button type="submit" className={buttonClassName} disabled={isLoading}>
+                        {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Actualizar policía"}
+                    </button>
                 </form>
             </div>
         </>,
