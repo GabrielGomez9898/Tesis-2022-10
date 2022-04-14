@@ -348,6 +348,10 @@ PODS:
     - Firebase/Firestore (= 8.14.0)
     - firebase_core
     - Flutter
+  - cloud_functions (3.2.11):
+    - Firebase/Functions (= 8.14.0)
+    - firebase_core
+    - Flutter
   - contacts_service (0.2.2):
     - Flutter
   - Firebase/Auth (8.14.0):
@@ -358,6 +362,9 @@ PODS:
   - Firebase/Firestore (8.14.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 8.14.0)
+  - Firebase/Functions (8.14.0):
+    - Firebase/CoreOnly
+    - FirebaseFunctions (~> 8.14.0)
   - Firebase/Messaging (8.14.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 8.14.0)
@@ -406,6 +413,9 @@ PODS:
     - "gRPC-C++ (~> 1.28.0)"
     - leveldb-library (~> 1.22)
     - nanopb (~> 2.30908.0)
+  - FirebaseFunctions (8.14.0):
+    - FirebaseCore (~> 8.0)
+    - GTMSessionFetcher/Core (~> 1.5)
   - FirebaseInstallations (8.14.0):
     - FirebaseCore (~> 8.0)
     - GoogleUtilities/Environment (~> 7.7)
@@ -506,6 +516,7 @@ PODS:
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
+  - cloud_functions (from `.symlinks/plugins/cloud_functions/ios`)
   - contacts_service (from `.symlinks/plugins/contacts_service/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -532,6 +543,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseCoreDiagnostics
     - FirebaseFirestore
+    - FirebaseFunctions
     - FirebaseInstallations
     - FirebaseMessaging
     - FirebaseStorage
@@ -548,6 +560,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
+  cloud_functions:
+    :path: ".symlinks/plugins/cloud_functions/ios"
   contacts_service:
     :path: ".symlinks/plugins/contacts_service/ios"
   firebase_auth:
@@ -585,6 +599,7 @@ SPEC CHECKSUMS:
   abseil: 6c8eb7892aefa08d929b39f9bb108e5367e3228f
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   cloud_firestore: 87254ed656d1da42b43c47ca37d7797b90880557
+  cloud_functions: 0003e860a2af12e1a2baf9a804a681b76f5d58b5
   contacts_service: 849e1f84281804c8bfbec1b4c3eedcb23c5d3eca
   Firebase: 7e8fe528c161b9271d365217a74c16aaf834578e
   firebase_auth: 9d680e09dba3b6bafb391a9902d63a9e85f3744b
@@ -595,6 +610,7 @@ SPEC CHECKSUMS:
   FirebaseCore: b84a44ee7ba999e0f9f76d198a9c7f60a797b848
   FirebaseCoreDiagnostics: fd0c8490f34287229c1d6c103d3a55f81ec85712
   FirebaseFirestore: fff37682b934e3e94d83e5c24936721890a2edf0
+  FirebaseFunctions: 72a8e24d3bcba2782f18602b14533b1525ff297c
   FirebaseInstallations: 7d1d967a307c12f1aadd76844fc321cef699b1ce
   FirebaseMessaging: 5ebc42d281567658a2cb72b9ef3506e4a1a1a6e4
   FirebaseStorage: 32ab036ce11eb7e94c279a238a65efa24f81593d
