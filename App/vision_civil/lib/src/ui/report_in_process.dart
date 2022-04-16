@@ -184,7 +184,7 @@ class _ProcessReportState extends State<ProcessReport> {
                             child: Container(
                                 width: size.width * 0.2,
                                 height: 30,
-                                child: FittedBox(child: Text("Ubicacion")))),
+                                child: FittedBox(child: Text("Ubicación")))),
                         SizedBox(width: size.width * 0.09),
                         FutureBuilder(
                             future: storage.listVideoPath(
@@ -232,6 +232,9 @@ class _ProcessReportState extends State<ProcessReport> {
                               }
                             }),
                       ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.03,
                     ),
                     BlocBuilder<ReportBloc, ReportblocState>(
                       builder: (context, state) {

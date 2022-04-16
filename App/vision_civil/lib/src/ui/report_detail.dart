@@ -63,7 +63,7 @@ class _ReportDetailState extends State<ReportDetail> {
                       ),
                       Column(
                         children: [
-                          Text("Informacion \ndel reporte",
+                          Text("Información \ndel reporte",
                               style: TextStyle(
                                   fontSize: 35.0,
                                   color: Colors.white,
@@ -101,6 +101,7 @@ class _ReportDetailState extends State<ReportDetail> {
                                 state.report.tipoReporte.replaceAll("_", " "),
                                 textAlign: TextAlign.end),
                           ),
+                          SizedBox(height: size.height * 0.01),
                           Text("Estado del reporte: ",
                               style: TextStyle(
                                 fontSize: 18.0,
@@ -250,76 +251,17 @@ class _ReportDetailState extends State<ReportDetail> {
                           }),
                     ],
                   ),
-                  FutureBuilder(
-                      future: storage.downloadUrl(state.imagesIDs, idReport),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<List<String>> snapshot) {
-                        if (state.imagesIDs.length > 0) {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.hasData) {
-                            return Container(
-                              height: 200,
-                              width: 200,
-                              child: ListView.builder(
-                                  itemCount: snapshot.data!.length,
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Image.network(snapshot.data![index]);
-                                  }),
-                            );
-                          }
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting ||
-                              !snapshot.hasData) {
-                            return Container(
-                                width: 100,
-                                height: 100,
-                                child: CircularProgressIndicator());
-                          }
-                        } else {
-                          return Text("No tiene imagenes");
-                        }
-                        return Text("No tiene imagenes");
-                      }),
-                  FutureBuilder(
-                      future: storage.listVideoPath(idReport, state.videoId),
-                      builder: (BuildContext context,
-                          AsyncSnapshot<String> snapshot) {
-                        if (state.videoId != " ") {
-                          if (snapshot.connectionState ==
-                                  ConnectionState.done &&
-                              snapshot.hasData) {
-                            return ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => ReportVideo(
-                                            videoPath: snapshot.data!)),
-                                  );
-                                },
-                                child: Text("Ver video"));
-                          }
-                          if (snapshot.connectionState ==
-                                  ConnectionState.waiting ||
-                              !snapshot.hasData) {
-                            return Container(
-                                width: 100,
-                                height: 100,
-                                child: CircularProgressIndicator());
-                          }
-                          return Text("data");
-                        } else {
-                          return Text("No tiene video");
-                        }
-                      }),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
                   BlocBuilder<UserBloc, UserblocState>(
                     builder: (context, state) {
                       return BlocBuilder<ReportBloc, ReportblocState>(
                         builder: (context, reportstate) {
                           if (reportstate.report.estado == "PENDIENTE") {
                             return ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    primary: Color.fromARGB(145, 8, 184, 55)),
                                 onPressed: () {
                                   if (state.onService == false) {
                                     outOfService(context);
@@ -349,17 +291,30 @@ class _ReportDetailState extends State<ReportDetail> {
                           } else if (reportstate.report.estado ==
                               "EN PROCESO") {
                             return Text(
-                                "Este caso ya esta en proceso por otro policia");
+                                "Este caso ya esta siendo atendido por otro policia",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 15));
                           } else {
-                            return Text("Este caso ya fue atendido");
+                            return Text("Este caso ya fue atendido",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 15));
                           }
                         },
                       );
                     },
                   ),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
                   BlocBuilder<ReportBloc, ReportblocState>(
                     builder: (context, state) {
                       return ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                              primary: Color.fromARGB(145, 217, 17, 17)),
                           onPressed: () {
                             BlocProvider.of<ReportBloc>(context)
                                 .add(DeleteReportEvent(state.report.id));
@@ -369,7 +324,61 @@ class _ReportDetailState extends State<ReportDetail> {
                           },
                           child: Text("Eliminar reporte"));
                     },
-                  )
+                  ),
+                  SizedBox(height: size.height * 0.04),
+                  FutureBuilder(
+                      future:
+                          storage.downloadUrl(state.imagesIDs, state.report.id),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<String>> snapshot) {
+                        if (state.imagesIDs.length > 0) {
+                          if (snapshot.connectionState ==
+                                  ConnectionState.done &&
+                              snapshot.hasData) {
+                            return Column(
+                              children: [
+                                Text(
+                                    "Imagenes adjuntas con el reporte, deslice para navegar entre ellas",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(255, 255, 255, 255),
+                                        fontSize: 15)),
+                                SizedBox(height: size.height * 0.02),
+                                Container(
+                                  height: 400,
+                                  child: ListView.builder(
+                                      itemCount: snapshot.data!.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        return Image.network(
+                                            snapshot.data![index]);
+                                      }),
+                                ),
+                              ],
+                            );
+                          }
+                          if (snapshot.connectionState ==
+                                  ConnectionState.waiting ||
+                              !snapshot.hasData) {
+                            return Container(
+                                width: 50,
+                                height: 300,
+                                child: CircularProgressIndicator());
+                          }
+                        } else {
+                          return Text("El reporte no cueta con imagenes",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 15));
+                        }
+                        return Text("El reporte no cueta con imagenes",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 255, 255, 255),
+                                fontSize: 15));
+                      }),
                 ],
               );
             },
