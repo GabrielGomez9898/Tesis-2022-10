@@ -26,13 +26,11 @@ const UsersTable = () => {
     const [lastCopDoc, setLastCopDoc] = useState();
     
     useEffect(() => {
-        console.log("1ER useEffect en ejecución")
         dispatch(refreshFuncData([]));
         getFuncsDataBatch(true);
     }, []);
 
     useEffect(() => {
-        console.log("2DO useEffect en ejecución")
         dispatch(refreshCopData([]));
         getCopsDataBatch(true);
     }, []);
@@ -107,6 +105,8 @@ const UsersTable = () => {
                 return completeCop;
             });
 
+            console.log(cops);
+
             setLastCopDoc(querySnapshot.docs[querySnapshot.docs.length - 1]);
 
             if(isFirstFetch) {
@@ -143,11 +143,17 @@ const UsersTable = () => {
                         })
                     }
                     {
-                        notMoreFuncsToBring ? 
+                        
+                        (functionaryList.length === 0)
+                        ?
+                        null 
+                        :
+                        (notMoreFuncsToBring ? 
                         <h1>No hay más funcionarios</h1> :
                         <button className={funcsButtonClassName} disabled={isLoadingFuncs} onClick={handleMoreFuncsClick}>
                             {isLoadingFuncs ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más funcionarios"}
-                        </button>
+                        </button>)
+                        
                     }
                 </div>
                 <div className="users-table-column">
@@ -169,11 +175,15 @@ const UsersTable = () => {
                         })
                     }
                     {
-                        notMoreCopsToBring ? 
+                        (functionaryList.length === 0)
+                        ?
+                        null
+                        :
+                        (notMoreCopsToBring ? 
                         <h1>No hay más policías</h1> :
                         <button className={copsButtonClassName} disabled={isLoadingCops} onClick={handleMoreCopsClick}>
                             {isLoadingCops ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más policías"}
-                        </button>
+                        </button>)
                     }
                 </div>
             </div>

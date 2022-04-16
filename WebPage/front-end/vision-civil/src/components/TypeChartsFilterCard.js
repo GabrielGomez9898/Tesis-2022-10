@@ -43,11 +43,11 @@ const TypeChartsFilterCard = () => {
         <form className="card-typechartfilter-container" onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="lowerDate">Desde</label><br/>
-                <input id="lowerDate" type="date" defaultValue={generateDaysAgoFormattedDate(60)} required onChange={(e) => {setLowerDate(e.target.value)}}/>
+                <input type="date" className="filter-card-input" id="lowerDate" defaultValue={generateDaysAgoFormattedDate(60)} required onChange={(e) => {setLowerDate(e.target.value)}}/>
             </div>
             <div>
                 <label htmlFor="upperDate">Hasta</label><br/>
-                <input id="upperDate" type="date" defaultValue={getTodayFormattedDate()} required onChange={(e) => {setUpperDate(e.target.value)}}/>
+                <input type="date" className="filter-card-input" id="upperDate" defaultValue={getTodayFormattedDate()} required onChange={(e) => {setUpperDate(e.target.value)}}/>
             </div>
             <button type="submit" className={buttonClassName} disabled={isLoading}>
                 {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Aplicar filtros a diagramas de tipo"} 

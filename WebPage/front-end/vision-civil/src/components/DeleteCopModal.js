@@ -2,9 +2,13 @@ import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
+import { useDispatch } from "react-redux";
+import { deleteItem } from "../features/CopList";
 import Axios from "axios";
 
 const DeleteCopModal = (props) => {
+    const dispatch = useDispatch();
+
     const [isLoading, setIsLoading] = useState(false);
     const [buttonClassName, setButtonClassName] = useState("accept-btn");
     const [hideCancelButton, setHideCancelButton] = useState(false);
@@ -24,6 +28,7 @@ const DeleteCopModal = (props) => {
         setIsLoading(false);
         setButtonClassName("accept-btn");
         setHideCancelButton(false);
+        dispatch(deleteItem({id: props.copIdText}));
     };
 
     const style = css`
@@ -34,8 +39,8 @@ const DeleteCopModal = (props) => {
         <div className="modal-background">
             <div className="modal-content">
                 <span className="close-btn" onClick={props.onClose}>&times;</span>
-                <h1>Estás seguro que deseas eliminar a este policía?</h1>
-                <p>El policía ya no podrá acceder a la aplicación móvil de Visión Civil, para que vuelva a poder acceder tendrá que agregarlo de nuevo</p>
+                <h2>¿ Estás seguro que deseas eliminar al policía <i>{props.nameText}</i> ?</h2>
+                <p className="modal-description">El policía <i>{props.nameText}</i> ya no podrá acceder a la aplicación móvil de Visión Civil, para que vuelva a poder acceder tendrá que agregarlo de nuevo</p>
                 <div className="modal-body-horizontal">
                     <button className="cancel-btn" hidden={hideCancelButton} onClick={props.onClose}>Cancelar</button>
                     <button className={buttonClassName} onClick={handleClick}>

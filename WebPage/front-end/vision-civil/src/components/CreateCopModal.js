@@ -3,10 +3,14 @@ import { createPortal } from "react-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
+import { useDispatch } from "react-redux";
+import { addItem } from "../features/CopList";
 import Alert from "./Alert";
 import Axios from "axios";
 
 const CreateCopModal = ({onClose}) => {
+    const dispatch = useDispatch();
+
     const [id, setId] = useState("");
     const [birthDate, setBirthDate] = useState();
     const [email, setEmail] = useState("");
@@ -45,6 +49,7 @@ const CreateCopModal = ({onClose}) => {
             onClose();
             setIsLoading(false);
             setButtonClassName("");
+            dispatch(addItem(cop));
         }
     }, [id]);
 
@@ -103,38 +108,64 @@ const CreateCopModal = ({onClose}) => {
     `;
 
     return createPortal(
-        <>
-            <div className="modal-background" />
-            <div className="modal-content">
+        <div className="modal-background">
+            <form className="modal-content" onSubmit={register}>
                 <span className="close-btn" onClick={onClose}>&times;</span>
-                <h1>Agregar un nuevo policia</h1>
-                <p>Al finalizar este proceso el policia podrá acceder a la aplicación móvil de Visión Civil con las credenciales escogidas abajo</p>
-                <form className="modal-body-vertical" onSubmit={register}>
-                    <label htmlFor="emailInput">Correo del nuevo policía</label>
-                    <input type="email" id="emailInput" placeholder="Ingrese el email" required onChange={(e) => setEmail(e.target.value)} />
-                    <label htmlFor="phoneInput">Numero telefónico del nuevo policía</label>
-                    <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" required onChange={(e) => setPhone(e.target.value)} />
-                    <label htmlFor="nameInput">Nombre completo del nuevo policía</label>
-                    <input type="text" id="nameInput" placeholder="Ingrese el nombre" required onChange={(e) => setName(e.target.value)} />
-                    <label htmlFor="birthDateInput">Fecha de nacimiento del nuevo policía</label>
-                    <input type="date" id="birthDateInput" placeholder="Ingrese la fecha de nacimiento" required onChange={(e) => setBirthDate(e.target.value)} />
-                    <label htmlFor="genderRadio">Genero del nuevo policía</label>
-                    <input type="radio" name="genderRadio" value="Masculino" required onChange={(e) => setGender(e.target.value)} />Masculino
-                    <input type="radio" name="genderRadio" value="Femenino" required onChange={(e) => setGender(e.target.value)} />Femenino
-                    <input type="radio" name="genderRadio" value="Otro" required onChange={(e) => setGender(e.target.value)} />Otro
-                    <label htmlFor="policeIdInput">Numero de placa policial</label>
-                    <input type="text" id="policeIdInput" placeholder="Ingrese el numero" required onChange={(e) => setPoliceId(e.target.value)} />
-                    {message && <Alert text={message} alertType="danger" isDeletable={true} />}
-                    <label htmlFor="passwordInput">Contraseña del nuevo policía</label>
+                <h2>Agregar un nuevo policía</h2>
+                <p className="modal-description">Al finalizar este proceso el policia podrá acceder a la aplicación móvil de Visión Civil con las credenciales escogidas abajo</p>
+                <div className="modal-body-horizontal">
+                    <div>
+                        <label htmlFor="emailInput">Correo</label><br/>
+                        <input type="email" id="emailInput" placeholder="Ingrese el email" required onChange={(e) => setEmail(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="phoneInput">Teléfono</label><br/>
+                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" required onChange={(e) => setPhone(e.target.value)} />
+                    </div>
+                </div>
+                <div className="modal-body-horizontal">
+                    <div>
+                        <label htmlFor="nameInput">Nombre completo</label><br/>
+                        <input type="text" id="nameInput" placeholder="Ingrese el nombre" required onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="birthDateInput">Fecha de nacimiento</label><br/>
+                        <input type="date" id="birthDateInput" placeholder="Ingrese la fecha de nacimiento" required onChange={(e) => setBirthDate(e.target.value)} />
+                    </div>
+                </div>
+                <div>
+                    <label htmlFor="policeIdInput">Número de placa</label><br/>
+                    <input type="text" id="policeIdInput" placeholder="Ingrese el número" required onChange={(e) => setPoliceId(e.target.value)} />
+                </div>
+                <label htmlFor="genderRadio">Género</label>
+                <div className="modal-body-horizontal radio-group">
+                    <label>
+                        <input type="radio" name="genderRadio" value="Masculino" required onChange={(e) => setGender(e.target.value)} />
+                        Masculino
+                    </label>
+                    <label>
+                        <input type="radio" name="genderRadio" value="Femenino" required onChange={(e) => setGender(e.target.value)} />
+                        Femenino
+                    </label>
+                    <label>
+                        <input type="radio" name="genderRadio" value="Otro" required onChange={(e) => setGender(e.target.value)} />
+                        Otro
+                    </label>
+                </div>
+                {message && <Alert text={message} alertType="danger" isDeletable={true} />}
+                <div>
+                    <label htmlFor="passwordInput">Contraseña</label><br/>
                     <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" required onChange={(e) => setPassword(e.target.value)} />
-                    <label htmlFor="confirmedPasswordInput">Confirmación de contraseña</label>
+                </div>
+                <div>
+                    <label htmlFor="confirmedPasswordInput">Confirme contraseña</label><br/>
                     <input type="password" id="confirmedPasswordInput" placeholder="Confirme la contraseña" required onChange={(e) => setConfirmedPassword(e.target.value)} />
-                    <button type="submit" className={buttonClassName} disabled={isLoading}>
-                        {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear policía"}
-                    </button>
-                </form>
-            </div>
-        </>,
+                </div>
+                <button type="submit" className={buttonClassName} disabled={isLoading}>
+                    {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear policía"}
+                </button>
+            </form>
+        </div>,
         document.getElementById("portal")
     )
 }

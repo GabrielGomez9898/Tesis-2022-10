@@ -17,8 +17,8 @@ export const copListSlice = createSlice({
             state.value[index].birth_date = action.payload.birth_date;
             state.value[index].gender = action.payload.gender;
             state.value[index].id_policia = action.payload.id_policia;
-            state.value[index].name = state.payload.name;
-            state.value[index].phone = state.payload.phone;
+            state.value[index].name = action.payload.name;
+            state.value[index].phone = action.payload.phone;
         },
         deleteItem: (state, action) => {
             state.value = state.value.filter((cop) => cop.id !== action.payload.id);

@@ -1,12 +1,15 @@
-
 import { useState } from "react";
 import { createPortal } from "react-dom";
 import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
+import { useDispatch } from "react-redux";
+import { editItem } from "../features/CopList";
 import Axios from "axios";
 
 
 const EditCopModal = (props) => {
+    const dispatch = useDispatch();
+
     const [birthDate, setBirthDate] = useState(props["birthDateText"]);
     const [gender, setGender] = useState(props["genderText"]);
     const [policeId, setPoliceId] = useState(props["badgeNumberText"]);
@@ -36,6 +39,8 @@ const EditCopModal = (props) => {
         props.onClose();
         setIsLoading(false);
         setButtonClassName("");
+        console.log({id: props.copIdText, ...cop});
+        dispatch(editItem({id: props.copIdText, ...cop}));
     }
 
     const style = css`
@@ -43,60 +48,72 @@ const EditCopModal = (props) => {
     `;
 
     return createPortal(
-        <>
-            <div className="modal-background"/>
-            <div className="modal-content">
+        <div className="modal-background">
+            <form className="modal-content" onSubmit={handleSubmit}>
                 <span className="close-btn" onClick={props.onClose}>&times;</span>
-                <h1>Editar policía</h1>
-                <form className="modal-body-vertical" onSubmit={handleSubmit}>
-                    <label htmlFor="phoneInput">Numero telefónico del policía</label>
-                    <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" defaultValue={props["phoneText"]} required onChange={(e) => setPhone(e.target.value)} />
-                    <label htmlFor="nameInput">Nombre completo del policía</label>
-                    <input type="text" id="nameInput" placeholder="Ingrese el nombre" defaultValue={props["nameText"]} required onChange={(e) => setName(e.target.value)} />
-                    <label htmlFor="birthDateInput">Fecha de nacimiento del policía</label>
-                    <input type="date" id="birthDateInput" placeholder="Ingrese la fecha de nacimiento" defaultValue={props["birthDateText"]} required onChange={(e) => setBirthDate(e.target.value)} />
-                    <label htmlFor="genderRadio">Genero del policía</label>
+                <h2>Editar policía</h2>
+                <p className="modal-description">Los cambios efectuados al policía se reflejarán inmediatamente en la base de datos</p>
+                <div className="modal-body-horizontal">
+                    <div>
+                        <label htmlFor="nameInput">Nombre completo</label><br/>
+                        <input type="text" id="nameInput" placeholder="Ingrese el nombre" defaultValue={props["nameText"]} required onChange={(e) => setName(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="birthDateInput">Fecha de nacimiento</label><br/>
+                        <input type="date" id="birthDateInput" placeholder="Ingrese la fecha de nacimiento" defaultValue={props["birthDateText"]} required onChange={(e) => setBirthDate(e.target.value)} />
+                    </div>
+                </div>
+                <div className="modal-body-horizontal">
+                    <div>
+                        <label htmlFor="phoneInput">Teléfono</label><br/>
+                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" defaultValue={props["phoneText"]} required onChange={(e) => setPhone(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="policeIdInput">Número de placa</label><br/>
+                        <input type="text" id="policeIdInput" placeholder="Ingrese el numero" defaultValue={props["badgeNumberText"]} required onChange={(e) => setPoliceId(e.target.value)} />
+                    </div>
+                </div>
+                <label htmlFor="genderRadio">Género</label>
+                <div className="modal-body-horizontal radio-group">
                     {
                         (props["genderText"] === "Masculino") ? 
-                        <>
+                        <label>
                             <input type="radio" name="genderRadio" value="Masculino" required defaultChecked onChange={(e) => setGender(e.target.value)} />
-                            <>Masculino</>
-                        </> :
-                        <>
+                            Masculino
+                        </label> :
+                        <label>
                             <input type="radio" name="genderRadio" value="Masculino" required onChange={(e) => setGender(e.target.value)} />
-                            <>Masculino</>
-                        </>
+                            Masculino
+                        </label>
                     }
                     {
                         (props["genderText"] === "Femenino") ?
-                        <>
+                        <label>
                             <input type="radio" name="genderRadio" value="Femenino" required defaultChecked onChange={(e) => setGender(e.target.value)} />
-                            <>Femenino</>
-                        </> :
-                        <>
+                            Femenino
+                        </label> :
+                        <label>
                             <input type="radio" name="genderRadio" value="Femenino" required onChange={(e) => setGender(e.target.value)} />
-                            <>Femenino</>
-                        </>
+                            Femenino
+                        </label>
                     }
                     {
                         (props["genderText"] === "Otro") ?
-                        <>
+                        <label>
                             <input type="radio" name="genderRadio" value="Otro" required defaultChecked onChange={(e) => setGender(e.target.value)} />
-                            <>Otro</>
-                        </> :
-                        <>
+                            Otro
+                        </label> :
+                        <label>
                             <input type="radio" name="genderRadio" value="Otro" required onChange={(e) => setGender(e.target.value)} />
-                            <>Otro</>
-                        </>
+                            Otro
+                        </label>
                     }
-                    <label htmlFor="policeIdInput">Numero de placa policial</label>
-                    <input type="text" id="policeIdInput" placeholder="Ingrese el numero" defaultValue={props["badgeNumberText"]} required onChange={(e) => setPoliceId(e.target.value)} />
-                    <button type="submit" className={buttonClassName} disabled={isLoading}>
-                        {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Actualizar policía"}
-                    </button>
-                </form>
-            </div>
-        </>,
+                </div>
+                <button type="submit" className={buttonClassName} disabled={isLoading}>
+                    {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Actualizar policía"}
+                </button>
+            </form>
+        </div>,
         document.getElementById("portal")
     );
 }

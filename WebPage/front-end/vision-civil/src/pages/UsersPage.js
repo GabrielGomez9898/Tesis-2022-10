@@ -4,12 +4,12 @@ import SignupForm from "../components/SignupForm";
 
 const UsersPage = () => {
     return (
-        <div>
+        <>
             <Navbar/>
             <div className="content-container">
                 <UsersTable/>
             </div>
-        </div>
+        </>
     );
 };
 
