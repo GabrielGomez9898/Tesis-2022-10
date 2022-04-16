@@ -3,13 +3,16 @@ import { useState } from "react";
 import Axios from "axios";
 import CreateFunctionaryModal from "./CreateFunctionaryModal";
 import CreateCopModal from "./CreateCopModal";
+import ReactTooltip from "react-tooltip";
 
 const ColumnHeader = ({columnText}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    let tooltipText = (columnText === "Funcionarios") ? "funcionario" : "policía"; 
+
     return (
         <div className="users-table-column-header">
-            <button onClick={() => setIsModalOpen(true)}>
+            <button data-tip={`Agregar nuevo ${tooltipText}`} onClick={() => setIsModalOpen(true)}>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                     <path 
                     fill="currentColor"
@@ -20,6 +23,7 @@ const ColumnHeader = ({columnText}) => {
             <h1>{columnText}</h1>
             { (isModalOpen && columnText === "Funcionarios") ? <CreateFunctionaryModal onClose={() => setIsModalOpen(false)} /> : null }
             { (isModalOpen && columnText === "Policías") ? <CreateCopModal onClose={() => setIsModalOpen(false)} /> : null }
+            <ReactTooltip effect="solid" />
         </div>
     );
 }

@@ -3,6 +3,7 @@ import DeleteFunctionaryModal from "./DeleteFunctionaryModal";
 import EditFunctionaryModal from "./EditFunctionaryModal";
 import DeleteCopModal from "./DeleteCopModal";
 import EditCopModal from "./EditCopModal";
+import ReactTooltip from "react-tooltip";
 
 const ColumnCell = (props) => {
     const [isEditFunctionaryModalOpen, setIsEditFunctionaryModalOpen] = useState(false);
@@ -28,7 +29,7 @@ const ColumnCell = (props) => {
                     }
                 </div>
                 <div className="users-table-column-cell-actions">
-                    <a onClick={() => setIsEditFunctionaryModalOpen(true)}>
+                    <a data-tip={`Cambiar los privilegios del funcionario`} onClick={() => setIsEditFunctionaryModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                             <path
                                 fill="currentColor"
@@ -36,7 +37,7 @@ const ColumnCell = (props) => {
                                 class="fa-edit-users" />
                         </svg>
                     </a>
-                    <a onClick={() => setIsDeleteFunctionaryModalOpen(true)}>
+                    <a data-tip={`Borrar al funcionario`} onClick={() => setIsDeleteFunctionaryModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path
                                 fill="currentColor"
@@ -47,6 +48,7 @@ const ColumnCell = (props) => {
                 </div>
                 {isEditFunctionaryModalOpen ? <EditFunctionaryModal functionaryId={props.functionaryId} isMaster={props.isMaster} onClose={() => setIsEditFunctionaryModalOpen(false)} /> : null}
                 {isDeleteFunctionaryModalOpen ? <DeleteFunctionaryModal functionaryId={props.functionaryId} emailText={props.emailText} onClose={() => setIsDeleteFunctionaryModalOpen(false)} /> : null}
+                <ReactTooltip effect="solid" />
             </div>
         ) : (
             <div className="users-table-column-cell">
@@ -74,7 +76,7 @@ const ColumnCell = (props) => {
                     </div>
                 </div>
                 <div className="users-table-column-cell-actions">
-                    <a onClick={() => setIsEditCopModalOpen(true)}>
+                    <a data-tip={`Editar los datos de ${props.nameText}`} onClick={() => setIsEditCopModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
                             <path
                                 fill="currentColor"
@@ -82,7 +84,7 @@ const ColumnCell = (props) => {
                                 class="fa-edit-users" />
                         </svg>
                     </a>
-                    <a onClick={() => setIsDeleteCopModalOpen(true)}>
+                    <a data-tip={`Borrar a ${props.nameText}`} onClick={() => setIsDeleteCopModalOpen(true)}>
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                             <path
                                 fill="currentColor"
@@ -99,6 +101,7 @@ const ColumnCell = (props) => {
                     phoneText={props.phoneText}
                     onClose={() => setIsEditCopModalOpen(false)} /> : null}
                 {isDeleteCopModalOpen ? <DeleteCopModal copIdText={props.copIdText} nameText={props.nameText} onClose={() => setIsDeleteCopModalOpen(false)} /> : null}
+                <ReactTooltip effect="solid" />
             </div>
         )
     );
