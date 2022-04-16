@@ -22,13 +22,13 @@ const EditFunctionaryModal = (props) => {
             initialRenderDone.current = true;
         }
         else {
-            dispatch(editItem({id: props.functionaryId, isMaster: isMaster}));
             await updateFunctionary();
             props.onClose();
             setIsLoading(false);
             setButtonClassName("");
             setHideNormalButton(false);
             setHideMasterButton(false);
+            dispatch(editItem({id: props.functionaryId, isMaster: isMaster}));
         }
     }, [isMaster])
 
@@ -55,11 +55,11 @@ const EditFunctionaryModal = (props) => {
     `;
 
     return createPortal(
-        <>
-            <div className="modal-background"/>
+        <div className="modal-background">
             <div className="modal-content">
                 <span className="close-btn" onClick={props.onClose}>&times;</span>
-                <h1>Seleccionar privilegios del funcionario</h1>
+                <h2>Seleccionar privilegios del funcionario</h2>
+                <p className="modal-description">Los cambios efectuados al funcionario se reflejarán inmediatamente en la base de datos</p>
                 <div className="modal-body-horizontal">
                     <button className={buttonClassName} disabled={isLoading} hidden={hideNormalButton} onClick={() => handleClick(false)}>
                         {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Privilegios normales"}
@@ -69,7 +69,7 @@ const EditFunctionaryModal = (props) => {
                     </button>
                 </div>
             </div>
-        </>,
+        </div>,
         document.getElementById("portal")
     );
 }

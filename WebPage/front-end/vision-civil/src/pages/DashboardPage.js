@@ -12,7 +12,7 @@ import MapLegend from "../components/MapLegend";
 
 const DashboardPage = () => {
     return(
-        <div>
+        <>
             <Navbar/>
             <div className="content-container">
                 <div className="dashboard-container">
@@ -30,7 +30,7 @@ const DashboardPage = () => {
                     <AreaChartCard/>
                 </div>
             </div>
-        </div>
+        </>
     );
 }
 

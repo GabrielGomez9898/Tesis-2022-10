@@ -8,7 +8,24 @@ form {
     }
 }
 
-input, select {
+[type=text],
+[type=email],
+[type=password],
+[type=date],
+[type=tel],
+select {
+    width: 15rem;
+    height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+    padding-left: 1rem;
+
+    font-size: 100%;
+    font-family: 'Manjari', sans-serif;
+    background-color: $unselected-color;
+}
+
+.filter-card-input {
     width: 15rem;
     height: 3rem;
     border-width: 0px;
@@ -20,16 +37,23 @@ input, select {
     background-color: white;
 }
 
+.radio-group {
+    label {
+        font-family: 'Manjari', sans-serif;
+    }
+}
+
 input:hover, 
 input:focus,
 select:hover,
 select:focus {
-    background-color: $unselected-color;
+    background-color: #E8F0FE;
 }
 
 button {
     width: 17rem;
     height: 3rem;
+    min-height: 3rem;
     border-width: 0px;
     border-radius: 5px;
 
@@ -39,12 +63,19 @@ button {
     background-color: $btn-color;
 }
 
-.button-loading {
-    background-color: lightgray;
+button:active {
+    transform: translate(0px, 5px);
+    -webkit-transform: translate(0px, 5px);
+    box-shadow: 0px 1px 0px 0px;
 }
 
 button:hover {
     cursor: pointer;
+    transform: scale(1.05) perspective(1px);
+}
+
+.button-loading {
+    background-color: lightgray;
 }
 
 .login-form {

@@ -44,15 +44,15 @@ const MapFilterCard = () => {
             <form className="card-mapfilter-container" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="lowerDate">Desde</label><br/>
-                    <input id="lowerDate" type="date" defaultValue={generateDaysAgoFormattedDate(60)} required onChange={(e) => {setLowerDate(e.target.value)}} />
+                    <input type="date" className="filter-card-input" id="lowerDate" defaultValue={generateDaysAgoFormattedDate(60)} required onChange={(e) => {setLowerDate(e.target.value)}} />
                 </div>
                 <div>
                     <label htmlFor="upperDate">Hasta</label><br/>
-                    <input id="upperDate" type="date" defaultValue={getTodayFormattedDate()} required onChange={(e) => {setUpperDate(e.target.value)}}/>
+                    <input type="date" className="filter-card-input" id="upperDate" defaultValue={getTodayFormattedDate()} required onChange={(e) => {setUpperDate(e.target.value)}}/>
                 </div>
                 <div>
                     <label htmlFor="reportType">Tipo de reporte</label><br/>
-                    <select id="reportType" required onChange={(e) => {setReportType(e.target.value)}}>
+                    <select className="filter-card-input" id="reportType" required onChange={(e) => {setReportType(e.target.value)}}>
                         <option key="todos" value="TODOS">Todos</option>
                         <option key="hurtoVivienda" value="HURTO_VIVIENDA">Hurto Vivienda</option>
                         <option key="hurtoPersona" value="HURTO_PERSONA">Hurto Persona</option>
