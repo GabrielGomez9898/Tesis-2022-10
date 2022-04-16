@@ -78,6 +78,7 @@ flutter:
   assets:
     - assets/images/vision_civil.jpg
     - assets/images/logo.jpg
+    - assets/images/logoPNG.png
     - assets/images/LogoConNombre.jpg
     - assets/images/fondo.jpg
     - assets/images/AlertarContactos.png

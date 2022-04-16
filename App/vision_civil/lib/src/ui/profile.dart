@@ -257,7 +257,11 @@ class ProfileState extends State<Profile> {
                         : Container(
                             width: size.width * 0.9,
                             child: Text(
-                                "Informacion gestionada por la Alacaldia de Sibate, por favor pongase en contacto"),
+                                "Informacion gestionada por la Alacaldia de Sibate, por favor pongase en contacto",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 255, 255, 255),
+                                    fontSize: 15)),
                           ),
                     SizedBox(height: size.height * 0.05),
                   ],
@@ -272,8 +276,6 @@ class ProfileState extends State<Profile> {
 }
 
 upDateInfoAlert(BuildContext context) {
-
-
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text("¡Datos actualizados!"),

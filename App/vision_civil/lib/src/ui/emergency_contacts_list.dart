@@ -63,7 +63,7 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
             Contact contact = contacts[index];
             String phone = " ";
             var contactName = "Contacto desconocido";
-            
+
             try {
               phone = contact.phones!.first.value.toString();
               contactName = contact.displayName!;
@@ -75,15 +75,13 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
               title: Text(contactName),
               subtitle: phone != " " ? Text(phone) : Text("no phone"),
               onTap: () {
-                
                 if (widget.emergencyContact.uniqueid == " ") {
-                  showNewEmergencyContact(context,contactName,phone);
-                  BlocProvider.of<ContactsblocBloc>(context).add(
-                      AddContactEvent(
-                          contactName, phone, widget.idUser));
+                  showNewEmergencyContact(context, contactName, phone);
+                  BlocProvider.of<ContactsblocBloc>(context)
+                      .add(AddContactEvent(contactName, phone, widget.idUser));
                   Navigator.pop(context);
                 } else {
-                  showNewEmergencyContact(context,contactName,phone);
+                  showNewEmergencyContact(context, contactName, phone);
                   BlocProvider.of<ContactsblocBloc>(context).add(
                       UpdateContactEvent(widget.emergencyContact.uniqueid,
                           contactName, phone));
@@ -97,8 +95,6 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
 }
 
 showNewEmergencyContact(BuildContext context, name, phone) {
-
-
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
     title: Text('Contacto de emrgencia agregado'),

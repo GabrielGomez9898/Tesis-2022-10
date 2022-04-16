@@ -91,7 +91,7 @@ class ContactsPageState extends State<ContactsPage> {
                                 children: [
                                   Text("Mis contactos \nde emergencia",
                                       style: TextStyle(
-                                          fontSize: 18.0,
+                                          fontSize: 28.0,
                                           color: Colors.white,
                                           fontWeight: FontWeight.w500)),
                                 ],
@@ -114,186 +114,188 @@ class ContactsPageState extends State<ContactsPage> {
                               color: Color.fromARGB(255, 97, 102, 119),
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width: 190,
-                                          height: 40,
-                                          child: FittedBox(
-                                              child: Text(emergencyContact1
-                                                  .contactName)),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                    builder: (_) => MultiBlocProvider(
-                                                        providers: [
-                                                          BlocProvider.value(
-                                                              value: BlocProvider
-                                                                  .of<UserBloc>(
-                                                                      context)),
-                                                          BlocProvider.value(
-                                                              value: BlocProvider
-                                                                  .of<ContactsblocBloc>(
-                                                                      context))
-                                                        ],
-                                                        child: EmergencyContactsPage(
-                                                            emergencyContact:
-                                                                emergencyContact1,
-                                                            idUser:
-                                                                state.userID)),
-                                                  ));
-                                                },
-                                                child: Icon(Icons.edit)),
-                                            SizedBox(width: 10),
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                              ContactsblocBloc>(
-                                                          context)
-                                                      .add(DeleteContactEvent(
-                                                          emergencyContact1
-                                                              .uniqueid));
-                                                },
-                                                child: Icon(Icons.delete))
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width: 190,
-                                          height: 40,
-                                          child: FittedBox(
-                                              child: Text(emergencyContact2
-                                                  .contactName)),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                    builder: (_) => MultiBlocProvider(
-                                                        providers: [
-                                                          BlocProvider.value(
-                                                              value: BlocProvider
-                                                                  .of<UserBloc>(
-                                                                      context)),
-                                                          BlocProvider.value(
-                                                              value: BlocProvider
-                                                                  .of<ContactsblocBloc>(
-                                                                      context))
-                                                        ],
-                                                        child: EmergencyContactsPage(
-                                                            emergencyContact:
-                                                                emergencyContact2,
-                                                            idUser:
-                                                                state.userID)),
-                                                  ));
-                                                },
-                                                child: Icon(Icons.edit)),
-                                            SizedBox(width: 10),
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                              ContactsblocBloc>(
-                                                          context)
-                                                      .add(DeleteContactEvent(
-                                                          emergencyContact2
-                                                              .uniqueid));
-                                                },
-                                                child: Icon(Icons.delete))
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Container(
-                                          width: 190,
-                                          height: 40,
-                                          child: FittedBox(
-                                              child: Text(emergencyContact3
-                                                  .contactName)),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.of(context)
-                                                      .push(MaterialPageRoute(
-                                                    builder: (_) => MultiBlocProvider(
-                                                        providers: [
-                                                          BlocProvider.value(
-                                                              value: BlocProvider
-                                                                  .of<UserBloc>(
-                                                                      context)),
-                                                          BlocProvider.value(
-                                                              value: BlocProvider
-                                                                  .of<ContactsblocBloc>(
-                                                                      context))
-                                                        ],
-                                                        child: EmergencyContactsPage(
-                                                            emergencyContact:
-                                                                emergencyContact3,
-                                                            idUser:
-                                                                state.userID)),
-                                                  ));
-                                                },
-                                                child: Icon(Icons.edit)),
-                                            SizedBox(width: 10),
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  BlocProvider.of<
-                                                              ContactsblocBloc>(
-                                                          context)
-                                                      .add(DeleteContactEvent(
-                                                          emergencyContact3
-                                                              .uniqueid));
-                                                },
-                                                child: Icon(Icons.delete)),
-                                          ],
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
+                            child: FittedBox(
+                              child: Column(
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width: 190,
+                                            height: 40,
+                                            child: FittedBox(
+                                                child: Text(emergencyContact1
+                                                    .contactName)),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (_) => MultiBlocProvider(
+                                                          providers: [
+                                                            BlocProvider.value(
+                                                                value: BlocProvider
+                                                                    .of<UserBloc>(
+                                                                        context)),
+                                                            BlocProvider.value(
+                                                                value: BlocProvider
+                                                                    .of<ContactsblocBloc>(
+                                                                        context))
+                                                          ],
+                                                          child: EmergencyContactsPage(
+                                                              emergencyContact:
+                                                                  emergencyContact1,
+                                                              idUser: state
+                                                                  .userID)),
+                                                    ));
+                                                  },
+                                                  child: Icon(Icons.edit)),
+                                              SizedBox(width: 10),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    BlocProvider.of<
+                                                                ContactsblocBloc>(
+                                                            context)
+                                                        .add(DeleteContactEvent(
+                                                            emergencyContact1
+                                                                .uniqueid));
+                                                  },
+                                                  child: Icon(Icons.delete))
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width: 190,
+                                            height: 40,
+                                            child: FittedBox(
+                                                child: Text(emergencyContact2
+                                                    .contactName)),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (_) => MultiBlocProvider(
+                                                          providers: [
+                                                            BlocProvider.value(
+                                                                value: BlocProvider
+                                                                    .of<UserBloc>(
+                                                                        context)),
+                                                            BlocProvider.value(
+                                                                value: BlocProvider
+                                                                    .of<ContactsblocBloc>(
+                                                                        context))
+                                                          ],
+                                                          child: EmergencyContactsPage(
+                                                              emergencyContact:
+                                                                  emergencyContact2,
+                                                              idUser: state
+                                                                  .userID)),
+                                                    ));
+                                                  },
+                                                  child: Icon(Icons.edit)),
+                                              SizedBox(width: 10),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    BlocProvider.of<
+                                                                ContactsblocBloc>(
+                                                            context)
+                                                        .add(DeleteContactEvent(
+                                                            emergencyContact2
+                                                                .uniqueid));
+                                                  },
+                                                  child: Icon(Icons.delete))
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Container(
+                                            width: 190,
+                                            height: 40,
+                                            child: FittedBox(
+                                                child: Text(emergencyContact3
+                                                    .contactName)),
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    Navigator.of(context)
+                                                        .push(MaterialPageRoute(
+                                                      builder: (_) => MultiBlocProvider(
+                                                          providers: [
+                                                            BlocProvider.value(
+                                                                value: BlocProvider
+                                                                    .of<UserBloc>(
+                                                                        context)),
+                                                            BlocProvider.value(
+                                                                value: BlocProvider
+                                                                    .of<ContactsblocBloc>(
+                                                                        context))
+                                                          ],
+                                                          child: EmergencyContactsPage(
+                                                              emergencyContact:
+                                                                  emergencyContact3,
+                                                              idUser: state
+                                                                  .userID)),
+                                                    ));
+                                                  },
+                                                  child: Icon(Icons.edit)),
+                                              SizedBox(width: 10),
+                                              ElevatedButton(
+                                                  onPressed: () {
+                                                    BlocProvider.of<
+                                                                ContactsblocBloc>(
+                                                            context)
+                                                        .add(DeleteContactEvent(
+                                                            emergencyContact3
+                                                                .uniqueid));
+                                                  },
+                                                  child: Icon(Icons.delete)),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
