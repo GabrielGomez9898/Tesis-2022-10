@@ -7,7 +7,8 @@ import { collection, doc, onSnapshot } from "firebase/firestore";
 import {db, storage} from "../firebase"
 import {LazyLoadImage} from "react-lazy-load-image-component"
 import 'react-lazy-load-image-component/src/effects/blur.css'
-import SyncLoader from "react-spinners/SyncLoader";
+import { SyncLoader, ClipLoader } from "react-spinners";
+
 
 
 const CrimeList = () => {
@@ -23,24 +24,41 @@ const CrimeList = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("tipo reporte",reportType)
+    setListado([]);
+    setIsFilterEmpty(false)
+    setIsFilterLoading(true);
+    setFilterButtonClassName("button-loading");
     getListadoByFilter();
 }
 
 const getListadoByFilter = () => {
+  setListado([]);
+  console.log(listado)
   Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
-      listado.pop();
+    if(response.data.length == 0)
+    setIsFilterEmpty(true)
+    else
+    setIsFilterEmpty(false)
       setListado(response.data)
   }).catch((error) => console.log(error));
+  setIsFilterLoading(false);
+  setFilterButtonClassName("");
 }
   const [showModal, setShowModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
-  const [listado, setListado] = useState([])
+  const [listado, setListado] = useState([]);
   const [lowerDate, setLowerDate] = useState("");
   const [upperDate, setUpperDate] = useState("");
   const [reportType, setReportType] = useState("TODOS");
-  const [container, setContainer] = useState("modal-container")
+  const [container, setContainer] = useState("modal-container");
+  const [isFilterLoading, setIsFilterLoading] = useState(false);
+  const [filterButtonClassName, setFilterButtonClassName] = useState("");
+  const [isFilterEmpty, setIsFilterEmpty] = useState(false);
+  const [reportList, setReportList] = useState([]);
+
+
+
   function getClass(index) {
     return index === activeObject?.id ? "active" : "inactive";
   }
@@ -74,10 +92,12 @@ const getListadoByFilter = () => {
       getFotos(props.object.fotourl, props.object.imagenes, setListadofotos);
     }, [])
 
+  
+
     return (
       <div id="CrimeListtModal" className="active modal" >
-        <div className={props.container}>
-          <div className="fotos">
+        <div className={props.container} style={{borderColor: props.object.color}}>
+          <div className="fotos" >
             {props.object.hasFotos && listadofotos.length == 0 ?  <div style={{marginTop : "75%"}}><SyncLoader sizeUnit={'px'} size={40} color={props.object.color} loading={true} /> </div>: "" }
                 
             {listadofotos.length == 1 ?
@@ -90,10 +110,10 @@ const getListadoByFilter = () => {
           </div>
           <div className="report">
             <button className="modalboton" onClick={() => setShowModal(false)}>X</button>
-            <h1 className="asunto" style={{color : props.object.color}}>{props.object.asunto}</h1>
-            <span className="TipoAlerta" style={{color : props.object.color}}>{props.object.tipo_reporte}</span>
+            <h1 className="asunto" style={{color : props.object.color}}>{props.object.asunto.charAt(0).toUpperCase() +props.object.asunto.slice(1)}</h1>
+            <span className="TipoAlerta" style={{color : props.object.color}}>{ props.object.tipo_reporte.charAt(0).toUpperCase() + (props.object.tipo_reporte.toLowerCase().replace("_" ," ")).slice(1)}</span>
             <br></br>
-            <span className="Descripcion" style={{color : props.object.color}}>{props.object.descripcion}</span>
+            <span className="Descripcion" style={{color : props.object.color}}>{props.object.descripcion.charAt(0).toUpperCase() +props.object.descripcion.slice(1)}</span>
             <br></br>
             <span className="fecha" style={{color : props.object.color}}>{props.object.fecha} {props.object.hora}</span>
             <br></br>
@@ -136,7 +156,9 @@ const getListadoByFilter = () => {
                         <option key="otro" value="OTRO">Otro</option>
                     </select>
                 </div>
-                <button type="submit">Aplicar filtros a la lista</button>
+                <button className={filterButtonClassName} disabled={isFilterLoading} >
+                  {isFilterLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Aplicar filtros a la lista"}
+                </button>
             </form>
             <br></br>
 
@@ -152,16 +174,18 @@ const getListadoByFilter = () => {
          getListadoData(); 
          if(showLoading)        
          alert("Se realizo un nuevo reporte");     
-        }, 4000);
+        }, 2000);
         
       }, [])}
-      {listado.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color={'grey'} loading={true} className="carga"/> </div> : ""}
+      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  listado.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
       <ul className="list-menu">
         {listado.map((item) => (
           <div className="Container-crime" style={{borderColor : item.color}}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
-            <h2>{item.asunto}</h2>
-            <span className="description">{item.descripcion}</span>
+            <h2>{item.asunto.charAt(0).toUpperCase() + item.asunto.slice(1)}</h2>
+            <span className="circulo" style={{backgroundColor : item.color}}>ㅤ</span> <span className="description"> { item.tipo_reporte.charAt(0).toUpperCase() +(item.tipo_reporte.toLowerCase().replace("_"," ")).slice(1)}</span>
+            <br></br>
+            <span className="description">{item.descripcion.charAt(0).toUpperCase() +item.descripcion.slice(1)}</span>
             <br></br>
             <button
               style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%" }}

@@ -24,6 +24,8 @@
     background-color: $unselected-color;
     border-radius: 1%;
     padding: 1rem;
+    border-style: solid;
+    border-width: 3px;
 }
 .modal-container-withoutphotos{
     margin-left: 30%;
@@ -33,6 +35,8 @@
     background-color: $unselected-color;
     border-radius: 1%;
     padding: 1rem;
+    border-style: solid;
+    border-width: 3px;
 }
 
 .report{
@@ -133,4 +137,19 @@
 }
 .loader{
     margin-top: 150 px;
+}
+.circulo {
+    width: 100px;
+    height: 100px;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+}
+.not-reports{
+    display: block;
+    text-align: center;
+    margin-top: 20%;
+    text-size-adjust: 50%;
+    color: hsl(207, 100%, 50%);
+    font-size: 60px;
 }
