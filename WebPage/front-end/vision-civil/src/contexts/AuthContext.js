@@ -16,7 +16,6 @@ export const authContext = createContext();
 
 export const AuthContextProvider = (props) => {
     const [user, setUser] = useState();
-    const [isMaster, setIsMaster] = useState();
     const [error, setError] = useState();
     const [isLoading, setIsLoading] = useState(true);
     
@@ -45,7 +44,7 @@ export const AuthContextProvider = (props) => {
         const index = querySnapshot.docs.findIndex((doc) => doc.id === userCredential.user.uid);
         if(index !== -1) {
             const functionaryObj = querySnapshot.docs[index].data();
-            setIsMaster(functionaryObj["isMaster"]);
+            localStorage.setItem("isMaster", functionaryObj["isMaster"]);
             return true;
         }
         else {
@@ -56,7 +55,7 @@ export const AuthContextProvider = (props) => {
 
     const logout = () => signOut(auth);
 
-    return <authContext.Provider value={{ user, isMaster, error, isLoading, signup, signIn, logout }} {...props} />
+    return <authContext.Provider value={{ user, error, isLoading, signup, signIn, logout }} {...props} />
 }
 
 export const useAuth = () => {

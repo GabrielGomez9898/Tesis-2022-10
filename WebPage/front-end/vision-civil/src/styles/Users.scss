@@ -29,6 +29,7 @@
 
 .users-table-column::-webkit-scrollbar-track {
     background: lightgray;
+    border-radius: 50px;
 }
 
 .users-table-column::-webkit-scrollbar-thumb {
@@ -53,9 +54,9 @@
         gap: 1rem;
 
         width: 40vw;
-        height: 95vh;
+        height: 97vh;
         overflow-x: hidden;
-        overflow-y: auto;
+        overflow-y: scroll;
 
         .users-table-column-header {
             display: flex;
@@ -63,7 +64,7 @@
             flex-wrap: nowrap;
             justify-content: flex-start;
             align-items: center;
-            gap: 1rem;
+            gap: 2.5rem;
 
             margin: 10px;
         
@@ -75,7 +76,7 @@
                 width: 3rem;
                 height: 3rem;
 
-                border-radius: 50px;
+                border-radius: 5px;
                 background-color: #2FB986;
                 cursor: pointer;
         
@@ -145,6 +146,40 @@
                         margin-bottom: 0;
                     }
                 }
+
+                .cop-true-pill {
+                    border-width: 2px;
+                    border-radius: 50px;
+                    border-color: $btn-color;
+                    padding-top: 2.5px;
+                    padding-bottom: 2.5px;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    border-style: solid;
+
+                    p {
+                        color: $btn-color;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                    }
+                }
+
+                .cop-false-pill {
+                    border-width: 2px;
+                    border-radius: 50px;
+                    border-color: $light-theme-select-color;
+                    padding-top: 2.5px;
+                    padding-bottom: 2.5px;
+                    padding-left: 5px;
+                    padding-right: 5px;
+                    border-style: solid;
+
+                    p {
+                        color: $light-theme-select-color;
+                        margin-top: 0;
+                        margin-bottom: 0;
+                    }
+                }
             }
 
             .users-table-column-cell-actions {
@@ -193,4 +228,10 @@
     span {
         font-size: x-large;
     }
+}
+
+.pill-container-horizontal {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
 }
