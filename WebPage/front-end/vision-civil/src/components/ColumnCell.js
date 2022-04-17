@@ -74,6 +74,26 @@ const ColumnCell = (props) => {
                         <span>Género: </span>
                         <span className="cop-data-item-detail">{props["genderText"]}</span>
                     </div>
+                    <div className="pill-container-horizontal">
+                        {
+                            props.disponible ?
+                            <div className="cop-true-pill">
+                                <p><i>DISPONIBLE</i></p>
+                            </div> : 
+                            <div className="cop-false-pill">
+                                <p><i>NO DISPONIBLE</i></p>
+                            </div>
+                        }
+                        {
+                            props.enServicio ?
+                            <div className="cop-true-pill">
+                                <p><i>EN SERVICIO</i></p>
+                            </div> : 
+                            <div className="cop-false-pill">
+                                <p><i>NO EN SERVICIO</i></p>
+                            </div>
+                        }
+                    </div>
                 </div>
                 <div className="users-table-column-cell-actions">
                     <a data-tip={`Editar los datos de ${props.nameText}`} onClick={() => setIsEditCopModalOpen(true)}>

@@ -2,7 +2,9 @@ import { useAuth } from "../contexts/AuthContext";
 import { Navigate, Outlet } from "react-router-dom";
 
 const MasterOutlet = () => {
-    const { isLoading, isMaster } = useAuth();
+    const { isLoading } = useAuth();
+
+    const isMaster = localStorage.getItem("isMaster") === "true";
 
     if(isLoading) return <></>;
 

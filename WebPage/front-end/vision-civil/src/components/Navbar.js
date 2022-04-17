@@ -5,10 +5,13 @@ import { useAuth } from "../contexts/AuthContext";
 const Navbar = () => {
     let navigate = useNavigate();
 
-    const { isMaster, logout } = useAuth();
+    const { logout } = useAuth();
+
+    const isMaster = localStorage.getItem("isMaster") === "true";
 
     const exit = async () => {
         await logout();
+        localStorage.clear();
         navigate("/login");
     }
 

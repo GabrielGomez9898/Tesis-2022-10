@@ -9,6 +9,8 @@ import typeChartsDataReducer from './features/TypeChartsData';
 import timeChartsDataReducer from "./features/TimeChartsData";
 import functionaryListReducer from './features/FunctionaryList';
 import copListReducer from "./features/CopList";
+import functionaryFiltersDataReducer from "./features/FunctionaryFiltersData";
+import copFiltersDataReducer from "./features/CopFiltersData";
 
 const store = configureStore({
   reducer: {
@@ -16,7 +18,9 @@ const store = configureStore({
     typeChartsData: typeChartsDataReducer,
     timeChartsData: timeChartsDataReducer,
     functionaryList: functionaryListReducer,
-    copList: copListReducer
+    copList: copListReducer,
+    functionaryFiltersData: functionaryFiltersDataReducer,
+    copFiltersData: copFiltersDataReducer
   }
 })
 
