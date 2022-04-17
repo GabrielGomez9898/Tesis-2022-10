@@ -41,7 +41,7 @@ const TimeChartsFilterCard = () => {
         <form className="card-timechartfilter-container" onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="period">Periodo</label><br/>
-                <select id="period" required onChange={(e) => {setPeriod(e.target.value)}}>
+                <select className="filter-card-input" id="period" required onChange={(e) => {setPeriod(e.target.value)}}>
                     <option key="ultimos7dias" value="ESTA_SEMANA">Últimos 7 días</option>
                     <option key="ultimos30dias" value="ESTE_MES">Últimos 30 días</option>
                     <option key="esteTrimestre" value="ESTE_TRIMESTRE" selected>Este trimestre</option>

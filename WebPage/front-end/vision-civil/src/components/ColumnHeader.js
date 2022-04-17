@@ -1,38 +1,25 @@
+import "../styles/Users.scss";
 import { useState } from "react";
-import Axios from "axios";
 import CreateFunctionaryModal from "./CreateFunctionaryModal";
 import CreateCopModal from "./CreateCopModal";
+import ReactTooltip from "react-tooltip";
+import { refreshData as refreshCopData } from "../features/CopFiltersData";
 
 const ColumnHeader = ({columnText}) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
+    let tooltipText = (columnText === "Funcionarios") ? "funcionario" : "policía"; 
+
     return (
         <div className="users-table-column-header">
-            <a onClick={() => setIsModalOpen(true)}>
-                <svg
-                    aria-hidden="true"
-                    focusable="false"
-                    data-prefix="fad"
-                    data-icon="user-plus"
-                    role="img"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 640 512"
-                    className="svg-inline--fa fa-user-plus fa-w-20 fa-7x"
-                >
-                    <g className="fa-group">
-                        <path
-                            fill="currentColor"
-                            d="M640 224v32a16 16 0 0 1-16 16h-64v64a16 16 0 0 1-16 16h-32a16 16 0 0 1-16-16v-64h-64a16 16 0 0 1-16-16v-32a16 16 0 0 1 16-16h64v-64a16 16 0 0 1 16-16h32a16 16 0 0 1 16 16v64h64a16 16 0 0 1 16 16z"
-                            class="fa-secondary-add-users">
-                        </path>
-                        <path
-                            fill="currentColor"
-                            d="M224 256A128 128 0 1 0 96 128a128 128 0 0 0 128 128zm89.6 32h-16.7a174.08 174.08 0 0 1-145.8 0h-16.7A134.43 134.43 0 0 0 0 422.4V464a48 48 0 0 0 48 48h352a48 48 0 0 0 48-48v-41.6A134.43 134.43 0 0 0 313.6 288z"
-                            class="fa-secondary-add-users">
-                        </path>
-                    </g>
+            <button onClick={() => setIsModalOpen(true)}>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                    <path 
+                        fill="currentColor"
+                        d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z"
+                        class="fa-add-users"/>
                 </svg>
-            </a>
+            </button>
             <h1>{columnText}</h1>
             { (isModalOpen && columnText === "Funcionarios") ? <CreateFunctionaryModal onClose={() => setIsModalOpen(false)} /> : null }
             { (isModalOpen && columnText === "Policías") ? <CreateCopModal onClose={() => setIsModalOpen(false)} /> : null }

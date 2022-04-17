@@ -35,11 +35,11 @@ const CreateFunctionaryModal = ({ onClose }) => {
             initialRenderDone.current = true;
         }
         else {
-            dispatch(addItem(functionary));
             await createFunctionary();
             onClose();
             setIsLoading(false);
             setButtonClassName("");
+            dispatch(addItem(functionary));
         }
     }, [id]);
 
@@ -93,34 +93,54 @@ const CreateFunctionaryModal = ({ onClose }) => {
         }
     }, [email, password, confirmedPassword]);
 
+    const handleRadioChange = (e) => {
+        if(e.target.value === "false") {
+            setIsMaster(false);
+        }
+        else if(e.target.value === "true") {
+            setIsMaster(true);
+        }
+    };
+
     const style = css`
         z-index: 1000;
     `;
 
     return createPortal(
-        <>
-            <div className="modal-background" />
-            <div className="modal-content">
+        <div className="modal-background">
+            <form className="modal-content" onSubmit={register}>
                 <span className="close-btn" onClick={onClose}>&times;</span>
-                <h1>Agregar un nuevo funcionario</h1>
-                <p>Al finalizar este proceso el funcionario podrá acceder a Visión Civil Web con las credenciales escogidas abajo</p>
-                <form className="modal-body-vertical" onSubmit={register}>
-                    <label htmlFor="emailInput">Correo del nuevo funcionario</label>
+                <h2>Agregar un nuevo funcionario</h2>
+                <p className="modal-description">Al finalizar este proceso el funcionario podrá acceder a Visión Civil Web con las credenciales escogidas abajo</p>
+                <div>
+                    <label htmlFor="emailInput">Correo</label><br/>
                     <input type="email" id="emailInput" placeholder="Ingrese el email" required onChange={(e) => setEmail(e.target.value)} />
-                    <label htmlFor="isMasterRadio">Seleccione el tipo de funcionario</label>
-                    <input type="radio" name="isMasterRadio" value={false} required onChange={(e) => setIsMaster(Boolean(e.target.value))} />Funcionario normal
-                    <input type="radio" name="isMasterRadio" value={true} required onChange={(e) => setIsMaster(Boolean(e.target.value))} />Funcionario master
-                    {message && <Alert text={message} alertType="danger" isDeletable={true} />}
-                    <label htmlFor="passwordInput">Contraseña del nuevo funcionario</label>
+                </div>
+                <label htmlFor="isMasterRadio">Tipo de funcionario</label>
+                <div className="modal-body-horizontal radio-group">
+                    <label>
+                        <input type="radio" name="isMasterRadio" value="false" required onChange={(e) => handleRadioChange(e)} />
+                        Funcionario normal
+                    </label>
+                    <label>
+                        <input type="radio" name="isMasterRadio" value="true" required onChange={(e) => handleRadioChange(e)} />
+                        Funcionario master
+                    </label>
+                </div>
+                {message && <Alert text={message} alertType="danger" isDeletable={true} />}
+                <div>
+                    <label htmlFor="passwordInput">Contraseña</label><br/>
                     <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" required onChange={(e) => setPassword(e.target.value)} />
-                    <label htmlFor="confirmedPasswordInput">Confirmación de contraseña</label>
+                </div>
+                <div>
+                    <label htmlFor="confirmedPasswordInput">Confirme contraseña</label><br/>
                     <input type="password" id="confirmedPasswordInput" placeholder="Confirme la contraseña" required onChange={(e) => setConfirmedPassword(e.target.value)} />
-                    <button type="submit" className={buttonClassName} disabled={isLoading}>
-                        {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear funcionario"}
-                    </button>
-                </form>
-            </div>
-        </>,
+                </div>
+                <button type="submit" className={buttonClassName} disabled={isLoading}>
+                    {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear funcionario"}
+                </button>
+            </form>
+        </div>,
         document.getElementById("portal")
     )
 }

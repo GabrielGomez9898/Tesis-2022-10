@@ -8,7 +8,24 @@ form {
     }
 }
 
-input, select {
+[type=text],
+[type=email],
+[type=password],
+[type=date],
+[type=tel],
+select {
+    width: 15rem;
+    height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+    padding-left: 1rem;
+
+    font-size: 100%;
+    font-family: 'Manjari', sans-serif;
+    background-color: $unselected-color;
+}
+
+.filter-card-input {
     width: 15rem;
     height: 3rem;
     border-width: 0px;
@@ -20,16 +37,35 @@ input, select {
     background-color: white;
 }
 
+.users-filter-input {
+    width: 9rem;
+    height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+    padding-left: 1rem;
+
+    font-size: 100%;
+    font-family: 'Manjari', sans-serif;
+    background-color: white;
+}
+
+.radio-group {
+    label {
+        font-family: 'Manjari', sans-serif;
+    }
+}
+
 input:hover, 
 input:focus,
 select:hover,
 select:focus {
-    background-color: $unselected-color;
+    background-color: #E8F0FE;
 }
 
 button {
     width: 17rem;
     height: 3rem;
+    min-height: 3rem;
     border-width: 0px;
     border-radius: 5px;
 
@@ -39,12 +75,12 @@ button {
     background-color: $btn-color;
 }
 
-.button-loading {
-    background-color: lightgray;
-}
-
 button:hover {
     cursor: pointer;
+}
+
+.button-loading {
+    background-color: lightgray;
 }
 
 .login-form {
@@ -52,4 +88,23 @@ button:hover {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+}
+
+.filtercard-body-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 2.5rem;
+
+    margin-bottom: 10px;
+}
+
+.filtercard-button {
+    width: 3rem;
+    height: 3rem;
+
+    svg {
+        width: 1.8rem;
+        height: 1.8rem;
+    }
 }

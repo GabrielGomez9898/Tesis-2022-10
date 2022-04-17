@@ -23,12 +23,12 @@ const DeleteFunctionaryModal = (props) => {
         setButtonClassName("button-loading");
         setHideCancelButton(true);
 
-        dispatch(deleteItem({id: props.functionaryId}));
         await deleteFunctionary();
         props.onClose();
         setIsLoading(false);
         setButtonClassName("accept-btn");
         setHideCancelButton(false);
+        dispatch(deleteItem({id: props.functionaryId}));
     }
 
     const style = css`
@@ -39,8 +39,8 @@ const DeleteFunctionaryModal = (props) => {
         <div className="modal-background">
             <div className="modal-content">
                 <span className="close-btn" onClick={props.onClose}>&times;</span>
-                <h1>Estás seguro que deseas eliminar a este funcionario?</h1>
-                <p>El funcionario ya no podrá acceder a Visión Civil Web, para que vuelva a poder acceder tendrá que agregarlo de nuevo</p>
+                <h2>¿ Estás seguro que deseas eliminar al funcionario <i>{props.emailText}</i> ?</h2>
+                <p className="modal-description">El funcionario <i>{props.emailText}</i> ya no podrá acceder a Visión Civil Web, para que vuelva a poder acceder tendrá que agregarlo de nuevo</p>
                 <div className="modal-body-horizontal">
                     <button className="cancel-btn" disabled={isLoading} hidden={hideCancelButton} onClick={props.onClose}>Cancelar</button>
                     <button className={buttonClassName} disabled={isLoading} onClick={handleClick}>
