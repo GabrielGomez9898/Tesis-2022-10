@@ -9,8 +9,14 @@ import ErrorPage from "./pages/ErrorPage";
 import { AuthContextProvider } from './contexts/AuthContext';
 import AuthenticatedOutlet from './components/AuthenticatedOutlet';
 import MasterOutlet from './components/MasterOutlet';
+import { useEffect } from 'react';
 
 function App() {
+
+  useEffect(() => {
+    document.title = "Visión Civil";
+  }, []);
+
   return (
     <AuthContextProvider>
       <Router>
