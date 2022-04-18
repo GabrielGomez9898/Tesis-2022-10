@@ -8,7 +8,7 @@ Visión Civil is a Crime Management System which focuses on preventing crime in 
 The technical details on the mobile app can be found on [the mobile app section of the repository](App/)
 
 ### **Mobile app users description**
-> Keep in mind that the mobile app user interface is not the same for the citizens and the policemans. The same mobile app is use for both users.
+> Keep in mind that the mobile app user interface is not the same for the citizens and the policemans, nevertheless the same mobile app is use for both users.
 
 #### **The citizen**
 The citizen that downloads the app needs to sign up in order to use the following services. Once the citizen creates an account he is now able to use 3 functionalities:
