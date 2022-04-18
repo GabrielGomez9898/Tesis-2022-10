@@ -2,7 +2,7 @@
 
 ![](images/logoAndText.png)
 
-<img src="images/logoAndText.png" width="10">
+<img src="images/logoAndText.png" width="100">
 
 Visión Civil is a Crime Management System which focuses on preventing crime in the municipality of Sibaté, Colombia. The system works with a **mobile app that is meant to be used by the citizens and the police**, and a **web app that is meant to be used by the government functionaries**.
 
