@@ -15,6 +15,7 @@ The citizen that downloads the app needs to sign up in order to use the followin
 1. Report crimes that he witnesses
 2. Notify his confidence contacts when he thinks he is in danger
 3. Select his confidence contacts
+
 Besides this 3 main functionalities, the citizen is also able to login, logout, view his profile information and manage it.
 
 #### **The policeman**
@@ -38,8 +39,10 @@ The functionary that wants to use the web app needs to be previously registered 
 2. View a list of all the generated reports by the citizens in real time
 3. Send notifications to all the citizens that have the mobile app installed (The notifications will appear to them as OS native notifications)
 4. Manage users (Add, delete, modify and view users)
-Beside this 5 main functionalities, the functionary is able to login, logout and change it's password.
+
+Beside this 4 main functionalities, the functionary is able to login, logout and change it's password.
 > Keep in mind that only the master functionaries are able to manage users
+
 > Keep also in mind that when the software is going to be released to production we will create a genesis functionary that will start to add the other users to the system.
 
 
