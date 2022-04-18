@@ -63,7 +63,7 @@ select:focus {
 }
 
 button {
-    width: 17rem;
+    width: 16rem;
     height: 3rem;
     min-height: 3rem;
     border-width: 0px;
@@ -88,6 +88,8 @@ button:hover {
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+
+    gap: 2rem;
 }
 
 .filtercard-body-horizontal {
