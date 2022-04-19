@@ -1,5 +1,5 @@
 # Visión Civil web app
-This section of the repository contains all the source code of the web app that is meant to be used by the functionaries of the government. The web app works with a serverless model, where Google Firebase Functions are used as the Back-end of the web app.
+This section of the repository contains all the source code of the web app that is meant to be used by the functionaries of the government. The web app works with a serverless model, where some Google Firebase Functions are used as the Back-end of the web app.
 
 ## **The technology stack**
 
@@ -24,52 +24,41 @@ This section of the repository contains all the source code of the web app that 
 * Managing Firebase authenticated users: **`firebase-admin@10.0.2`**
 * DB integration: **`google-cloud/firestore@5.0.2`**
 
-> You can check the full list of dependencies for the Back-end on [the package.json from the Back-end section](Cloud/package.json)
+> You can check the full list of dependencies for the Back-end on [the package.json from the Cloud section](Cloud/package.json)
 
 ## **Run the project from a development point of view**
 > In order to access the web app from a production point of view open your favorite browser and go to ***www.visioncivil.com***
 
-### **Setting Up Firebase CLI on your local machine**
-In order to run and test the Firebase functions you have written you will need to follow the next steps:
+If you have already worked with the project and have already setup the Firebase CLI then [skip the below section](#running-and-testing-the-firebase-functions).
+
+### **Setting up Firebase CLI on your local machine**
+In order to run and test the Firebase Functions you have written you will need to follow the next steps:
 
 1. Go to `Tesis-2022-10/WebPage/Cloud/`
 2. Install all the dependencies of the project by typing `npm install`
 3. In order to use the Firebase CLI you will need to install Firebase Tools globally on your system by typing `npm install -g firebase-tools`
 4. Ask the proprietary of the Firebase app to give you proprietary privileges. If you don't have the privileges you are not going to be able to test or redeploy the functions.
-5. Once you have the privileges you need to login: `firebase login`
-6. The Firebase CLI will open a browser tab where you need to folow the steps to login with the user that has the privileges.
+5. Once you have the privileges you need to login by typing: `firebase login`
+6. The Firebase CLI will open a browser tab where you need to follow the steps to login with the user that has the privileges.
 
 ### **Running and testing the Firebase Functions**
-You can test your recently written functions in 2 ways. The first way is to use the firebase emulator which will run the Firebase Functions project locally on localhost. The second way is to deploy the functions which will make all the functions available to consume by the specified IP adresses. 
+You can test your recently written functions in 2 ways. The first way is to use the firebase emulator which will run the Firebase Functions project locally on localhost. The second way is to deploy the functions which will make all the functions available to consume by the specified IP adresses (CORS must be enabled both on the Functions code and the Google Cloud Platform console). 
+
+> At this point you must already have enabled CORS in order to consume the functions from anywhere, keep in mind that if you're using the Front-end to send the requests and test the functions then an error will occur notifying you that, so you must enable it.
 
 #### **Running the Firebase Emulator**
 1. type `firebase serve` or `firebase emulators:start --only functions`
+2. Once the emulator is running copy and paste the url of the function that you want to try and use a client application such as Postman or the Front-end application to send a request that will be handled by the function. 
 
 #### **Deploying the functions**
 1. type `firebase deploy` or `firebase deploy --only functions`
+2. Once the functions are deployed copy and paste the url of the function that you want to try and use a client application such as Postman or the Front-end application to send a request that will be handle by the function.
 
-If you have already worked with the project and have all the Python modules that the project requires [skip the below section](#starting-the-development-server).
-
-#### **Preparing your Node environment and installing modules**
-
-1. Go to `Tesis-2022-10/WebPage/back-end/vision-civil/`
-2. Either create a Virtual Environment using `py -m venv .venv` or just skip step **2** and step **3** and download all the modules directly to your default Virtual Environment
-3. Activate the Virtual Environment that you just have created going to `.venv/Scripts/` and typing `activate`
-4. Install all the following modules with the Virtual Environment activated:
-    * Type `pip install Django`
-    * Type `pip install firebase-admin`
-    * Type `pip install django-cors-headers`
-5. Go back to `Tesis-2022-10/WebPage/back-end/vision-civil/`
-
-#### **Starting the development server**
-
-Start the development server by typing `py manage.py runserver` or if you want to run the server in a different port than port **8000** run `py manage.py runserver <your desired port number>`
-
-After completing all the steps and while the server is running, any request handling message or error will be displayed on the console each time a request is sent to the server.
+After the emulator is running or the functions are deployed, any request handling message or error will be displayed on the editor console that your using with the Firebase Functions project each time a request is sent to the server.
 
 ### **Running the client side application**
 
-If you have already worked with the project and have all the Node modules that the project requires [skip the below section](#running-the-react-application).
+If you have already worked with the project and have all the Node modules that the Front-end application requires [skip the below section](#running-the-react-application).
 
 #### **Preparing the Node environment and installing modules**
 
@@ -77,10 +66,6 @@ If you have already worked with the project and have all the Node modules that t
 
 #### **Running the React application**
 
-Run the React application by typing `npm start`. The application will run on port **3000**.
+Run the React application by typing `npm start`. 
 
-> If you want to test each endpoint (aka view in Django) individually, without having to run the client side application, write an email to ***dankramirez@outlook.com*** asking for each resource URI and the reason why you need them.
-
-## **How to support the project**
-
-If you are interested in supporting the project start by reading the documentation in order to understand how both the Front-end and Back-end are structured, which languages and workflow do we work with and many other things.
+> The application will run on port **3000**.
