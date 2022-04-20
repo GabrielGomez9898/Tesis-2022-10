@@ -43,6 +43,7 @@ const CrimeList = () => {
       console.log(response)
     })
   }
+  //funcion para obtener los siguientes 3 reportes
   function getMoreReports(){
     setIsFilterLoading(true);
     setFilterButtonClassName("button-loading");  
@@ -52,6 +53,7 @@ const CrimeList = () => {
     }, 1000);  
     getReports();
   }
+  //funcion para paginacion de reportes de 3 en 3
   function getReports(){
     let indice = reportList.length;
     let tem = [];
@@ -84,7 +86,7 @@ const CrimeList = () => {
       setReportList([])
     }
   }
-
+//funcion para obtener los reportes por filtro
 const getListadoByFilter = () => {
   setListado([]);
   setReportList([]);
@@ -101,7 +103,6 @@ const getListadoByFilter = () => {
     if(contR > 2 || reportList.length <= 0)
     setReportList(tem)
   }).catch((error) => console.log(error));
-  //getReports();
 }
   useEffect(() =>  {
    getListadoData();
@@ -112,7 +113,6 @@ const getListadoByFilter = () => {
     if(!initialRenderDone.current){
       initialRenderDone.current = true
     }else{
-      console.log("entre al else")
       getReports();
     }
 },[listado]);  
@@ -124,6 +124,7 @@ const getListadoByFilter = () => {
     width: "43.5%",
     height: "46%"
   }
+  //funcion para obtener las fotos desde el storage de firebase
   async function getFotos(id, imagesids, setListadofotos) {
     let aux = [];
 
@@ -142,8 +143,6 @@ const getListadoByFilter = () => {
     setListadofotos(aux);
 
   }
-  const num = useRef(0);
-  const cont = useRef(0);
 
   const Modal = (props) => {
 
@@ -151,7 +150,6 @@ const getListadoByFilter = () => {
     useEffect(() => {
       getFotos(props.object.fotourl, props.object.imagenes, setListadofotos);
     }, []);
-
 
     return (
       <div id="CrimeListtModal" className="active modal" >
@@ -230,10 +228,8 @@ const getListadoByFilter = () => {
         setTimeout(() => {  
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
-            setShowLoading(true)
+            alert("Se realizo un nuevo reporte");     
           });
-         if(showLoading)        
-         alert("Se realizo un nuevo reporte");     
         }, 3000);
         
         
