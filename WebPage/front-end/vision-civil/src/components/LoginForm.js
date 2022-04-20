@@ -6,6 +6,8 @@ import { useAuth } from "../contexts/AuthContext";
 import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
 import Alert from "./Alert";
+import { createPortal } from "react-dom";
+import logo from "../images/logo.png";
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -67,20 +69,26 @@ const LoginForm = () => {
         z-index: 1000;
     `;
 
-    return (
-        <>
-            {message && <Alert text={message} alertType="danger" isDeletable={false} />}
-            <form className="login-form" onSubmit={login}>
-                <label htmlFor="email" id="email-label">Email</label><br />
-                <input type="email" id="email" name="email" placeholder="Ingrese su email" required onChange={(e) => { setEmail(e.target.value) }} /><br />
-                <label htmlFor="password" id="password-label">Contraseña</label><br />
-                <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required onChange={(e) => { setPassword(e.target.value) }} /><br />
+    return createPortal(
+        <div className="login-modal-background">
+            <form className="login-modal-content" onSubmit={login}>
+                <img src={logo} className="login-logo" alt=""/>
+                {message && <Alert text={message} alertType="danger" isDeletable={false} />}
+                <div>
+                    <label htmlFor="email" id="email-label">Email</label><br/>
+                    <input type="email" id="email" name="email" placeholder="Ingrese su email" required onChange={(e) => { setEmail(e.target.value) }}/>
+                </div>
+                <div>
+                    <label htmlFor="password" id="password-label">Contraseña</label><br/>
+                    <input type="password" id="password" name="password" placeholder="Ingrese su contraseña" required onChange={(e) => { setPassword(e.target.value) }}/>
+                </div>
                 <button type="submit" className={buttonClassName} disabled={isLoading}>
                     {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Acceder"}
                 </button>
             </form>
-        </>
-    )
+        </div>,
+        document.getElementById("portal")
+    );
 }
 
 export default LoginForm

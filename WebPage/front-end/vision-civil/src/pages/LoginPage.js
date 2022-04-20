@@ -1,4 +1,5 @@
 import LoginForm from "../components/LoginForm";
+import backgroundImage from "../images/visionCivilBackgroundImage.jpg";
 
 const LoginPage = () => {
     return (
