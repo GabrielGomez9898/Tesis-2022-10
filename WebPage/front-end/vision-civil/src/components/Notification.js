@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Axios from "axios";
 import "../styles/Notification.scss";
+import { ClipLoader } from "react-spinners";
+
 
 const Notification = () => {
   //funcion para enviar notificaciones
@@ -8,17 +10,27 @@ const Notification = () => {
   
 const handleSubmit = (e) => {
   e.preventDefault();
+  setIsSendLoading(true);
+  setButtonSend("button-loading");  
+  setTimeout(() => {
+    setIsSendLoading(false)
+    setButtonSend("");
+  }, 1500); 
   sendNotification();
 }
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [isSendLoading, setIsSendLoading] = useState(false);
+  const [buttonSend, setButtonSend] = useState("");
+
 
   const sendNotification= () => {
     Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/notification?title=${title}&description=${description}`).then((response) =>{
       
     console.log(response)
   }).catch((error) => console.log(error));
+ 
 }
 
  
@@ -47,15 +59,9 @@ const handleSubmit = (e) => {
         <br></br>
         <br></br>
         <br></br>
-        <button className="button-notification" type="submit">Enviar</button>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
-        <br></br>
+        <button className="button-notification" type="submit" className={buttonSend} onClick={sendNotification} style={{marginLeft: "68%"}}>
+          {isSendLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Enviar"}
+        </button>     
       </form>
     </>
 

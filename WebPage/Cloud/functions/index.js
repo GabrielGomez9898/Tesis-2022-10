@@ -39,14 +39,14 @@ app.get("/mapData", async (request, response) => {
     const queryParams = request.query;
     const lowerDate = queryParams["lowerDate"].replaceAll("-", "/");
     const upperDate = queryParams["upperDate"].replaceAll("-", "/");
-    const tipo_reporte = queryParams["tipo_reporte"];
+    const reportType = queryParams["reportType"];
 
     const lowerDateObject = new Date(lowerDate);
     const upperDateObject = new Date(upperDate);
 
     let docs = undefined;
-    (tipo_reporte != "TODOS") ?
-      (docs = await db.collection("reports").where("tipo_reporte", "==", tipo_reporte).get()) :
+    (reportType != "TODOS") ?
+      (docs = await db.collection("reports").where("tipo_reporte", "==", reportType).get()) :
       (docs = await db.collection("reports").get());
     
     const mapData = [];
@@ -56,7 +56,7 @@ app.get("/mapData", async (request, response) => {
       reportDateObject = new Date(reportDate);
 
       if (reportDateObject >= lowerDateObject && reportDateObject <= upperDateObject) {
-        mapData.push({ "lat": report["latitude"], "lng": report["longitude"], "tipo_reporte": report["tipo_reporte"] });
+        mapData.push({ "lat": report["latitude"], "lng": report["longitude"], "reportType": report["tipo_reporte"] });
       }
     });
 
@@ -566,7 +566,7 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
     ({title} = request.body)
     
     title.replace("_" , " ");
-    const usersRef = await db.collection("users").where("role" , "==" , "POLICIA").get();
+    const usersRef = await db.collection("users").where("role" , "==" , "POLICIA").where("enServicio", "==" , "true").get();
     let user = undefined;
     let tokens = [];
     usersRef.forEach((item) => {

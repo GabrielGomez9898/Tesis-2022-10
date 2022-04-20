@@ -8,42 +8,12 @@ import {db, storage} from "../firebase"
 import {LazyLoadImage} from "react-lazy-load-image-component"
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import { SyncLoader, ClipLoader } from "react-spinners";
+import { async } from "@firebase/util";
 
 
 
 const CrimeList = () => {
-  //funcion para sacar los reportes del back
-  function getListadoData() {
-    Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reports')
-      .then((response) => {
-        setListado(response.data)
-        console.log(response)
-        num.current += 1;
-      })
-  }
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setListado([]);
-    setIsFilterEmpty(false)
-    setIsFilterLoading(true);
-    setFilterButtonClassName("button-loading");
-    getListadoByFilter();
-}
-
-const getListadoByFilter = () => {
-  setListado([]);
-  console.log(listado)
-  Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
-    if(response.data.length == 0)
-    setIsFilterEmpty(true)
-    else
-    setIsFilterEmpty(false)
-      setListado(response.data)
-  }).catch((error) => console.log(error));
-  setIsFilterLoading(false);
-  setFilterButtonClassName("");
-}
   const [showModal, setShowModal] = useState(false);
   const [showLoading, setShowLoading] = useState(false);
   const [activeObject, setActiveObject] = useState(null);
@@ -56,8 +26,96 @@ const getListadoByFilter = () => {
   const [filterButtonClassName, setFilterButtonClassName] = useState("");
   const [isFilterEmpty, setIsFilterEmpty] = useState(false);
   const [reportList, setReportList] = useState([]);
+  const initialRenderDone = useRef(false);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setListado([]);
+    setReportList([]);
+    getListadoByFilter();
+}
 
+  //funcion para sacar los reportes del back
+  async function getListadoData() {
+     Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reports')
+    .then((response) => {
+      setListado(response.data)
+      console.log(response)
+    })
+  }
+  function getMoreReports(){
+    setIsFilterLoading(true);
+    setFilterButtonClassName("button-loading");  
+    setTimeout(() => {
+      setIsFilterLoading(false)
+      setFilterButtonClassName("");  
+    }, 1000);  
+    getReports();
+  }
+  function getReports(){
+    let indice = reportList.length;
+    let tem = [];
+    if(listado.length != 0){
+      setReportList([])
+      if(reportList.length == 0 || reportList == null || indice == 0){
+        if(listado.length >= 3) {
+
+          for (let i = 0; i < 3 ; i++) {
+            tem.push(listado[i])
+          }
+        }else{
+          for (let i = 0; i < listado.length ; i++) {
+            tem.push(listado[i])
+          }
+        }
+        
+        setReportList(tem);
+      }
+      else{
+        let contador = 0;
+        for (indice ; indice < listado.length; indice++) {
+          if(contador < 3)
+            tem.push(listado[indice])
+            contador += 1;        
+        }
+        setReportList([...reportList ,...tem])
+      }
+    }else{
+      setReportList([])
+    }
+  }
+
+const getListadoByFilter = () => {
+  setListado([]);
+  setReportList([]);
+  setIsFilterEmpty(false)
+  let tem = []
+  let contR = 0
+  Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
+    if(response.data.length == 0)
+    setIsFilterEmpty(true)
+    if(contR < 3)
+    tem.push(response.data)
+    contR += 1
+    setListado(response.data)
+    if(contR > 2 || reportList.length <= 0)
+    setReportList(tem)
+  }).catch((error) => console.log(error));
+  //getReports();
+}
+  useEffect(() =>  {
+   getListadoData();
+   
+  }, []);
+    
+  useEffect(() => {
+    if(!initialRenderDone.current){
+      initialRenderDone.current = true
+    }else{
+      console.log("entre al else")
+      getReports();
+    }
+},[listado]);  
 
   function getClass(index) {
     return index === activeObject?.id ? "active" : "inactive";
@@ -85,14 +143,15 @@ const getListadoByFilter = () => {
 
   }
   const num = useRef(0);
+  const cont = useRef(0);
+
   const Modal = (props) => {
 
     const [listadofotos, setListadofotos] = useState([])
     useEffect(() => {
       getFotos(props.object.fotourl, props.object.imagenes, setListadofotos);
-    }, [])
+    }, []);
 
-  
 
     return (
       <div id="CrimeListtModal" className="active modal" >
@@ -109,15 +168,19 @@ const getListadoByFilter = () => {
             }
           </div>
           <div className="report">
-            <button className="modalboton" onClick={() => setShowModal(false)}>X</button>
-            <h1 className="asunto" style={{color : props.object.color}}>{props.object.asunto.charAt(0).toUpperCase() +props.object.asunto.slice(1)}</h1>
-            <span className="TipoAlerta" style={{color : props.object.color}}>{ props.object.tipo_reporte.charAt(0).toUpperCase() + (props.object.tipo_reporte.toLowerCase().replace("_" ," ")).slice(1)}</span>
+            <span className="close-btn" onClick={() => setShowModal(false)}>&times;</span> 
             <br></br>
-            <span className="Descripcion" style={{color : props.object.color}}>{props.object.descripcion.charAt(0).toUpperCase() +props.object.descripcion.slice(1)}</span>
             <br></br>
-            <span className="fecha" style={{color : props.object.color}}>{props.object.fecha} {props.object.hora}</span>
+            <h1 className="asunto">{ props.object.asunto != " " ? props.object.asunto.charAt(0).toUpperCase() +props.object.asunto.slice(1) : "No hay asunto"}</h1>
+            <span>Tipo reporte: </span> <span className="TipoAlerta">{props.object.tipo_reporte.charAt(0).toUpperCase() + (props.object.tipo_reporte.toLowerCase().replace("_" ," ")).slice(1)}</span>
             <br></br>
-            <span className="horam" style={{color : props.object.color}}>{props.object.user_phone}</span>
+            <span>{props.object.descripcion != " " ? <span>Descripción : </span> : ""}</span><span className="Descripcion">{props.object.descripcion != " " ? props.object.descripcion.charAt(0).toUpperCase() +props.object.descripcion.slice(1) : "No hay descripción"}</span>
+            <br></br>
+            <span>Fecha : </span> <span className="fecha">{props.object.fecha}</span> 
+            <br></br>
+            <span>Hora : </span> <span className="horamodal">{props.object.hora}</span>
+            <br></br>
+            <span>{props.object.user_phone != 0 ? "Celular del usuario : " : ""}</span> <span className="telefono">{props.object.user_phone != 0 ? props.object.user_phone : "El ciudadano ha decidido reportar sin celular"}</span>
             <br></br>
             <Map google={google} zoom={16} style={mapStyles} initialCenter={{ lat: parseFloat(props.object.latitude), lng: parseFloat(props.object.longitude) }}>
               <Marker position={{ lat: props.object.latitude, lng: props.object.longitude }} />
@@ -133,6 +196,7 @@ const getListadoByFilter = () => {
     <>
 
       <h1 className="title"> Listado de crimenes</h1>
+      <br></br>
       <form className="card-mapfilter-container" onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="lowerDate">Desde</label><br/>
@@ -156,39 +220,41 @@ const getListadoByFilter = () => {
                         <option key="otro" value="OTRO">Otro</option>
                     </select>
                 </div>
-                <button className={filterButtonClassName} disabled={isFilterLoading} >
-                  {isFilterLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Aplicar filtros a la lista"}
+                <button >
+                   Aplicar filtros a la lista
                 </button>
             </form>
             <br></br>
-
+      
       {useEffect(() => {
-        setTimeout(() => {
-          
+        setTimeout(() => {  
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
-            listado.pop();
-            getListadoData();
             setShowLoading(true)
           });
-         getListadoData(); 
          if(showLoading)        
          alert("Se realizo un nuevo reporte");     
-        }, 2000);
+        }, 3000);
+        
         
       }, [])}
-      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  listado.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
+      
+      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  reportList.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
       <ul className="list-menu">
-        {listado.map((item) => (
+        {reportList.map((item) => (
           <div className="Container-crime" style={{borderColor : item.color}}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
-            <h2>{item.asunto.charAt(0).toUpperCase() + item.asunto.slice(1)}</h2>
-            <span className="circulo" style={{backgroundColor : item.color}}>ㅤ</span> <span className="description"> { item.tipo_reporte.charAt(0).toUpperCase() +(item.tipo_reporte.toLowerCase().replace("_"," ")).slice(1)}</span>
             <br></br>
-            <span className="description">{item.descripcion.charAt(0).toUpperCase() +item.descripcion.slice(1)}</span>
+            <br></br>
+            <h2 className="asunto">{item.asunto != " " ? item.asunto.charAt(0).toUpperCase() + item.asunto.slice(1) : "No hay asunto"}</h2>
+            <br></br>
+            <span>{item.descripcion != " " ? <span>Descripción : </span> : ""}</span><span className="description">{item.descripcion != " " ? item.descripcion.charAt(0).toUpperCase() +item.descripcion.slice(1) : "No hay descripción"}</span>
+            <br></br>
+            <br></br>
+            <div className="pill" style={{borderColor : item.color }}><p className="description" style={{color : item.color, fontFamily: "Spline Sans, sans-serif" }}> <i>{ item.tipo_reporte.toUpperCase().replace("_" , " ")}</i></p></div>
             <br></br>
             <button
-              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%" }}
+              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%" , marginTop : "-70px"}}
               className="crime-button"
               key={item.id}
               onClick={() => {
@@ -202,13 +268,15 @@ const getListadoByFilter = () => {
         ))}
         {showModal ? <Modal object={activeObject} container={container} /> : null}
       </ul>
+      <br></br>
+      <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "42%"}}>
+      {isFilterLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
+      </button>
 
 
     </>
 
   );
 };
-
-
 
 export default CrimeList;

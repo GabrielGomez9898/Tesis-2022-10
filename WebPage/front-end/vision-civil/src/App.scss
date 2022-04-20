@@ -33,7 +33,8 @@ body::-webkit-scrollbar-thumb {
   margin-left: 5rem; //rem es una unidad relativa al tamaño de la fuente seleccionado en el tag root, en este caso sería 5 * 16px = 85px
   padding: 1rem;
 
-  height: 100vh;
+  min-height: 948px;
+  max-height: 100%;
 
   background: #e6e9f0; //bccbde
   // background: rgb(255,94,249);
