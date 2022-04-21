@@ -14,6 +14,7 @@ import 'package:vision_civil/src/ui/login.dart';
 import 'package:vision_civil/src/ui/profile.dart';
 import 'package:vision_civil/src/ui/report_detail.dart';
 import 'package:vision_civil/src/ui/report_in_process.dart';
+import 'package:vision_civil/src/ui/report_list.dart';
 import 'package:vision_civil/src/ui/servicio_policia.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
@@ -394,117 +395,309 @@ class HomeState extends State<HomePage> {
                 )),
           );
         } else if (state.userRole == "POLICIA") {
-          return Scaffold(
-              appBar: AppBar(
-                title: Text("Home Policias"),
-                automaticallyImplyLeading: false,
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.room_service),
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => BlocProvider.value(
-                            value: BlocProvider.of<UserBloc>(context),
-                            child: PoliceService()),
-                      ));
-                    },
-                  ),
-                  BlocBuilder<UserBloc, UserblocState>(
-                    builder: (context, state) {
-                      _getTokenPhone(state.userID);
-                      return IconButton(
-                        icon: Icon(Icons.my_library_books),
-                        onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => MultiBlocProvider(
-                                providers: [
-                                  BlocProvider.value(
-                                      value:
-                                          BlocProvider.of<UserBloc>(context)),
-                                  BlocProvider.value(
-                                      value:
-                                          BlocProvider.of<ReportBloc>(context))
-                                ],
-                                child:
-                                    ProcessReport(idUserPolice: state.userID)),
-                          ));
-                        },
-                      );
-                    },
-                  ),
-                  BlocBuilder<UserBloc, UserblocState>(
-                    builder: (context, state) {
-                      return IconButton(
-                        icon: Icon(Icons.accessibility),
-                        onPressed: () async {
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => BlocProvider.value(
-                                value: BlocProvider.of<UserBloc>(context),
-                                child: Profile(
-                                    email: state.userEmail,
-                                    name: state.userName,
-                                    birthDate: state.userBirthDate,
-                                    gender: state.userGender,
-                                    phone: state.userPhone)),
-                          ));
-                        },
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.logout),
-                    onPressed: () {
-                      BlocProvider.of<UserBloc>(context).add(LogoutEvent());
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => MultiBlocProvider(providers: [
-                          BlocProvider(
-                              create: (BuildContext context) => UserBloc()),
-                        ], child: Login()),
-                      ));
-                    },
-                  )
-                ],
-              ),
-              body: BlocBuilder<ReportBloc, ReportblocState>(
-                builder: (context, state) {
-                  return ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: state.reports.length,
-                    itemBuilder: (context, index) {
-                      Report report = state.reports[index];
-
-                      return ListTile(
-                        title: Text(report.tipoReporte),
-                        subtitle: Text(report.asunto),
-                        trailing: BlocBuilder<UserBloc, UserblocState>(
-                          builder: (context, state) {
-                            return ElevatedButton(
-                                onPressed: () {
-                                  Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => MultiBlocProvider(
-                                        providers: [
-                                          BlocProvider.value(
-                                              value: BlocProvider.of<UserBloc>(
-                                                  context)),
-                                          BlocProvider.value(
-                                              value:
-                                                  BlocProvider.of<ReportBloc>(
-                                                      context)),
+          _getTokenPhone(state.userID);
+          return Container(
+            decoration: BoxDecoration(
+                image: DecorationImage(
+                    image: AssetImage("assets/images/fondo.jpg"),
+                    fit: BoxFit.cover)),
+            child: Scaffold(
+                backgroundColor: Colors.transparent,
+                appBar: AppBar(
+                  title: Text("Home Policía"),
+                  centerTitle: true,
+                  automaticallyImplyLeading: false,
+                  actions: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.logout),
+                      onPressed: () {
+                        BlocProvider.of<UserBloc>(context).add(LogoutEvent());
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (_) => MultiBlocProvider(providers: [
+                            BlocProvider(
+                                create: (BuildContext context) => UserBloc()),
+                          ], child: Login()),
+                        ));
+                      },
+                    )
+                  ],
+                ),
+                body: BlocBuilder<UserBloc, UserblocState>(
+                  builder: (context, userstate) {
+                    BlocProvider.of<ContactsblocBloc>(context)
+                        .add(GetUserContactsEvent(userstate.userID));
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Container(
+                            child: Image.asset(
+                                'assets/images/LogoConNombre.jpg',
+                                width: 260.0,
+                                height: 190.0,
+                                scale: 1),
+                          ),
+                          SizedBox(height: 18),
+                          Container(
+                            width: size.width * 0.9,
+                            child: Text(
+                                "Seleccione la acción como policía que quiere realizar",
+                                style: TextStyle(
+                                    fontSize: 16.0, color: Colors.grey)),
+                          ),
+                          SizedBox(height: 25),
+                          BlocBuilder<ContactsblocBloc, ContactsblocState>(
+                            builder: (context, contactsstate) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  SizedBox.fromSize(
+                                    size: Size(130, 120),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey.withOpacity(0.4),
+                                            spreadRadius: 0.5,
+                                            blurRadius: 8,
+                                            offset: Offset(
+                                              0,
+                                              1,
+                                            ),
+                                          ),
                                         ],
-                                        child: ReportDetail(
-                                            idReport: report.id,
-                                            idPoliceUser: state.userID)),
-                                  ));
-                                },
-                                child: Text("Ver más"));
-                          },
-                        ),
-                        onTap: () {},
-                      );
-                    },
-                  );
-                },
-              ));
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(8.0),
+                                        child: Material(
+                                          color: Colors.orange.withOpacity(0.7),
+                                          child: InkWell(
+                                            splashColor: Colors.white,
+                                            onTap: () async {
+                                              //funcion que permite cambiar el estado del servicio del policia
+                                              Navigator.of(context)
+                                                  .push(MaterialPageRoute(
+                                                builder: (_) =>
+                                                    BlocProvider.value(
+                                                        value: BlocProvider.of<
+                                                            UserBloc>(context),
+                                                        child: PoliceService()),
+                                              ));
+                                            },
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: <Widget>[
+                                                ImageIcon(
+                                                    AssetImage(
+                                                        'assets/images/estado de mi servicio.png'),
+                                                    size: 80),
+                                                FittedBox(
+                                                    child: Text(
+                                                        "Estado de mi Servicio")),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(width: 30),
+                                  SizedBox.fromSize(
+                                      size: Size(130, 120),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.4),
+                                              spreadRadius: 0.5,
+                                              blurRadius: 8,
+                                              offset: Offset(
+                                                0,
+                                                1,
+                                              ), // changes position of shadow
+                                            ),
+                                          ],
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(8.0),
+                                          child: Material(
+                                            color: Colors.blueAccent
+                                                .withOpacity(0.4),
+                                            child: InkWell(
+                                              splashColor: Colors.white,
+                                              onTap: () async {
+                                                // aqui va la funcion de ver mi reporte
+                                                Navigator.of(context)
+                                                    .push(MaterialPageRoute(
+                                                  builder: (_) =>
+                                                      MultiBlocProvider(
+                                                          providers: [
+                                                        BlocProvider.value(
+                                                            value: BlocProvider
+                                                                .of<UserBloc>(
+                                                                    context)),
+                                                        BlocProvider.value(
+                                                            value: BlocProvider
+                                                                .of<ReportBloc>(
+                                                                    context))
+                                                      ],
+                                                          child: ProcessReport(
+                                                              idUserPolice:
+                                                                  state
+                                                                      .userID)),
+                                                ));
+                                              },
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  ImageIcon(
+                                                      AssetImage(
+                                                          'assets/images/GenerarReporte.png'),
+                                                      size: 80),
+                                                  FittedBox(
+                                                      child: Text(
+                                                          "Mi Reporte Activo")),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      )),
+                                ],
+                              );
+                            },
+                          ),
+                          SizedBox(height: 30),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox.fromSize(
+                                size: Size(130, 120),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        spreadRadius: 0.5,
+                                        blurRadius: 8,
+                                        offset: Offset(
+                                          0,
+                                          1,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Material(
+                                      color:
+                                          Colors.greenAccent.withOpacity(0.4),
+                                      borderRadius: BorderRadius.circular(4.0),
+                                      child: InkWell(
+                                        splashColor: Colors.white,
+                                        onTap: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (_) =>
+                                                MultiBlocProvider(providers: [
+                                              BlocProvider.value(
+                                                  value:
+                                                      BlocProvider.of<UserBloc>(
+                                                          context)),
+                                              BlocProvider(
+                                                  create:
+                                                      (BuildContext context) =>
+                                                          ReportBloc()),
+                                              BlocProvider(
+                                                  create:
+                                                      (BuildContext context) =>
+                                                          ContactsblocBloc())
+                                            ], child: ReportListPage()),
+                                          ));
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            ImageIcon(
+                                                AssetImage(
+                                                    'assets/images/Lista reportes.png'),
+                                                size: 80),
+                                            Text("Lista de Reportes"),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 30),
+                              SizedBox.fromSize(
+                                size: Size(130, 120),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.grey.withOpacity(0.4),
+                                        spreadRadius: 0.5,
+                                        blurRadius: 8,
+                                        offset: Offset(
+                                          0,
+                                          1,
+                                        ), // changes position of shadow
+                                      ),
+                                    ],
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Material(
+                                      color: Color.fromARGB(131, 167, 68, 68),
+                                      child: InkWell(
+                                        splashColor: Colors.white,
+                                        onTap: () async {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (_) => BlocProvider.value(
+                                                value:
+                                                    BlocProvider.of<UserBloc>(
+                                                        context),
+                                                child: Profile(
+                                                    email: state.userEmail,
+                                                    name: state.userName,
+                                                    birthDate:
+                                                        state.userBirthDate,
+                                                    gender: state.userGender,
+                                                    phone: state.userPhone)),
+                                          ));
+                                        },
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: <Widget>[
+                                            ImageIcon(
+                                                AssetImage(
+                                                    'assets/images/MiPerfil.png'),
+                                                size: 80),
+                                            Text("Mi Perfil"),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                )),
+          );
         } else {
           return Scaffold(
             appBar: AppBar(
@@ -514,13 +707,13 @@ class HomeState extends State<HomePage> {
               child: Column(
                 children: [
                   SizedBox(
-                    height: 200,
+                    height: size.height * 0.3,
                   ),
                   Container(
                       width: 100,
                       height: 100,
                       child: CircularProgressIndicator()),
-                  SizedBox(height: 50),
+                  SizedBox(height: size.height * 0.03),
                   Text("Cargando... por favor espere")
                 ],
               ),

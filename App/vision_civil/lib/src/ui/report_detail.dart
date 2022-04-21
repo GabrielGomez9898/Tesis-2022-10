@@ -203,7 +203,7 @@ class _ReportDetailState extends State<ReportDetail> {
                           child: Container(
                               width: size.width * 0.2,
                               height: 30,
-                              child: FittedBox(child: Text("Ubicacion")))),
+                              child: FittedBox(child: Text("Ubicación")))),
                       SizedBox(width: size.width * 0.09),
                       FutureBuilder(
                           future: storage.listVideoPath(
