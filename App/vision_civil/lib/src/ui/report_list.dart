@@ -15,10 +15,20 @@ class ReportListPage extends StatefulWidget {
 }
 
 class ReportListState extends State<ReportListPage> {
+  String _tipoReporteFiltro = "", _estadoReporteFiltro = ""; 
+
+  ReportListState(){
+    this._tipoReporteFiltro = "Tipo reporte";
+    this._estadoReporteFiltro = "Estado reporte";
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     BlocProvider.of<ReportBloc>(context).add(GetReportsEvent());
+    var _tiposReporte = ["HURTO_VIVIENDA", "VANDALISMO", "HOMICIDIO", "HURTO_PERSONA", "VIOLACION", "AGRESION", "HURTO_VEHICULO", "OTRO"];
+    var _estadosReporte = ["PENDIENTE", "EN PROCESO", "FINALIZADO"];
+
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -39,72 +49,86 @@ class ReportListState extends State<ReportListPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Filtro estado del reporte: ",
+                      Text("Filtro tipo de reporte: ",
                           style: TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontSize: 15,
                               fontWeight: FontWeight.w500)),
                       SizedBox(height: size.height * 0.01),
-                      SizedBox(
-                        height: size.height * 0.07,
-                        width: size.width,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            Container(
-                              width: 160.0,
-                              color: Colors.red,
-                              child: Text("pendiente "),
+                      Container(
+                      padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          items: _tiposReporte.map((String tipoReporte) {
+                            return DropdownMenuItem(
+                                child: Text(tipoReporte), value: tipoReporte);
+                          }).toList(),
+                          onChanged: (_value) {
+                            setState(() {
+                              this._tipoReporteFiltro = _value.toString();
+                              print("filtro: "+this._tipoReporteFiltro);
+                            });
+                          },
+                          hint: Container(
+                            height: 50,
+                            width: 200,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Text(
+                              this._tipoReporteFiltro,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 15),
                             ),
-                            Container(
-                              width: 160.0,
-                              color: Colors.blue,
-                              child: Text("en proceso "),
-                            ),
-                            Container(
-                              width: 160.0,
-                              color: Colors.green,
-                              child: Text("finalizado "),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
-                      SizedBox(height: size.height * 0.02),
-                      Text("Filtro tipo reporte: ",
+                    ),
+                    SizedBox(height: 20),
+                      Text("Filtro estado reporte: ",
                           style: TextStyle(
                               color: Color.fromARGB(255, 255, 255, 255),
                               fontSize: 15,
                               fontWeight: FontWeight.w500)),
-                      SizedBox(height: size.height * 0.01),
-                      SizedBox(
-                        height: size.height * 0.07,
-                        width: size.width,
-                        child: ListView(
-                          scrollDirection: Axis.horizontal,
-                          children: <Widget>[
-                            Container(
-                              width: 160.0,
-                              color: Colors.red,
-                              child: Text("hurto viviend "),
+                      Container(
+                      padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          items: _estadosReporte.map((String estadoReporte) {
+                            return DropdownMenuItem(
+                                child: Text(estadoReporte), value: estadoReporte);
+                          }).toList(),
+                          onChanged: (_value) {
+                            setState(() {
+                              this._estadoReporteFiltro = _value.toString();
+                              print("filtro: "+this._estadoReporteFiltro);
+                            });
+                          },
+                          hint: Container(
+                            height: 50,
+                            width: 200,
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: Colors.white,
+                                ),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(20))),
+                            child: Text(
+                              this._estadoReporteFiltro,
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 255, 255, 255),
+                                  fontSize: 15),
                             ),
-                            Container(
-                              width: 160.0,
-                              color: Colors.blue,
-                              child: Text("hurto carro "),
-                            ),
-                            Container(
-                              width: 160.0,
-                              color: Colors.green,
-                              child: Text("violacion "),
-                            ),
-                            Container(
-                              width: 160.0,
-                              color: Colors.yellow,
-                              child: Text("matanza "),
-                            ),
-                          ],
+                          ),
                         ),
                       ),
+                    ),
                     ],
                   ),
                 ),
