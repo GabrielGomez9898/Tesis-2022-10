@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/map.dart';
+import 'package:vision_civil/src/ui/report_list.dart';
 import 'package:vision_civil/src/ui/report_video.dart';
 import 'package:vision_civil/storage_service.dart';
 
@@ -31,9 +33,11 @@ class _ReportDetailState extends State<ReportDetail> {
 
   @override
   Widget build(BuildContext context) {
+    bool redirect = false;
     Size size = MediaQuery.of(context).size;
     Storage storage = new Storage();
     BlocProvider.of<ReportBloc>(context).add(GetReportInfoEvent(this.idReport));
+
     return Container(
       decoration: BoxDecoration(
           image: DecorationImage(
@@ -285,6 +289,7 @@ class _ReportDetailState extends State<ReportDetail> {
                                     BlocProvider.of<ReportBloc>(context).add(
                                         AsignPoliceReport(
                                             this.idPoliceUser, this.idReport));
+                                    reportAccepted(context);
                                   }
                                 },
                                 child: Text("Atender caso"));
@@ -312,6 +317,8 @@ class _ReportDetailState extends State<ReportDetail> {
                   ),
                   BlocBuilder<ReportBloc, ReportblocState>(
                     builder: (context, state) {
+                      print("antes del if" + redirect.toString());
+
                       return ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               primary: Color.fromARGB(145, 217, 17, 17)),
@@ -321,6 +328,19 @@ class _ReportDetailState extends State<ReportDetail> {
                             BlocProvider.of<ReportBloc>(context)
                                 .add(GetReportsEvent());
                             reportDeleted(context);
+
+                            setState(() {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => MultiBlocProvider(providers: [
+                                  BlocProvider.value(
+                                      value:
+                                          BlocProvider.of<UserBloc>(context)),
+                                  BlocProvider.value(
+                                      value:
+                                          BlocProvider.of<ReportBloc>(context)),
+                                ], child: ReportListPage()),
+                              ));
+                            });
                           },
                           child: Text("Eliminar reporte"));
                     },
@@ -387,144 +407,90 @@ class _ReportDetailState extends State<ReportDetail> {
   }
 }
 
-alertAttendReport(BuildContext context) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
-  AlertDialog alert = AlertDialog(
-    title: Text("Caso en nombre suyo"),
-    content: Text("Por favor dirijase al lugar del caso"),
-    actions: [
-      okButton,
-    ],
-  );
-
-  // show the dialog
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
-}
-
 reportAlreadyInProcess(BuildContext context) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("No se puede atender"),
+    title: Text('No se puede atender'),
     content: Text(
-        "Usted ya tiene un caso en proceso, terminelo antes de atender otro caso"),
-    actions: [
-      okButton,
-    ],
+        'Usted ya tiene un caso en proceso, terminelo antes de atender otro caso'),
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }
 
 outOfService(BuildContext context) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("No se puede atender"),
+    title: Text('No se puede atender'),
     content: Text(
-        "Usted se encuentra fuera de servicio, inicie su jornada para atender un caso"),
-    actions: [
-      okButton,
-    ],
+        'Usted se encuentra fuera de servicio, inicie su jornada para atender un caso.'),
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }
 
 reportDeleted(BuildContext context) {
-  // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).push(MaterialPageRoute(
-        builder: (_) => MultiBlocProvider(providers: [
-          BlocProvider.value(value: BlocProvider.of<UserBloc>(context)),
-          BlocProvider.value(value: BlocProvider.of<ReportBloc>(context)),
-        ], child: HomePage()),
-      ));
-    },
-  );
-
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("Reporte eliminado"),
-    content: Text("Este caso fue eliminado exitosamente"),
-    actions: [
-      okButton,
-    ],
+    title: Text('¡Reporte eliminado!'),
+    content: Text('El reporte no aparecera en la lista.'),
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }
 
 noVideoAlert(BuildContext context) {
   // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("El reporte no cuenta con videos adjuntos"),
-    content: Text("presione OK para volver"),
-    actions: [
-      okButton,
-    ],
+    title: Text('No hay video disponible'),
+    content: Text('el usuario no adjunto video a su reporte.'),
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+reportAccepted(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    title: Text('Reporte aceptado'),
+    content: Text('Por favor atienda el caso lo antes posible'),
   );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }

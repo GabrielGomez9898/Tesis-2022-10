@@ -75,8 +75,8 @@ class _LoginScreenState extends State<Login> {
                   textColor: Colors.black,
                   press: () async {
                     setState(() {
-                        _loginText = "Validando usuario...";
-                      });
+                      _loginText = "Validando usuario...";
+                    });
                     try {
                       await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: _email,
@@ -146,27 +146,19 @@ class _LoginScreenState extends State<Login> {
 //se puede usar para el usuario o contraseña incorrectos
 invalidUserAlert(BuildContext context) {
   // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("No se pudo ingresar"),
-    content: Text("Revise su usuario y contraseña"),
-    actions: [
-      okButton,
-    ],
+    title: Text('Error al iniciar'),
+    content: Text('Puede que su correo o contraseña esten mal.'),
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
-  );
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }

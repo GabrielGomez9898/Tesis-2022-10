@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vision_civil/src/blocs/reports_bloc/reports_bloc.dart';
 import 'package:vision_civil/src/blocs/user_bloc/user_bloc.dart';
 import 'package:vision_civil/src/ui/map.dart';
+import 'package:vision_civil/src/ui/report_list.dart';
 import 'package:vision_civil/src/ui/report_video.dart';
 import 'package:vision_civil/storage_service.dart';
 
@@ -261,6 +262,22 @@ class _ProcessReportState extends State<ProcessReport> {
                                   BlocProvider.of<ReportBloc>(context).add(
                                       FinishReportEvent(
                                           this.idUserPolice, state.report.id));
+                                  endReport(context);
+
+                                  setState(() {
+                                    Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                      builder: (_) =>
+                                          MultiBlocProvider(providers: [
+                                        BlocProvider.value(
+                                            value: BlocProvider.of<UserBloc>(
+                                                context)),
+                                        BlocProvider.value(
+                                            value: BlocProvider.of<ReportBloc>(
+                                                context)),
+                                      ], child: ReportListPage()),
+                                    ));
+                                  });
                                 },
                                 child: Container(
                                     width: size.width * 0.2,
@@ -375,27 +392,36 @@ class _ProcessReportState extends State<ProcessReport> {
 
 noVideoAlert(BuildContext context) {
   // set up the button
-  Widget okButton = TextButton(
-    child: Text("OK"),
-    onPressed: () {
-      Navigator.of(context).pop();
-    },
-  );
-
-  // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text("El reporte no cuenta con videos adjuntos"),
-    content: Text("presione OK para volver"),
-    actions: [
-      okButton,
-    ],
+    title: Text('No hay video disponible'),
+    content: Text('el usuario no adjunto video a su reporte.'),
   );
 
   // show the dialog
   showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return alert;
-    },
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+endReport(BuildContext context) {
+  // set up the button
+  AlertDialog alert = AlertDialog(
+    title: Text('Reporte Finalizado'),
+    content: Text('Gracias por su ayuda.'),
   );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }

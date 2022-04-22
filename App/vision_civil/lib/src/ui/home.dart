@@ -608,14 +608,9 @@ class HomeState extends State<HomePage> {
                                                   value:
                                                       BlocProvider.of<UserBloc>(
                                                           context)),
-                                              BlocProvider(
-                                                  create:
-                                                      (BuildContext context) =>
-                                                          ReportBloc()),
-                                              BlocProvider(
-                                                  create:
-                                                      (BuildContext context) =>
-                                                          ContactsblocBloc())
+                                              BlocProvider.value(
+                                                  value: BlocProvider.of<
+                                                      ReportBloc>(context)),
                                             ], child: ReportListPage()),
                                           ));
                                         },
