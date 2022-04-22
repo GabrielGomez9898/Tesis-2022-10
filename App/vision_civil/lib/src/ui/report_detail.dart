@@ -11,22 +11,32 @@ import 'package:vision_civil/storage_service.dart';
 
 class ReportDetail extends StatefulWidget {
   const ReportDetail(
-      {Key? key, required this.idReport, required this.idPoliceUser})
+      {Key? key,
+      required this.idReport,
+      required this.idPoliceUser,
+      required this.tipoReporteFiltro,
+      required this.estadoReporteFiltro})
       : super(key: key);
 
   final String idPoliceUser;
   final String idReport;
+  final String tipoReporteFiltro;
+  final String estadoReporteFiltro;
   @override
-  State<ReportDetail> createState() =>
-      _ReportDetailState(idReport, idPoliceUser);
+  State<ReportDetail> createState() => _ReportDetailState(
+      idReport, idPoliceUser, tipoReporteFiltro, estadoReporteFiltro);
 }
 
 class _ReportDetailState extends State<ReportDetail> {
   String idReport = "";
   String idPoliceUser = "";
-  _ReportDetailState(String idReport, String idPoliceUser) {
+  String _tipoReporteFiltro = "", _estadoReporteFiltro = "";
+  _ReportDetailState(String idReport, String idPoliceUser,
+      String tipoReporteFiltro, String estadoReporteFiltro) {
     this.idReport = idReport;
     this.idPoliceUser = idPoliceUser;
+    this._tipoReporteFiltro = tipoReporteFiltro;
+    this._estadoReporteFiltro = estadoReporteFiltro;
   }
 
   bool timeToReturn = false;
@@ -46,6 +56,7 @@ class _ReportDetailState extends State<ReportDetail> {
           appBar: AppBar(
             centerTitle: true,
             title: Text("Detalles reporte"),
+            automaticallyImplyLeading: false,
           ),
           backgroundColor: Colors.transparent,
           body: BlocBuilder<ReportBloc, ReportblocState>(
@@ -72,6 +83,26 @@ class _ReportDetailState extends State<ReportDetail> {
                                   fontSize: 35.0,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500)),
+                          ElevatedButton(
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (_) => MultiBlocProvider(
+                                      providers: [
+                                        BlocProvider.value(
+                                            value: BlocProvider.of<UserBloc>(
+                                                context)),
+                                        BlocProvider.value(
+                                            value: BlocProvider.of<ReportBloc>(
+                                                context)),
+                                      ],
+                                      child: ReportListPage(
+                                          tipoReporteFiltro:
+                                              this._tipoReporteFiltro,
+                                          estadoReporteFiltro:
+                                              this._estadoReporteFiltro)),
+                                ));
+                              },
+                              child: Text("Volver a los reportes"))
                         ],
                       ),
                     ],
@@ -331,14 +362,20 @@ class _ReportDetailState extends State<ReportDetail> {
 
                             setState(() {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (_) => MultiBlocProvider(providers: [
-                                  BlocProvider.value(
-                                      value:
-                                          BlocProvider.of<UserBloc>(context)),
-                                  BlocProvider.value(
-                                      value:
-                                          BlocProvider.of<ReportBloc>(context)),
-                                ], child: ReportListPage()),
+                                builder: (_) => MultiBlocProvider(
+                                    providers: [
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<UserBloc>(
+                                              context)),
+                                      BlocProvider.value(
+                                          value: BlocProvider.of<ReportBloc>(
+                                              context)),
+                                    ],
+                                    child: ReportListPage(
+                                        tipoReporteFiltro:
+                                            this._tipoReporteFiltro,
+                                        estadoReporteFiltro:
+                                            this._estadoReporteFiltro)),
                               ));
                             });
                           },

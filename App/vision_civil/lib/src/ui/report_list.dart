@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vision_civil/src/blocs/contacts_bloc/contactsbloc_bloc.dart';
+import 'package:vision_civil/src/ui/home.dart';
 import 'package:vision_civil/src/ui/report_detail.dart';
 
 import '../blocs/reports_bloc/reports_bloc.dart';
@@ -8,18 +10,25 @@ import '../blocs/user_bloc/user_bloc.dart';
 import '../models/report.dart';
 
 class ReportListPage extends StatefulWidget {
-  const ReportListPage({Key? key}) : super(key: key);
+  ReportListPage(
+      {Key? key,
+      required this.tipoReporteFiltro,
+      required this.estadoReporteFiltro})
+      : super(key: key);
+  String tipoReporteFiltro;
+  String estadoReporteFiltro;
 
   @override
-  ReportListState createState() => ReportListState();
+  ReportListState createState() =>
+      ReportListState(tipoReporteFiltro, estadoReporteFiltro);
 }
 
 class ReportListState extends State<ReportListPage> {
   String _tipoReporteFiltro = "", _estadoReporteFiltro = "";
 
-  ReportListState() {
-    this._tipoReporteFiltro = "Todos";
-    this._estadoReporteFiltro = "Todos";
+  ReportListState(String tipoReporteFiltro, String estadoReporteFiltro) {
+    this._tipoReporteFiltro = tipoReporteFiltro;
+    this._estadoReporteFiltro = estadoReporteFiltro;
   }
 
   @override
@@ -47,6 +56,7 @@ class ReportListState extends State<ReportListPage> {
       child: Scaffold(
         appBar: AppBar(
           centerTitle: true,
+          automaticallyImplyLeading: false,
           title: Text("Reportes ciudadanos"),
         ),
         backgroundColor: Colors.transparent,
@@ -207,7 +217,11 @@ class ReportListState extends State<ReportListPage> {
                                               ],
                                               child: ReportDetail(
                                                   idReport: report.id,
-                                                  idPoliceUser: state.userID)),
+                                                  idPoliceUser: state.userID,
+                                                  tipoReporteFiltro:
+                                                      this._tipoReporteFiltro,
+                                                  estadoReporteFiltro: this
+                                                      ._estadoReporteFiltro)),
                                         ));
                                       },
                                       child: Text("Ver más"));
@@ -221,6 +235,21 @@ class ReportListState extends State<ReportListPage> {
                     ),
                   ),
                 ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => MultiBlocProvider(providers: [
+                          BlocProvider.value(
+                              value: BlocProvider.of<UserBloc>(context)),
+                          BlocProvider(
+                              create: (BuildContext context) => ReportBloc()),
+                          BlocProvider(
+                              create: (BuildContext context) =>
+                                  ContactsblocBloc())
+                        ], child: HomePage()),
+                      ));
+                    },
+                    child: Text("HOME"))
               ],
             );
           },

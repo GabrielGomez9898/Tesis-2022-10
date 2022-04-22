@@ -602,16 +602,19 @@ class HomeState extends State<HomePage> {
                                         onTap: () {
                                           Navigator.of(context)
                                               .push(MaterialPageRoute(
-                                            builder: (_) =>
-                                                MultiBlocProvider(providers: [
-                                              BlocProvider.value(
-                                                  value:
-                                                      BlocProvider.of<UserBloc>(
-                                                          context)),
-                                              BlocProvider.value(
-                                                  value: BlocProvider.of<
-                                                      ReportBloc>(context)),
-                                            ], child: ReportListPage()),
+                                            builder: (_) => MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider.value(
+                                                      value: BlocProvider.of<
+                                                          UserBloc>(context)),
+                                                  BlocProvider.value(
+                                                      value: BlocProvider.of<
+                                                          ReportBloc>(context)),
+                                                ],
+                                                child: ReportListPage(
+                                                    tipoReporteFiltro: "Todos",
+                                                    estadoReporteFiltro:
+                                                        "Todos")),
                                           ));
                                         },
                                         child: Column(
