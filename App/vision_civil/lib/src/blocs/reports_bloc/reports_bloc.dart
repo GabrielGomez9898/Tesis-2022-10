@@ -157,25 +157,101 @@ class ReportBloc extends Bloc<ReportblocEvent, ReportblocState> {
             }
           });
         });
-        if(idReport != ""){
+        if (idReport != "") {
           emit(ReportblocState(
-            reports: reports,
-            report: reportSave,
-            imagesIDs: arrayIds,
-            videoId: videoId));
-        }else{
+              reports: reports,
+              report: reportSave,
+              imagesIDs: arrayIds,
+              videoId: videoId));
+        } else {
           emit(ReportblocState(
+              reports: reports,
+              report: new Report(" ", " ", " ", " ", " ", " ", " ", " ", " "),
+              imagesIDs: [],
+              videoId: ""));
+        }
+      } else if (event is FinishReportEvent) {
+        reportdb.finishReport(event.idPoliceUser, event.idReport);
+      } else if (event is DeleteReportEvent) {
+        reportdb.deleteReport(event.idReport);
+        print("Se elimino el reporte: " + event.idReport);
+      } else if (event is FilterReportsEvent) {
+        print("Evento: quiere filtrar por estado: " +
+            event.estadoReporteFiltro +
+            " y tipo: " +
+            event.tipoReporteFiltro);
+        List<Report> reports = [];
+        Future<QuerySnapshot> getReports = reportdb.getReports();
+        await getReports.then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            if (event.estadoReporteFiltro == "Todos" &&
+                event.tipoReporteFiltro != "") {
+              if (event.tipoReporteFiltro == doc["tipo_reporte"]) {
+                reports.add(Report(
+                    doc.id,
+                    doc["asunto"],
+                    doc["descripcion"],
+                    doc["estado"],
+                    doc["fecha_hora"],
+                    doc["latitude"],
+                    doc["longitude"],
+                    doc["tipo_reporte"],
+                    doc["user_phone"].toString()));
+              }
+            }
+            if (event.estadoReporteFiltro != "" &&
+                event.tipoReporteFiltro == "Todos") {
+              if (event.estadoReporteFiltro == doc["estado"]) {
+                reports.add(Report(
+                    doc.id,
+                    doc["asunto"],
+                    doc["descripcion"],
+                    doc["estado"],
+                    doc["fecha_hora"],
+                    doc["latitude"],
+                    doc["longitude"],
+                    doc["tipo_reporte"],
+                    doc["user_phone"].toString()));
+              }
+            }
+            if (event.estadoReporteFiltro != "Todos" &&
+                event.tipoReporteFiltro != "Todos") {
+              if (event.tipoReporteFiltro == doc["tipo_reporte"] &&
+                  event.estadoReporteFiltro == doc["estado"]) {
+                reports.add(Report(
+                    doc.id,
+                    doc["asunto"],
+                    doc["descripcion"],
+                    doc["estado"],
+                    doc["fecha_hora"],
+                    doc["latitude"],
+                    doc["longitude"],
+                    doc["tipo_reporte"],
+                    doc["user_phone"].toString()));
+              }
+            }
+            if (event.estadoReporteFiltro == "Todos" &&
+                event.tipoReporteFiltro == "Todos") {
+              reports.add(Report(
+                  doc.id,
+                  doc["asunto"],
+                  doc["descripcion"],
+                  doc["estado"],
+                  doc["fecha_hora"],
+                  doc["latitude"],
+                  doc["longitude"],
+                  doc["tipo_reporte"],
+                  doc["user_phone"].toString()));
+            }
+          });
+        });
+
+        print(reports);
+        emit(ReportblocState(
             reports: reports,
             report: new Report(" ", " ", " ", " ", " ", " ", " ", " ", " "),
             imagesIDs: [],
             videoId: ""));
-        }
-        
-      }else if(event is FinishReportEvent){
-        reportdb.finishReport(event.idPoliceUser, event.idReport);
-      }else if(event is DeleteReportEvent){
-        reportdb.deleteReport(event.idReport);
-        print("Se elimino el reporte: "+event.idReport);
       }
     });
   }

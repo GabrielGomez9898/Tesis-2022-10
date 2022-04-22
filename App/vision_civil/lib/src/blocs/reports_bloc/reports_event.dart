@@ -41,55 +41,66 @@ class CreateRepotEvent extends ReportblocEvent {
     this.userPhone = _userPhone;
   }
 }
-// ignore: must_be_immutable
-class GetReportsEvent extends ReportblocEvent{}
 
 // ignore: must_be_immutable
-class GetReportInfoEvent extends ReportblocEvent{
+class GetReportsEvent extends ReportblocEvent {}
+
+// ignore: must_be_immutable
+class GetReportInfoEvent extends ReportblocEvent {
   String idReport = "";
 
-  GetReportInfoEvent(String idreport){
+  GetReportInfoEvent(String idreport) {
     this.idReport = idreport;
   }
 }
 
 // ignore: must_be_immutable
-class AsignPoliceReport extends ReportblocEvent{
+class AsignPoliceReport extends ReportblocEvent {
   String idPoliceUser = "";
   String idReport = "";
 
-  AsignPoliceReport(String idPoliceUser, String idReport){
-    this.idPoliceUser = idPoliceUser;
-    this.idReport = idReport;
-  }
-
-}
-
-// ignore: must_be_immutable
-class GetPoliceProcessReport extends ReportblocEvent{
-  String idPoliceUser = "";
-
-  GetPoliceProcessReport(String idPoliceUser){
-    this.idPoliceUser = idPoliceUser;
-  }
-}
-
-// ignore: must_be_immutable
-class FinishReportEvent extends ReportblocEvent{
-  String idPoliceUser = "";
-  String idReport = "";
-
-  FinishReportEvent(String idPoliceUser,String idReport){
+  AsignPoliceReport(String idPoliceUser, String idReport) {
     this.idPoliceUser = idPoliceUser;
     this.idReport = idReport;
   }
 }
 
 // ignore: must_be_immutable
-class DeleteReportEvent extends ReportblocEvent{
+class GetPoliceProcessReport extends ReportblocEvent {
+  String idPoliceUser = "";
+
+  GetPoliceProcessReport(String idPoliceUser) {
+    this.idPoliceUser = idPoliceUser;
+  }
+}
+
+// ignore: must_be_immutable
+class FinishReportEvent extends ReportblocEvent {
+  String idPoliceUser = "";
   String idReport = "";
 
-  DeleteReportEvent(String idReport){
+  FinishReportEvent(String idPoliceUser, String idReport) {
+    this.idPoliceUser = idPoliceUser;
     this.idReport = idReport;
-  }  
+  }
+}
+
+// ignore: must_be_immutable
+class DeleteReportEvent extends ReportblocEvent {
+  String idReport = "";
+
+  DeleteReportEvent(String idReport) {
+    this.idReport = idReport;
+  }
+}
+
+// ignore: must_be_immutable
+class FilterReportsEvent extends ReportblocEvent {
+  String tipoReporteFiltro = "";
+  String estadoReporteFiltro = "";
+
+  FilterReportsEvent(String tipoReporteFiltro, String estadoReporteFiltro) {
+    this.tipoReporteFiltro = tipoReporteFiltro;
+    this.estadoReporteFiltro = estadoReporteFiltro;
+  }
 }
