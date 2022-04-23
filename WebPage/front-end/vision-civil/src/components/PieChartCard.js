@@ -1,7 +1,7 @@
 import "../styles/Dashboard.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { refreshData } from "../features/FunctionaryList";
-import React, { PureComponent } from "react";
+import React, { PureComponent, useCallback } from "react";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend , LabelList, Tooltip, Customized} from 'recharts';
 
 const PieChartCard = () => {
@@ -51,14 +51,20 @@ const PieChartCard = () => {
         }
     ]
 
-    data = data.sort((a, b) => a.value - b.value);
+    const numberOfReports = data.reduce((acc, obj) => acc += obj.value, data[0].value);
+
+    data = data.sort((a, b) => a.value - b.value).filter(({value}) => value != 0);
+
+    console.log(numberOfReports);
+
+    const formatToPercentage = useCallback((value) => `${((value / numberOfReports) * 100).toFixed(0)}%`, []);
 
     const COLORS = ['#00C3FF', '#0059FF', '#006800', '#00FF62', "#FF00FF", "#FF0000", "#FF7B00", "#000000"];
 
     return (
         <ResponsiveContainer className="card-piechart-container" width="100%" height="100%" >
             <PieChart>
-                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={100} outerRadius={150} fill="#8884d8" >
+                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={100} outerRadius={150} fill="#8884d8" animationDuration={1000} >
                     <LabelList 
                         dataKey="name" 
                         angle="0" 
@@ -69,7 +75,7 @@ const PieChartCard = () => {
                     <LabelList 
                         dataKey="value" 
                         angle="0" 
-                        formatter={(value) => `${((value / 193) * 100).toFixed(0)}%`} 
+                        formatter={(value) => `${((value / numberOfReports) * 100).toFixed(0)}%`} 
                         style={{fill: "white", stroke: "white", strokeWidth: 0}} 
                     />
                     {data.map((val, i) => (

@@ -61,7 +61,7 @@ const RadarChartCard = () => {
                 <PolarGrid/>
                 <PolarAngleAxis dataKey="reportType" style={{fontFamily: ["Manjari", "sansSerif"], fontSize: "0.9rem"}}/>
                 <PolarRadiusAxis angle={90} domain={[0, round5(biggest)]} style={{fontSize: "0.8rem"}} tick={false}/>
-                <Radar name="Reportes" dataKey="A" stroke="#FFCC00" fill="#FFCC00" fillOpacity={0.3}/>
+                <Radar name="Reportes" dataKey="A" stroke="#FFCC00" fill="#FFCC00" fillOpacity={0.3} animationDuration={1000} />
                 <Tooltip/>
             </RadarChart>
         </ResponsiveContainer>

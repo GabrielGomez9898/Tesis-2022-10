@@ -30,6 +30,7 @@ const TimeChartsFilterCard = () => {
     }
 
     useEffect(() => {
+        dispatch(refreshData([]));
         getTimeChartsData();
     }, []);
 
