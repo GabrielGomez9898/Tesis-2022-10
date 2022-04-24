@@ -100,15 +100,22 @@ class ProfileState extends State<Profile> {
                                     fontSize: 16.0, color: Colors.grey)),
                           ),
                     SizedBox(height: size.height * 0.02),
-                    TextFieldFuntion(
-                        hintText: state.userName,
-                        onChanged: (value) {
-                          setState(() {
-                            this.name = value.trim();
-                          });
-                        },
-                        tipo: TextInputType.emailAddress,
-                        obsText: false),
+                    state.userRole == "CIUDADANO"
+                        ? TextFieldFuntion(
+                            hintText: state.userName,
+                            onChanged: (value) {
+                              setState(() {
+                                this.name = value.trim();
+                              });
+                            },
+                            tipo: TextInputType.emailAddress,
+                            obsText: false)
+                        : TextFieldFuntion(
+                            hintText: state.userName,
+                            enablded: false,
+                            onChanged: (value) {},
+                            tipo: TextInputType.emailAddress,
+                            obsText: false),
                     state.userRole == "CIUDADANO"
                         ? TextFieldFuntion(
                             hintText: state.userDocument,
@@ -134,16 +141,24 @@ class ProfileState extends State<Profile> {
                       icon: Icons.email,
                       enablded: false,
                     ),
-                    TextFieldFuntion(
-                        hintText: state.userPhone.toString(),
-                        onChanged: (value) {
-                          setState(() {
-                            this.phone = double.parse(value.trim());
-                          });
-                        },
-                        tipo: TextInputType.number,
-                        icon: Icons.aod,
-                        obsText: false),
+                    state.userRole == "CIUDADANO"
+                        ? TextFieldFuntion(
+                            hintText: state.userPhone.toString(),
+                            onChanged: (value) {
+                              setState(() {
+                                this.phone = double.parse(value.trim());
+                              });
+                            },
+                            tipo: TextInputType.number,
+                            icon: Icons.aod,
+                            obsText: false)
+                        : TextFieldFuntion(
+                            hintText: state.userPhone.toString(),
+                            enablded: false,
+                            onChanged: (value) {},
+                            tipo: TextInputType.number,
+                            icon: Icons.aod,
+                            obsText: false),
                     Row(
                       children: [
                         Container(
@@ -155,48 +170,59 @@ class ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    TextButton(
-                        onPressed: () {
-                          DatePicker.showDatePicker(context,
-                              showTitleActions: true,
-                              minTime: DateTime(1930, 3, 5),
-                              maxTime: DateTime(2019, 6, 7),
-                              onChanged: (date) {}, onConfirm: (date) {
-                            setState(() {
-                              this.birthDate = DateTime.parse(date.toString())
-                                      .year
-                                      .toString() +
-                                  "-" +
-                                  DateTime.parse(date.toString())
-                                      .month
-                                      .toString() +
-                                  "-" +
-                                  DateTime.parse(date.toString())
-                                      .day
-                                      .toString();
-                            });
-                          },
-                              currentTime: DateTime.now(),
-                              locale: LocaleType.es);
-                        },
-                        child: Container(
-                            height: 50,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.white,
-                                ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
-                            child: Center(
-                              child: Text(
-                                this.birthDate,
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    color: Color.fromARGB(125, 255, 255, 255),
-                                    fontSize: 15),
-                              ),
-                            ))),
+                    state.userRole == "CIUDADANO"
+                        ? TextButton(
+                            onPressed: () {
+                              DatePicker.showDatePicker(context,
+                                  showTitleActions: true,
+                                  minTime: DateTime(1930, 3, 5),
+                                  maxTime: DateTime(2019, 6, 7),
+                                  onChanged: (date) {}, onConfirm: (date) {
+                                setState(() {
+                                  this.birthDate =
+                                      DateTime.parse(date.toString())
+                                              .year
+                                              .toString() +
+                                          "-" +
+                                          DateTime.parse(date.toString())
+                                              .month
+                                              .toString() +
+                                          "-" +
+                                          DateTime.parse(date.toString())
+                                              .day
+                                              .toString();
+                                });
+                              },
+                                  currentTime: DateTime.now(),
+                                  locale: LocaleType.es);
+                            },
+                            child: Container(
+                                height: 50,
+                                width: 200,
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.white,
+                                    ),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(20))),
+                                child: Center(
+                                  child: Text(
+                                    this.birthDate,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(125, 255, 255, 255),
+                                        fontSize: 15),
+                                  ),
+                                )))
+                        : Container(
+                            padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                            child: Text(
+                              state.userBirthDate,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ),
                     SizedBox(height: 20),
                     Row(
                       children: [
@@ -209,39 +235,49 @@ class ProfileState extends State<Profile> {
                         ),
                       ],
                     ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          items: _genders.map((String gender) {
-                            return DropdownMenuItem(
-                                child: Text(gender), value: gender);
-                          }).toList(),
-                          onChanged: (_value) {
-                            setState(() {
-                              this.gender = _value.toString();
-                            });
-                          },
-                          hint: Container(
-                            height: 50,
-                            width: 200,
-                            decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Colors.white,
+                    state.userRole == "CIUDADANO"
+                        ? Container(
+                            padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton(
+                                items: _genders.map((String gender) {
+                                  return DropdownMenuItem(
+                                      child: Text(gender), value: gender);
+                                }).toList(),
+                                onChanged: (_value) {
+                                  setState(() {
+                                    this.gender = _value.toString();
+                                  });
+                                },
+                                hint: Container(
+                                  height: 50,
+                                  width: 200,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: Colors.white,
+                                      ),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(20))),
+                                  child: Text(
+                                    this.gender,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color:
+                                            Color.fromARGB(125, 255, 255, 255),
+                                        fontSize: 15),
+                                  ),
                                 ),
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(20))),
+                              ),
+                            ),
+                          )
+                        : Container(
+                            padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                             child: Text(
-                              this.gender,
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Color.fromARGB(125, 255, 255, 255),
-                                  fontSize: 15),
+                              state.userGender,
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
                             ),
                           ),
-                        ),
-                      ),
-                    ),
                     SizedBox(height: size.height * 0.05),
                     state.userRole == "CIUDADANO"
                         ? ButtoWidget(
