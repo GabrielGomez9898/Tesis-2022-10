@@ -3,6 +3,7 @@ import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
     signOut,
+    updatePassword,
     setPersistence,
     browserLocalPersistence,
     browserSessionPersistence
@@ -53,9 +54,11 @@ export const AuthContextProvider = (props) => {
         }
     }
 
+    const changePassword = (password) => updatePassword(user, password);
+
     const logout = () => signOut(auth);
 
-    return <authContext.Provider value={{ user, error, isLoading, signup, signIn, logout }} {...props} />
+    return <authContext.Provider value={{ user, error, isLoading, signup, signIn, changePassword, logout }} {...props} />
 }
 
 export const useAuth = () => {

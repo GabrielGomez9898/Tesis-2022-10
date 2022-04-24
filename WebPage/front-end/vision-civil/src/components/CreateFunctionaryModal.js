@@ -16,7 +16,6 @@ const CreateFunctionaryModal = ({ onClose }) => {
     const [email, setEmail] = useState("");
     const [isMaster, setIsMaster] = useState(false);
     const [password, setPassword] = useState("");
-    const [confirmedPassword, setConfirmedPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const [buttonClassName, setButtonClassName] = useState("");
@@ -29,13 +28,55 @@ const CreateFunctionaryModal = ({ onClose }) => {
         isMaster: isMaster
     }
 
-    const initialRenderDone = useRef(false);
+    const initialRenderDone1 = useRef(false);
     useEffect(async () => {
-        if(!initialRenderDone.current) {
-            initialRenderDone.current = true;
+        if(!initialRenderDone1.current) {
+            initialRenderDone1.current = true;
+        }
+        else {
+            try {
+                const userCredential = await signup(email, password);
+                setId(userCredential.user.uid);
+            }
+            catch (error) {
+                // https://firebase.google.com/docs/auth/admin/errors
+
+                console.log(error);
+
+                switch (error.code) {
+                    case "auth/internal-error":
+                        setMessage("Error interno del servidor");
+                        break;
+                    case "auth/invalid-email":
+                        setMessage("El email provisto no tiene un formato válido");
+                        break;
+                    case "auth/invalid-password":
+                        setMessage("La contraseña debe tener por lo menos 6 caracteres");
+                        break;
+                    case "auth/email-already-exists":
+                        setMessage("El email provisto ya está en uso por otro usuario");
+                        break;
+                    case "auth/email-already-in-use":
+                        setMessage("El email provisto ya está en uso por otro usuario");
+                        break;
+                    default:
+                        setMessage("Error desconocido");
+                        break;
+                }
+                setIsLoading(false);
+                setButtonClassName("");
+            }
+        }
+    }, [password]);
+
+    const initialRenderDone2 = useRef(false);
+    useEffect(async () => {
+        if(!initialRenderDone2.current) {
+            initialRenderDone2.current = true;
         }
         else {
             await createFunctionary();
+            await notifyPasswordByEmail();
             onClose();
             setIsLoading(false);
             setButtonClassName("");
@@ -47,51 +88,24 @@ const CreateFunctionaryModal = ({ onClose }) => {
         return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries`, functionary);
     };
 
-    const register = useCallback(async (e) => {
+    const getPassword = () => {
+        return Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/password`);
+    };
+
+    const notifyPasswordByEmail = () => {
+        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries/${email}`, {password: password});
+    };
+
+    const register = async (e) => {
         e.preventDefault();
 
-        try {
-            if(password === confirmedPassword) {
-                setMessage("");
-                setIsLoading(true);
-                setButtonClassName("button-loading");
-    
-                const userCredential = await signup(email, password);
-                setId(userCredential.user.uid);
-            }
-            else {
-                setMessage("Las contraseñas no coinciden");
-            }
-        }
-        catch (error) {
-            // https://firebase.google.com/docs/auth/admin/errors
+        setMessage("");
+        setIsLoading(true);
+        setButtonClassName("button-loading");
 
-            console.log(error);
-
-            switch (error.code) {
-                case "auth/internal-error":
-                    setMessage("Error interno del servidor");
-                    break;
-                case "auth/invalid-email":
-                    setMessage("El email provisto no tiene un formato válido");
-                    break;
-                case "auth/invalid-password":
-                    setMessage("La contraseña debe tener por lo menos 6 caracteres");
-                    break;
-                case "auth/email-already-exists":
-                    setMessage("El email provisto ya está en uso por otro usuario");
-                    break;
-                case "auth/email-already-in-use":
-                    setMessage("El email provisto ya está en uso por otro usuario");
-                    break;
-                default:
-                    setMessage("Error desconocido");
-                    break;
-            }
-            setIsLoading(false);
-            setButtonClassName("");
-        }
-    }, [email, password, confirmedPassword]);
+        const response = await getPassword();
+        setPassword(response.data.password);
+    };
 
     const handleRadioChange = (e) => {
         if(e.target.value === "false") {
@@ -111,7 +125,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
             <form className="modal-content" onSubmit={register}>
                 <span className="close-btn" onClick={onClose}>&times;</span>
                 <h2>Agregar un nuevo funcionario</h2>
-                <p className="modal-description">Al finalizar este proceso el funcionario podrá acceder a Visión Civil Web con las credenciales escogidas abajo</p>
+                <p className="modal-description">Al finalizar este proceso el sistema generará automáticamente una contraseña que se le enviará al funcionario por correo. No olvide revisar que en efecto el correo indicado esté bien escrito</p>
                 <div>
                     <label htmlFor="emailInput">Correo</label><br/>
                     <input type="email" id="emailInput" placeholder="Ingrese el email" required onChange={(e) => setEmail(e.target.value)} />
@@ -127,15 +141,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
                         Funcionario master
                     </label>
                 </div>
-                {message && <Alert text={message} alertType="danger" isDeletable={true} />}
-                <div>
-                    <label htmlFor="passwordInput">Contraseña</label><br/>
-                    <input type="password" id="passwordInput" placeholder="Ingrese la contraseña" required onChange={(e) => setPassword(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor="confirmedPasswordInput">Confirme contraseña</label><br/>
-                    <input type="password" id="confirmedPasswordInput" placeholder="Confirme la contraseña" required onChange={(e) => setConfirmedPassword(e.target.value)} />
-                </div>
+                {message && <Alert text={message} alertType="danger" isDeletable={false} />}
                 <button type="submit" className={buttonClassName} disabled={isLoading}>
                     {isLoading ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Crear funcionario"}
                 </button>
