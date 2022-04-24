@@ -1,16 +1,18 @@
 // Dependencies
 const {
-  totalReportsByWeek, 
-  totalReportsByMonth, 
-  totalReportsByTrimester, 
-  totalReportsBySemester, 
-  totalReportsByYear, 
+  totalReportsByWeek,
+  totalReportsByMonth,
+  totalReportsByTrimester,
+  totalReportsBySemester,
+  totalReportsByYear,
   totalReportsForever
 } = require("./getTimeChartsDataUtil.js");
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const express = require("express");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
+var generator = require("generate-password");
 
 // Use Express.ja with cloud functions
 const app = express();
@@ -20,9 +22,10 @@ app.use(cors({ origin: true }));
 
 // Initialize the firebase app
 var serviceAccount = require("./miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
+const { google } = require("googleapis");
 
 const firebaseApp = admin.initializeApp(
-  {credential: admin.credential.cert(serviceAccount)}
+  { credential: admin.credential.cert(serviceAccount) }
 );
 
 // Obtain the firestore reference in order to query and manage the db
@@ -33,7 +36,7 @@ const printError = (error) => {
   console.log("\x1b[0m");
 };
 
-//getMapData
+// getMapData
 app.get("/mapData", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -48,7 +51,7 @@ app.get("/mapData", async (request, response) => {
     (reportType != "TODOS") ?
       (docs = await db.collection("reports").where("tipo_reporte", "==", reportType).get()) :
       (docs = await db.collection("reports").get());
-    
+
     const mapData = [];
     docs.forEach((doc, i) => {
       report = doc.data();
@@ -68,11 +71,11 @@ app.get("/mapData", async (request, response) => {
   }
 });
 
-//getTypeChartsData
+// getTypeChartsData
 app.get("/typeChartsData", async (request, response) => {
   try {
     const queryParams = request.query;
-    const lowerDate = queryParams["lowerDate"].replaceAll("-", "/"); 
+    const lowerDate = queryParams["lowerDate"].replaceAll("-", "/");
     const upperDate = queryParams["upperDate"].replaceAll("-", "/");
 
     const lowerDateObject = new Date(lowerDate);
@@ -104,20 +107,20 @@ app.get("/typeChartsData", async (request, response) => {
 
     return response.status(200).json(typeChartsData);
   }
-  catch(error) {
+  catch (error) {
     printError(error);
     return response.status(500).send(error);
   }
 });
 
-//getTimeChartsData
+// getTimeChartsData
 app.get("/timeChartsData", async (request, response) => {
   try {
     const queryParams = request.query;
     const period = queryParams["period"];
 
     let timeChartsData = undefined;
-    switch(period){
+    switch (period) {
       case "ESTA_SEMANA":
         timeChartsData = await totalReportsByWeek(db);
         break;
@@ -140,13 +143,13 @@ app.get("/timeChartsData", async (request, response) => {
 
     return response.status(200).json(timeChartsData);
   }
-  catch(error) {
+  catch (error) {
     printError(error);
     return response.status(500).send(error);
   }
 });
 
-//getReportById
+// getReportById
 app.get("/report/:reportId", async (request, response) => {
   try {
     const doc = await db.collection("reports").doc(request.params.reportId).get();
@@ -160,7 +163,7 @@ app.get("/report/:reportId", async (request, response) => {
   }
 });
 
-//getAllFunctionaries
+// getAllFunctionaries
 app.get("/functionaries", async (request, response) => {
   try {
     const querySnapshot = await db.collection("functionaries").get();
@@ -168,7 +171,7 @@ app.get("/functionaries", async (request, response) => {
     return response.status(200).json(querySnapshot.docs.map((doc) => {
       const functionaryObj = doc.data();
       functionaryObj["id"] = doc.id;
-      
+
       return functionaryObj;
     }));
   }
@@ -178,7 +181,7 @@ app.get("/functionaries", async (request, response) => {
   }
 });
 
-//createFunctionary
+// createFunctionary
 app.post("/functionaries", async (request, response) => {
   try {
     const requestBody = request.body;
@@ -199,7 +202,7 @@ app.post("/functionaries", async (request, response) => {
   }
 });
 
-//updateFunctionary
+// updateFunctionary
 app.patch("/functionaries/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
@@ -209,7 +212,7 @@ app.patch("/functionaries/:functionaryId", async (request, response) => {
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
     // Update the document by id
-    const writeResult = await functionariesRef.doc(id).update({isMaster: isMaster});
+    const writeResult = await functionariesRef.doc(id).update({ isMaster: isMaster });
     console.log(writeResult);
 
     return response.status(200).send(writeResult);
@@ -220,13 +223,13 @@ app.patch("/functionaries/:functionaryId", async (request, response) => {
   }
 });
 
-//deleteFunctionary
+// deleteFunctionary
 app.delete("/functionaries/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
 
     /* Delete the functionary from the functionaries Firestore collection */
-    
+
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
     // Delete the document by id
@@ -248,7 +251,7 @@ app.delete("/functionaries/:functionaryId", async (request, response) => {
   }
 });
 
-//getAllReports
+// getAllReports
 app.get("/reports", async (request, response) => {
   try {
     const doc = await db.collection("reports").get();
@@ -256,50 +259,50 @@ app.get("/reports", async (request, response) => {
     let id = 1;
     let reporte = undefined;
     let color = "";
-    doc.forEach((item ) => {
+    doc.forEach((item) => {
       let imagenes = [];
       let imag = [];
       reporte = item.data();
       reporte["id"] = id;
-      if(reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
+      if (reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
         color = "#00b7ff";
-    }
-    else if(reporte["tipo_reporte"] === "HURTO_PERSONA") {
+      }
+      else if (reporte["tipo_reporte"] === "HURTO_PERSONA") {
         color = "#001aff";
-    }
-    else if(reporte["tipo_reporte"] === "HURTO_VEHICULO") {
+      }
+      else if (reporte["tipo_reporte"] === "HURTO_VEHICULO") {
         color = "#008000";
-    }
-    else if(reporte["tipo_reporte"] === "VANDALISMO") {
+      }
+      else if (reporte["tipo_reporte"] === "VANDALISMO") {
         color = "#4d0080";
-    }
-    else if(reporte["tipo_reporte"] === "VIOLACION") {
+      }
+      else if (reporte["tipo_reporte"] === "VIOLACION") {
         color = "#ff00ff";
-    }
-    else if(reporte["tipo_reporte"] === "HOMICIDIO") {
+      }
+      else if (reporte["tipo_reporte"] === "HOMICIDIO") {
         color = "#ff0000";
-    }
-    else if(reporte["tipo_reporte"] === "AGRESION") {
+      }
+      else if (reporte["tipo_reporte"] === "AGRESION") {
         color = "#ff8800";
-    }
-    else if(reporte["tipo_reporte"] === "OTRO") {
+      }
+      else if (reporte["tipo_reporte"] === "OTRO") {
         color = "#000000";
-    }
-      if(reporte["images_ids"] != null ){
-        imag.push(reporte["images_ids"].split(",")); 
-        for(let x = 0; x < imag.length; x++){
-          for(let y = 0; y < imag[x].length; y++){
+      }
+      if (reporte["images_ids"] != null) {
+        imag.push(reporte["images_ids"].split(","));
+        for (let x = 0; x < imag.length; x++) {
+          for (let y = 0; y < imag[x].length; y++) {
             if (imag[x][y] != "") {
               imagenes.push(imag[x][y]);
             }
           }
         }
-        reporte["imagenes"]= imagenes;
+        reporte["imagenes"] = imagenes;
         reporte["hasFotos"] = true;
       }
       else {
         reporte["hasFotos"] = false;
-        reporte["imagenes"]= imagenes;
+        reporte["imagenes"] = imagenes;
       }
       reporte["fotourl"] = item.id
       reporte["color"] = color;
@@ -308,8 +311,8 @@ app.get("/reports", async (request, response) => {
       reports.push(reporte);
       id += 1;
     });
-  
-    reports.sort(function(a,b) {
+
+    reports.sort(function (a, b) {
       return new Date(b.fecha) - new Date(a.fecha);
     })
 
@@ -322,7 +325,7 @@ app.get("/reports", async (request, response) => {
   }
 });
 
-//getAllCops
+// getAllCops
 app.get("/cops", async (request, response) => {
   try {
     const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
@@ -340,7 +343,7 @@ app.get("/cops", async (request, response) => {
   }
 });
 
-//createCop
+// createCop
 app.post("/cops", async (request, response) => {
   try {
     const requestBody = request.body;
@@ -361,7 +364,7 @@ app.post("/cops", async (request, response) => {
   }
 });
 
-//updateCop
+// updateCop
 app.patch("/cops/:copId", async (request, response) => {
   try {
     const id = request.params.copId;
@@ -380,7 +383,7 @@ app.patch("/cops/:copId", async (request, response) => {
   }
 });
 
-//deleteCop
+// deleteCop
 app.delete("/cops/:copId", async (request, response) => {
   try {
     const id = request.params.copId;
@@ -408,7 +411,7 @@ app.delete("/cops/:copId", async (request, response) => {
   }
 });
 
-//notification
+// notification
 app.post("/notification", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -420,7 +423,7 @@ app.post("/notification", async (request, response) => {
     let tokens = [];
     usersRef.forEach((item) => {
       user = item.data();
-      if(user["phoneToken"] != null) {
+      if (user["phoneToken"] != null) {
         tokens.push(user["phoneToken"]);
       }
     })
@@ -435,15 +438,15 @@ app.post("/notification", async (request, response) => {
       priority: "high",
       //timeToLive: 60 * 60 *24
     };
-    try{
-      tokens.map((item,i) => {
-        admin.messaging().sendToDevice(item, payload, options).then(function(response){
-          console.log("sirvio",response )
-        }).catch(function(error){
+    try {
+      tokens.map((item, i) => {
+        admin.messaging().sendToDevice(item, payload, options).then(function (response) {
+          console.log("sirvio", response)
+        }).catch(function (error) {
           console.log("no sirvio", error)
         })
       })
-    }catch(error){
+    } catch (error) {
       printError(error)
     }
   }
@@ -453,7 +456,7 @@ app.post("/notification", async (request, response) => {
   }
 });
 
-//getReportsByFilter
+// getReportsByFilter
 app.get("/reportByFilter", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -463,7 +466,7 @@ app.get("/reportByFilter", async (request, response) => {
     printError(upperDate)
     const tipo_reporte = queryParams["reportType"];
     printError(tipo_reporte)
-    
+
     const lowerDateObject = new Date(lowerDate);
     const upperDateObject = new Date(upperDate);
 
@@ -471,7 +474,7 @@ app.get("/reportByFilter", async (request, response) => {
     (tipo_reporte != "TODOS") ?
       (docs = await db.collection("reports").where("tipo_reporte", "==", tipo_reporte).get()) :
       (docs = await db.collection("reports").get());
-    
+
     const reports = [];
     let id = 1;
     let color = "";
@@ -480,48 +483,48 @@ app.get("/reportByFilter", async (request, response) => {
       reportDate = reporte["fecha_hora"].split(" | ")[0];
       reportDateObject = new Date(reportDate);
       let imagenes = [];
-      if(reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
+      if (reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
         color = "#00b7ff";
-    }
-    else if(reporte["tipo_reporte"] === "HURTO_PERSONA") {
+      }
+      else if (reporte["tipo_reporte"] === "HURTO_PERSONA") {
         color = "#001aff";
-    }
-    else if(reporte["tipo_reporte"] === "HURTO_VEHICULO") {
+      }
+      else if (reporte["tipo_reporte"] === "HURTO_VEHICULO") {
         color = "#008000";
-    }
-    else if(reporte["tipo_reporte"] === "VANDALISMO") {
+      }
+      else if (reporte["tipo_reporte"] === "VANDALISMO") {
         color = "#4d0080";
-    }
-    else if(reporte["tipo_reporte"] === "VIOLACION") {
+      }
+      else if (reporte["tipo_reporte"] === "VIOLACION") {
         color = "#ff00ff";
-    }
-    else if(reporte["tipo_reporte"] === "HOMICIDIO") {
+      }
+      else if (reporte["tipo_reporte"] === "HOMICIDIO") {
         color = "#ff0000";
-    }
-    else if(reporte["tipo_reporte"] === "AGRESION") {
+      }
+      else if (reporte["tipo_reporte"] === "AGRESION") {
         color = "#ff8800";
-    }
-    else if(reporte["tipo_reporte"] === "OTRO") {
+      }
+      else if (reporte["tipo_reporte"] === "OTRO") {
         color = "#000000";
-    }
+      }
       let imag = [];
       reporte = item.data();
       reporte["id"] = id;
-      if(reporte["images_ids"] != null ){
-        imag.push(reporte["images_ids"].split(",")); 
-        for(let x = 0; x < imag.length; x++){
-          for(let y = 0; y < imag[x].length; y++){
+      if (reporte["images_ids"] != null) {
+        imag.push(reporte["images_ids"].split(","));
+        for (let x = 0; x < imag.length; x++) {
+          for (let y = 0; y < imag[x].length; y++) {
             if (imag[x][y] != "") {
               imagenes.push(imag[x][y]);
             }
           }
         }
-        reporte["imagenes"]= imagenes;
+        reporte["imagenes"] = imagenes;
         reporte["hasFotos"] = true;
       }
       else {
         reporte["hasFotos"] = false;
-        reporte["imagenes"]= imagenes;
+        reporte["imagenes"] = imagenes;
       }
       reporte["fotourl"] = item.id
       reporte["color"] = color;
@@ -534,7 +537,7 @@ app.get("/reportByFilter", async (request, response) => {
       }
     });
 
-    reports.sort(function(a,b) {
+    reports.sort(function (a, b) {
       return new Date(b.fecha) - new Date(a.fecha);
     })
 
@@ -560,18 +563,18 @@ exports.getAllReports = functions.https.onRequest((request, response) => {
   });
 });
 
-exports.sendNotification = functions.https.onRequest(async (request, response) =>{ 
+exports.sendNotification = functions.https.onRequest(async (request, response) => {
   try {
     let title = null;
-    ({title} = request.body)
-    
-    title.replace("_" , " ");
-    const usersRef = await db.collection("users").where("role" , "==" , "POLICIA").where("enServicio", "==" , "true").get();
+    ({ title } = request.body)
+
+    title.replace("_", " ");
+    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", "true").get();
     let user = undefined;
     let tokens = [];
     usersRef.forEach((item) => {
       user = item.data();
-      if(user["phoneToken"] != null) {
+      if (user["phoneToken"] != null) {
         tokens.push(user["phoneToken"]);
       }
     })
@@ -579,24 +582,149 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
     var payload = {
       notification: {
         title: "Nuevo reporte!",
-        body: "De tipo : " + title  
+        body: "De tipo : " + title
       }
     };
     var options = {
       priority: "high",
       //timeToLive: 60 * 60 *24
     };
-    try{
-      tokens.map((item,i) => {
-        admin.messaging().sendToDevice(item, payload, options).then(function(response){
-          console.log("sirvio",response )
-        }).catch(function(error){
+    try {
+      tokens.map((item, i) => {
+        admin.messaging().sendToDevice(item, payload, options).then(function (response) {
+          console.log("sirvio", response)
+        }).catch(function (error) {
           console.log("no sirvio", error)
         })
       })
-    }catch(error){
+    } catch (error) {
       printError(error)
     }
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+app.get("/password", (request, response) => {
+  try {
+    const password = generator.generate({
+      length: 15,
+      numbers: true
+    });
+
+    return response.status(200).json({password: password});
+  }
+  catch (error) {
+    return response.status(500).send(error);
+  }
+});
+
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL);
+oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
+
+// notifyFunctionaryPassword
+app.post("/functionaries/:email", async (request, response) => {
+  try {
+    const email = request.params.email;
+    const password = request.body.password;
+
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.EMAIL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken
+      },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Visión Civil - Cuentas" <visioncivilweb@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "¡Bienvenido a Visión Civil Web!", // Subject line
+      text: `Estimado funcionario ${email}
+              Usted acaba de ser registrado en la plataforma de Visión Civil Web. Para ingresar a la plataforma utilice la siguiente contraseña: ${password}
+              Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de Visión Civil Web.
+              Cordialmente, el equipo de Visión Civil`,
+      html: `<p align="center"><img src="cid:img1" width="300"/></p>
+              <h2>Estimado funcionario <i>${email}</i></h2>
+              <p>Usted acaba de ser registrado en la plataforma Visión Civil Web. Para ingresar a la plataforma utilice la siguiente contraseña: <b>${password}</b></p>
+              <p>Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de Visión Civil Web.</p>
+              <p>Cordialmente, el equipo de Visión Civil</p>`,
+      attachments: [
+        {
+          filename: "logoAndText.png",
+          path: "https://raw.githubusercontent.com/VisionCivil/Tesis-2022-10/main/images/logoAndText.png",
+          cid: "img1"
+        }
+      ]
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    return response.status(200).json(info);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+// notifyCopPassword
+app.post("/cops/:email", async (request, response) => {
+  try {
+    const email = request.params.email;
+    const password = request.body.password;
+
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.EMAIL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken
+      },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Visión Civil - Cuentas" <visioncivilweb@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "¡Bienvenido a Visión Civil Mobile!", // Subject line
+      text: `Estimado policía ${email}
+              Usted acaba de ser registrado en la aplicación móvil de Visión Civil. Para ingresar a la app utilice la siguiente contraseña: ${password}
+              Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de la aplicación.
+              Cordialmente, el equipo de Visión Civil`,
+      html: `<p align="center"><img src="cid:img1" width="300"/></p>
+              <h2>Estimado policía <i>${email}</i></h2>
+              <p>Usted acaba de ser registrado en la aplicación móvil de Visión Civil. Para ingresar a la app utilice la siguiente contraseña: <b>${password}</b></p>
+              <p>Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de la aplicación.</p>
+              <p>Cordialmente, el equipo de Visión Civil</p>`,
+      attachments: [
+        {
+          filename: "logoAndText.png",
+          path: "https://raw.githubusercontent.com/VisionCivil/Tesis-2022-10/main/images/logoAndText.png",
+          cid: "img1"
+        }
+      ]
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    return response.status(200).json(info);
   }
   catch (error) {
     printError(error);
