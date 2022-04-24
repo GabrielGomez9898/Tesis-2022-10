@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
@@ -23,7 +24,13 @@ class Profile extends StatefulWidget {
 }
 
 class ProfileState extends State<Profile> {
-  String email = " ", name = " ", birthDate = " ", gender = " ";
+  String email = " ",
+      name = " ",
+      birthDate = " ",
+      gender = " ",
+      currentPassword = "",
+      password = "",
+      confirmPassword = "";
   double phone = 0;
   ProfileState(String widgetEmail, String widgetName, String widgetBirthDate,
       String widgetGender, double widgetPhone) {
@@ -300,6 +307,92 @@ class ProfileState extends State<Profile> {
                                     fontSize: 15)),
                           ),
                     SizedBox(height: size.height * 0.05),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                      child: Text(
+                        "Cambiar contraseña",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.05),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                      child: Text(
+                        "Ingrese su contraseña actual",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
+                    TextFieldFuntion(
+                      hintText: 'Contraseña actual',
+                      onChanged: (value) {
+                        setState(() {
+                          this.currentPassword = value.trim();
+                        });
+                      },
+                      icon: Icons.password,
+                      tipo: TextInputType.visiblePassword,
+                      obsText: true,
+                    ),
+                    TextFieldFuntion(
+                      hintText: 'Ingrese su nueva contraseña',
+                      onChanged: (value) {
+                        setState(() {
+                          this.password = value.trim();
+                        });
+                      },
+                      icon: Icons.password,
+                      tipo: TextInputType.visiblePassword,
+                      obsText: true,
+                    ),
+                    Container(
+                      padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                      child: Text(
+                        "Ingrese nuevamente la nueva contraseña",
+                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      ),
+                    ),
+                    TextFieldFuntion(
+                      hintText: 'Confirmar contraseña',
+                      onChanged: (value) {
+                        setState(() {
+                          this.confirmPassword = value.trim();
+                        });
+                      },
+                      icon: Icons.password,
+                      tipo: TextInputType.visiblePassword,
+                      obsText: true,
+                    ),
+                    ButtoWidget(
+                      text: 'Actualizar Contraseña',
+                      textColor: Colors.black,
+                      press: () async {
+                        if (this.password == this.confirmPassword) {
+                          if (this.password.length < 6) {
+                            sixCharactersPasswordAlert(context);
+                          } else {
+                            final user =
+                                await FirebaseAuth.instance.currentUser;
+                            final cred = EmailAuthProvider.credential(
+                                email: state.userEmail,
+                                password: this.currentPassword);
+                            user!
+                                .reauthenticateWithCredential(cred)
+                                .then((value) {
+                              user.updatePassword(this.password).then((_) {
+                                upDatePasswordAlert(context);
+                              }).catchError((error) {
+                                wrongCurrentPasswordAlert(context);
+                              });
+                            }).catchError((err) {
+                              wrongCurrentPasswordAlert(context);
+                            });
+                          }
+                        } else {
+                          differentPasswordsAlert(context);
+                        }
+                      },
+                    ),
+                    SizedBox(height: size.height * 0.05),
                   ],
                 ),
               );
@@ -323,6 +416,78 @@ upDateInfoAlert(BuildContext context) {
       context: context,
       builder: (context) {
         Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+upDatePasswordAlert(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("¡Contraseña actualizada!"),
+    content: Text(""),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 2), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+differentPasswordsAlert(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Contraseñas diferentes"),
+    content: Text("Confirme nuevamente su contraseña"),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+sixCharactersPasswordAlert(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Contraseña inválida"),
+    content: Text("La contraseña debe tener al menos 6 caracteres"),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+wrongCurrentPasswordAlert(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Contraseña antigua inválida"),
+    content: Text("Ingrese su contraseña actual"),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
           Navigator.of(context).pop(true);
         });
         return alert;

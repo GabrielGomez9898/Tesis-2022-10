@@ -122,3 +122,16 @@ class AddPhoneToken extends UserblocEvent {
     this.token = token;
   }
 }
+
+// ignore: must_be_immutable
+class UpdatePassword extends UserblocEvent {
+  String userEmail = "";
+  String currentPassword = "";
+  String newPassword = "";
+
+  UpdatePassword(String userEmail, String currentPassword, String newPassword) {
+    this.userEmail = userEmail;
+    this.currentPassword = currentPassword;
+    this.newPassword = newPassword;
+  }
+}

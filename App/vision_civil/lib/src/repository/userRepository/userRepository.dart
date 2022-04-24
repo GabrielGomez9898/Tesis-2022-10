@@ -111,6 +111,22 @@ class UserDB {
 
     return userReturn;
   }
+
+  void updatePassword(
+      String userEmail, String currentPassword, String newPassword) async {
+    final user = await FirebaseAuth.instance.currentUser;
+    print("repo: email usuario: " + userEmail);
+    print("repo: contraseña actual: " + currentPassword);
+    print("repo: contraseña nueva: " + newPassword);
+    final cred = EmailAuthProvider.credential(
+        email: userEmail, password: currentPassword);
+
+    user!.reauthenticateWithCredential(cred).then((value) {
+      user.updatePassword(newPassword).then((value) {
+        print("Se acualizó la contraseña");
+      });
+    });
+  }
 }
 
 UserDB userdb = UserDB();

@@ -153,6 +153,9 @@ class UserBloc extends Bloc<UserblocEvent, UserblocState> {
         userdb.updatePoliceService(event.userID, event.onService);
       } else if (event is AddPhoneToken) {
         userdb.updateTokenPhone(event.user, event.token);
+      } else if (event is UpdatePassword) {
+        userdb.updatePassword(
+            event.userEmail, event.currentPassword, event.newPassword);
       }
     });
   }
