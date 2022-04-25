@@ -625,7 +625,9 @@ class HomeState extends State<HomePage> {
                                                 AssetImage(
                                                     'assets/images/Lista reportes.png'),
                                                 size: 80),
-                                            Text("Lista de Reportes"),
+                                            FittedBox(
+                                                child:
+                                                    Text("Lista de Reportes")),
                                           ],
                                         ),
                                       ),

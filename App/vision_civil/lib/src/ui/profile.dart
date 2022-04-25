@@ -41,7 +41,7 @@ class ProfileState extends State<Profile> {
     this.gender = widgetGender;
     this.phone = widgetPhone;
   }
-
+  final _scrollController = ScrollController();
   var _genders = ["Masculino", "Femenino", "Otro"];
 
   @override
@@ -61,205 +61,155 @@ class ProfileState extends State<Profile> {
           body: BlocBuilder<UserBloc, UserblocState>(
             builder: (context, state) {
               realPhone = state.userPhone.toString().split(".")[0];
-
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    SizedBox(height: size.height * 0.09),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          children: [
-                            Container(
-                              child: Image.asset('assets/images/logo.jpg',
-                                  width: 100.0, height: 100.0, scale: 1.0),
+              return Scrollbar(
+                isAlwaysShown: true,
+                controller: _scrollController,
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      SizedBox(height: size.height * 0.09),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                child: Image.asset('assets/images/logo.jpg',
+                                    width: 100.0, height: 100.0, scale: 1.0),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Text("Mi perfil",
+                                  style: TextStyle(
+                                      fontSize: 35.0,
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500)),
+                              Text("Rol: " + state.userRole,
+                                  style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.w400)),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: size.height * 0.07),
+                      state.userRole == "CIUDADANO"
+                          ? Container(
+                              width: size.width * 0.9,
+                              child: Text(
+                                  "Solo puedes modificar los campos: Nombre, Celular, Fecha de nacimiento y Genero",
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Colors.grey)),
+                            )
+                          : Container(
+                              width: size.width * 0.9,
+                              child: Text(
+                                  "Usted como policia no puede modificar sus datos, en caso de querer realizar un cambio de información ponerse en contacto con la Secretaria de Gobierno",
+                                  style: TextStyle(
+                                      fontSize: 16.0, color: Colors.grey)),
                             ),
-                          ],
-                        ),
-                        Column(
-                          children: [
-                            Text("Mi perfil",
-                                style: TextStyle(
-                                    fontSize: 35.0,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500)),
-                            Text("Rol: " + state.userRole,
-                                style: TextStyle(
-                                    fontSize: 15.0,
-                                    color: Colors.grey,
-                                    fontWeight: FontWeight.w400)),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: size.height * 0.07),
-                    state.userRole == "CIUDADANO"
-                        ? Container(
-                            width: size.width * 0.9,
-                            child: Text(
-                                "Solo puedes modificar los campos: Nombre, Celular, Fecha de nacimiento y Genero",
-                                style: TextStyle(
-                                    fontSize: 16.0, color: Colors.grey)),
-                          )
-                        : Container(
-                            width: size.width * 0.9,
-                            child: Text(
-                                "Usted como policia no puede modificar sus datos, en caso de cambio de informacion ponerse en contacto con la Alcaldia de Sibate",
-                                style: TextStyle(
-                                    fontSize: 16.0, color: Colors.grey)),
-                          ),
-                    SizedBox(height: size.height * 0.02),
-                    state.userRole == "CIUDADANO"
-                        ? TextFieldFuntion(
-                            hintText: state.userName,
-                            onChanged: (value) {
-                              setState(() {
-                                this.name = value.trim();
-                              });
-                            },
-                            tipo: TextInputType.emailAddress,
-                            obsText: false)
-                        : TextFieldFuntion(
-                            hintText: state.userName,
-                            enablded: false,
-                            onChanged: (value) {},
-                            tipo: TextInputType.emailAddress,
-                            obsText: false),
-                    state.userRole == "CIUDADANO"
-                        ? TextFieldFuntion(
-                            hintText: state.userDocument,
-                            onChanged: (value) {},
-                            tipo: TextInputType.name,
-                            obsText: false,
-                            icon: Icons.assignment,
-                            enablded: false,
-                          )
-                        : TextFieldFuntion(
-                            hintText: state.idPolice,
-                            onChanged: (value) {},
-                            tipo: TextInputType.name,
-                            obsText: false,
-                            icon: Icons.assignment,
-                            enablded: false,
-                          ),
-                    TextFieldFuntion(
-                      hintText: state.userEmail,
-                      onChanged: (value) {},
-                      tipo: TextInputType.name,
-                      obsText: false,
-                      icon: Icons.email,
-                      enablded: false,
-                    ),
-                    state.userRole == "CIUDADANO"
-                        ? TextFieldFuntion(
-                            hintText: realPhone,
-                            onChanged: (value) {
-                              setState(() {
-                                this.phone = double.parse(value.trim());
-                              });
-                            },
-                            tipo: TextInputType.number,
-                            icon: Icons.aod,
-                            obsText: false)
-                        : TextFieldFuntion(
-                            hintText: realPhone,
-                            enablded: false,
-                            onChanged: (value) {},
-                            tipo: TextInputType.number,
-                            icon: Icons.aod,
-                            obsText: false),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                          child: Text(
-                            "Fecha de nacimento:",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
-                    state.userRole == "CIUDADANO"
-                        ? TextButton(
-                            onPressed: () {
-                              DatePicker.showDatePicker(context,
-                                  showTitleActions: true,
-                                  minTime: DateTime(1930, 3, 5),
-                                  maxTime: DateTime(2019, 6, 7),
-                                  onChanged: (date) {}, onConfirm: (date) {
+                      SizedBox(height: size.height * 0.02),
+                      state.userRole == "CIUDADANO"
+                          ? TextFieldFuntion(
+                              hintText: state.userName,
+                              onChanged: (value) {
                                 setState(() {
-                                  this.birthDate =
-                                      DateTime.parse(date.toString())
-                                              .year
-                                              .toString() +
-                                          "-" +
-                                          DateTime.parse(date.toString())
-                                              .month
-                                              .toString() +
-                                          "-" +
-                                          DateTime.parse(date.toString())
-                                              .day
-                                              .toString();
+                                  this.name = value.trim();
                                 });
                               },
-                                  currentTime: DateTime.now(),
-                                  locale: LocaleType.es);
-                            },
-                            child: Container(
-                                height: 50,
-                                width: 200,
-                                decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Colors.white,
-                                    ),
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(20))),
-                                child: Center(
-                                  child: Text(
-                                    this.birthDate,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(125, 255, 255, 255),
-                                        fontSize: 15),
-                                  ),
-                                )))
-                        : Container(
+                              tipo: TextInputType.emailAddress,
+                              obsText: false)
+                          : TextFieldFuntion(
+                              hintText: state.userName,
+                              enablded: false,
+                              onChanged: (value) {},
+                              tipo: TextInputType.emailAddress,
+                              obsText: false),
+                      state.userRole == "CIUDADANO"
+                          ? TextFieldFuntion(
+                              hintText: state.userDocument,
+                              onChanged: (value) {},
+                              tipo: TextInputType.name,
+                              obsText: false,
+                              icon: Icons.assignment,
+                              enablded: false,
+                            )
+                          : TextFieldFuntion(
+                              hintText: state.idPolice,
+                              onChanged: (value) {},
+                              tipo: TextInputType.name,
+                              obsText: false,
+                              icon: Icons.assignment,
+                              enablded: false,
+                            ),
+                      TextFieldFuntion(
+                        hintText: state.userEmail,
+                        onChanged: (value) {},
+                        tipo: TextInputType.name,
+                        obsText: false,
+                        icon: Icons.email,
+                        enablded: false,
+                      ),
+                      state.userRole == "CIUDADANO"
+                          ? TextFieldFuntion(
+                              hintText: realPhone,
+                              onChanged: (value) {
+                                setState(() {
+                                  this.phone = double.parse(value.trim());
+                                });
+                              },
+                              tipo: TextInputType.number,
+                              icon: Icons.aod,
+                              obsText: false)
+                          : TextFieldFuntion(
+                              hintText: realPhone,
+                              enablded: false,
+                              onChanged: (value) {},
+                              tipo: TextInputType.number,
+                              icon: Icons.aod,
+                              obsText: false),
+                      Row(
+                        children: [
+                          Container(
                             padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                             child: Text(
-                              state.userBirthDate,
+                              "Fecha de nacimento:",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
                           ),
-                    SizedBox(height: 20),
-                    Row(
-                      children: [
-                        Container(
-                          padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                          child: Text(
-                            "Género: ",
-                            style: TextStyle(color: Colors.white, fontSize: 14),
-                          ),
-                        ),
-                      ],
-                    ),
-                    state.userRole == "CIUDADANO"
-                        ? Container(
-                            padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton(
-                                items: _genders.map((String gender) {
-                                  return DropdownMenuItem(
-                                      child: Text(gender), value: gender);
-                                }).toList(),
-                                onChanged: (_value) {
+                        ],
+                      ),
+                      state.userRole == "CIUDADANO"
+                          ? TextButton(
+                              onPressed: () {
+                                DatePicker.showDatePicker(context,
+                                    showTitleActions: true,
+                                    minTime: DateTime(1930, 3, 5),
+                                    maxTime: DateTime(2019, 6, 7),
+                                    onChanged: (date) {}, onConfirm: (date) {
                                   setState(() {
-                                    this.gender = _value.toString();
+                                    this.birthDate =
+                                        DateTime.parse(date.toString())
+                                                .year
+                                                .toString() +
+                                            "-" +
+                                            DateTime.parse(date.toString())
+                                                .month
+                                                .toString() +
+                                            "-" +
+                                            DateTime.parse(date.toString())
+                                                .day
+                                                .toString();
                                   });
                                 },
-                                hint: Container(
+                                    currentTime: DateTime.now(),
+                                    locale: LocaleType.es);
+                              },
+                              child: Container(
                                   height: 50,
                                   width: 200,
                                   decoration: BoxDecoration(
@@ -268,135 +218,220 @@ class ProfileState extends State<Profile> {
                                       ),
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(20))),
-                                  child: Text(
-                                    this.gender,
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color:
-                                            Color.fromARGB(125, 255, 255, 255),
-                                        fontSize: 15),
-                                  ),
-                                ),
+                                  child: Center(
+                                    child: Text(
+                                      this.birthDate,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              125, 255, 255, 255),
+                                          fontSize: 15),
+                                    ),
+                                  )))
+                          : Container(
+                              padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                              child: Text(
+                                state.userBirthDate,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 14),
                               ),
                             ),
-                          )
-                        : Container(
+                      SizedBox(height: 20),
+                      Row(
+                        children: [
+                          Container(
                             padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                             child: Text(
-                              state.userGender,
+                              "Género: ",
                               style:
                                   TextStyle(color: Colors.white, fontSize: 14),
                             ),
                           ),
-                    SizedBox(height: size.height * 0.05),
-                    state.userRole == "CIUDADANO"
-                        ? ButtoWidget(
-                            text: 'Actualizar datos',
-                            textColor: Colors.black,
-                            press: () {
-                              upDateInfoAlert(context);
-                              BlocProvider.of<UserBloc>(context).add(
-                                  UpdateUserEvent(this.email, this.name,
-                                      this.birthDate, this.gender, this.phone));
-                            },
-                          )
-                        : Container(
-                            width: size.width * 0.9,
-                            child: Text(
-                                "Informacion gestionada por la Alacaldia de Sibate, por favor pongase en contacto",
-                                textAlign: TextAlign.center,
+                        ],
+                      ),
+                      state.userRole == "CIUDADANO"
+                          ? Container(
+                              padding: EdgeInsets.fromLTRB(25, 0, 0, 0),
+                              child: DropdownButtonHideUnderline(
+                                child: DropdownButton(
+                                  items: _genders.map((String gender) {
+                                    return DropdownMenuItem(
+                                        child: Text(gender), value: gender);
+                                  }).toList(),
+                                  onChanged: (_value) {
+                                    setState(() {
+                                      this.gender = _value.toString();
+                                    });
+                                  },
+                                  hint: Container(
+                                    height: 50,
+                                    width: 200,
+                                    decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: Colors.white,
+                                        ),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(20))),
+                                    child: Text(
+                                      this.gender,
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color.fromARGB(
+                                              125, 255, 255, 255),
+                                          fontSize: 15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                              child: Text(
+                                state.userGender,
                                 style: TextStyle(
-                                    color: Color.fromARGB(255, 255, 255, 255),
-                                    fontSize: 15)),
+                                    color: Colors.white, fontSize: 14),
+                              ),
+                            ),
+                      SizedBox(height: size.height * 0.05),
+                      state.userRole == "CIUDADANO"
+                          ? ButtoWidget(
+                              text: 'Actualizar datos',
+                              textColor: Colors.black,
+                              press: () {
+                                upDateInfoAlert(context);
+                                BlocProvider.of<UserBloc>(context).add(
+                                    UpdateUserEvent(
+                                        this.email,
+                                        this.name,
+                                        this.birthDate,
+                                        this.gender,
+                                        this.phone));
+                              },
+                            )
+                          : Container(),
+                      Container(
+                          child: Divider(
+                        color: Color.fromARGB(255, 255, 255, 255),
+                        indent: size.width * 0.05,
+                        endIndent: size.width * 0.05,
+                        thickness: 1.5,
+                      )),
+                      SizedBox(height: size.height * 0.02),
+                      Container(
+                        child: Text(
+                          "Cambio contraseña",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      SizedBox(height: size.height * 0.03),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                            child: Text(
+                              "Ingrese su contraseña actual:",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
                           ),
-                    SizedBox(height: size.height * 0.05),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                      child: Text(
-                        "Cambiar contraseña",
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                        ],
                       ),
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                      child: Text(
-                        "Ingrese su contraseña actual",
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      TextFieldFuntion(
+                        hintText: '',
+                        onChanged: (value) {
+                          setState(() {
+                            this.currentPassword = value.trim();
+                          });
+                        },
+                        icon: Icons.password,
+                        tipo: TextInputType.visiblePassword,
+                        obsText: true,
                       ),
-                    ),
-                    TextFieldFuntion(
-                      hintText: 'Contraseña actual',
-                      onChanged: (value) {
-                        setState(() {
-                          this.currentPassword = value.trim();
-                        });
-                      },
-                      icon: Icons.password,
-                      tipo: TextInputType.visiblePassword,
-                      obsText: true,
-                    ),
-                    TextFieldFuntion(
-                      hintText: 'Ingrese su nueva contraseña',
-                      onChanged: (value) {
-                        setState(() {
-                          this.password = value.trim();
-                        });
-                      },
-                      icon: Icons.password,
-                      tipo: TextInputType.visiblePassword,
-                      obsText: true,
-                    ),
-                    Container(
-                      padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
-                      child: Text(
-                        "Ingrese nuevamente la nueva contraseña",
-                        style: TextStyle(color: Colors.white, fontSize: 14),
+                      SizedBox(height: size.height * 0.02),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                            child: Text(
+                              "Ingrese su nueva contraseña:",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    TextFieldFuntion(
-                      hintText: 'Confirmar contraseña',
-                      onChanged: (value) {
-                        setState(() {
-                          this.confirmPassword = value.trim();
-                        });
-                      },
-                      icon: Icons.password,
-                      tipo: TextInputType.visiblePassword,
-                      obsText: true,
-                    ),
-                    ButtoWidget(
-                      text: 'Actualizar Contraseña',
-                      textColor: Colors.black,
-                      press: () async {
-                        if (this.password == this.confirmPassword) {
-                          if (this.password.length < 6) {
-                            sixCharactersPasswordAlert(context);
-                          } else {
-                            final user =
-                                await FirebaseAuth.instance.currentUser;
-                            final cred = EmailAuthProvider.credential(
-                                email: state.userEmail,
-                                password: this.currentPassword);
-                            user!
-                                .reauthenticateWithCredential(cred)
-                                .then((value) {
-                              user.updatePassword(this.password).then((_) {
-                                upDatePasswordAlert(context);
-                              }).catchError((error) {
+                      TextFieldFuntion(
+                        hintText: '',
+                        onChanged: (value) {
+                          setState(() {
+                            this.password = value.trim();
+                          });
+                        },
+                        icon: Icons.password,
+                        tipo: TextInputType.visiblePassword,
+                        obsText: true,
+                      ),
+                      Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
+                            child: Text(
+                              "Ingrese su nueva contraseña:",
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 14),
+                            ),
+                          ),
+                        ],
+                      ),
+                      TextFieldFuntion(
+                        hintText: '',
+                        onChanged: (value) {
+                          setState(() {
+                            this.confirmPassword = value.trim();
+                          });
+                        },
+                        icon: Icons.password,
+                        tipo: TextInputType.visiblePassword,
+                        obsText: true,
+                      ),
+                      SizedBox(height: size.height * 0.02),
+                      ButtoWidget(
+                        text: 'Actualizar Contraseña',
+                        textColor: Colors.black,
+                        press: () async {
+                          if (this.password == this.confirmPassword) {
+                            if (this.password.length < 6) {
+                              sixCharactersPasswordAlert(context);
+                            } else {
+                              final user =
+                                  await FirebaseAuth.instance.currentUser;
+                              final cred = EmailAuthProvider.credential(
+                                  email: state.userEmail,
+                                  password: this.currentPassword);
+                              user!
+                                  .reauthenticateWithCredential(cred)
+                                  .then((value) {
+                                user.updatePassword(this.password).then((_) {
+                                  upDatePasswordAlert(context);
+                                }).catchError((error) {
+                                  wrongCurrentPasswordAlert(context);
+                                });
+                              }).catchError((err) {
                                 wrongCurrentPasswordAlert(context);
                               });
-                            }).catchError((err) {
-                              wrongCurrentPasswordAlert(context);
-                            });
+                            }
+                          } else {
+                            differentPasswordsAlert(context);
                           }
-                        } else {
-                          differentPasswordsAlert(context);
-                        }
-                      },
-                    ),
-                    SizedBox(height: size.height * 0.05),
-                  ],
+                        },
+                      ),
+                      SizedBox(height: size.height * 0.05),
+                    ],
+                  ),
                 ),
               );
             },

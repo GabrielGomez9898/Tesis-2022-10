@@ -58,6 +58,23 @@ class ReportListState extends State<ReportListPage> {
           centerTitle: true,
           automaticallyImplyLeading: false,
           title: Text("Reportes ciudadanos"),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.home),
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => MultiBlocProvider(providers: [
+                    BlocProvider.value(
+                        value: BlocProvider.of<UserBloc>(context)),
+                    BlocProvider(
+                        create: (BuildContext context) => ReportBloc()),
+                    BlocProvider(
+                        create: (BuildContext context) => ContactsblocBloc())
+                  ], child: HomePage()),
+                ));
+              },
+            )
+          ],
         ),
         backgroundColor: Colors.transparent,
         body: BlocBuilder<ReportBloc, ReportblocState>(
@@ -159,97 +176,83 @@ class ReportListState extends State<ReportListPage> {
                   ),
                 ),
                 SizedBox(height: size.height * 0.02),
-                Material(
-                  elevation: 0,
-                  child: BlocListener<ReportBloc, ReportblocState>(
-                    listener: (context, state) {},
-                    child: Container(
-                      height: size.height * 0.6,
-                      width: size.width * 0.95,
-                      decoration: new BoxDecoration(
-                          border: Border.all(
-                              width: 3, color: Color.fromARGB(255, 0, 0, 0)),
-                          borderRadius: BorderRadius.circular(0),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(255, 193, 192, 192)
-                                  .withOpacity(0.3),
-                              spreadRadius: 3,
-                              blurRadius: 5,
-                              offset:
-                                  Offset(0, 0), // changes position of shadow
-                            ),
-                          ]),
-                      padding: const EdgeInsets.only(left: 1),
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: state.reports.length,
-                        itemBuilder: (context, index) {
-                          Report report = state.reports[index];
+                Center(
+                  child: Material(
+                    elevation: 5,
+                    child: BlocListener<ReportBloc, ReportblocState>(
+                      listener: (context, state) {},
+                      child: Container(
+                        height: size.height * 0.6,
+                        width: size.width * 0.95,
+                        decoration: new BoxDecoration(
+                            border: Border.all(
+                                width: 3, color: Color.fromARGB(255, 0, 0, 0)),
+                            borderRadius: BorderRadius.circular(0),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(255, 193, 192, 192)
+                                    .withOpacity(0.3),
+                                spreadRadius: 3,
+                                blurRadius: 5,
+                                offset:
+                                    Offset(0, 0), // changes position of shadow
+                              ),
+                            ]),
+                        child: ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: state.reports.length,
+                          itemBuilder: (context, index) {
+                            Report report = state.reports[index];
 
-                          return Container(
-                            decoration: new BoxDecoration(
-                              color: Color.fromARGB(6, 0, 0, 0),
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Color.fromARGB(88, 0, 0, 0),
-                                  width: 1.0,
+                            return Container(
+                              decoration: new BoxDecoration(
+                                color: Color.fromARGB(6, 0, 0, 0),
+                                border: Border(
+                                  bottom: BorderSide(
+                                    color: Color.fromARGB(88, 0, 0, 0),
+                                    width: 1.0,
+                                  ),
                                 ),
                               ),
-                            ),
-                            child: ListTile(
-                              title: Text(report.tipoReporte),
-                              subtitle: Text(report.asunto),
-                              trailing: BlocBuilder<UserBloc, UserblocState>(
-                                builder: (context, state) {
-                                  return ElevatedButton(
-                                      onPressed: () {
-                                        Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (_) => MultiBlocProvider(
-                                              providers: [
-                                                BlocProvider.value(
-                                                    value: BlocProvider.of<
-                                                        UserBloc>(context)),
-                                                BlocProvider.value(
-                                                    value: BlocProvider.of<
-                                                        ReportBloc>(context)),
-                                              ],
-                                              child: ReportDetail(
-                                                  idReport: report.id,
-                                                  idPoliceUser: state.userID,
-                                                  tipoReporteFiltro:
-                                                      this._tipoReporteFiltro,
-                                                  estadoReporteFiltro: this
-                                                      ._estadoReporteFiltro)),
-                                        ));
-                                      },
-                                      child: Text("Ver más"));
-                                },
+                              child: ListTile(
+                                title: Text(report.tipoReporte),
+                                subtitle: Text(report.asunto),
+                                trailing: BlocBuilder<UserBloc, UserblocState>(
+                                  builder: (context, state) {
+                                    return ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.of(context)
+                                              .push(MaterialPageRoute(
+                                            builder: (_) => MultiBlocProvider(
+                                                providers: [
+                                                  BlocProvider.value(
+                                                      value: BlocProvider.of<
+                                                          UserBloc>(context)),
+                                                  BlocProvider.value(
+                                                      value: BlocProvider.of<
+                                                          ReportBloc>(context)),
+                                                ],
+                                                child: ReportDetail(
+                                                    idReport: report.id,
+                                                    idPoliceUser: state.userID,
+                                                    tipoReporteFiltro:
+                                                        this._tipoReporteFiltro,
+                                                    estadoReporteFiltro: this
+                                                        ._estadoReporteFiltro)),
+                                          ));
+                                        },
+                                        child: Text("Ver más"));
+                                  },
+                                ),
+                                onTap: () {},
                               ),
-                              onTap: () {},
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => MultiBlocProvider(providers: [
-                          BlocProvider.value(
-                              value: BlocProvider.of<UserBloc>(context)),
-                          BlocProvider(
-                              create: (BuildContext context) => ReportBloc()),
-                          BlocProvider(
-                              create: (BuildContext context) =>
-                                  ContactsblocBloc())
-                        ], child: HomePage()),
-                      ));
-                    },
-                    child: Text("HOME"))
               ],
             );
           },
