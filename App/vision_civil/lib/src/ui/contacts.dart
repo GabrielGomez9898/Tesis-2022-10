@@ -157,17 +157,29 @@ class ContactsPageState extends State<ContactsPage> {
                                                               idUser: state
                                                                   .userID)),
                                                     ));
+                                                    setState(() {
+                                                      BlocProvider.of<
+                                                                  ContactsblocBloc>(
+                                                              context)
+                                                          .add(
+                                                              GetUserContactsEvent(
+                                                                  state
+                                                                      .userID));
+                                                    });
                                                   },
                                                   child: Icon(Icons.edit)),
                                               SizedBox(width: 10),
                                               ElevatedButton(
                                                   onPressed: () {
-                                                    BlocProvider.of<
-                                                                ContactsblocBloc>(
-                                                            context)
-                                                        .add(DeleteContactEvent(
-                                                            emergencyContact1
-                                                                .uniqueid));
+                                                    setState(() {
+                                                      BlocProvider.of<
+                                                                  ContactsblocBloc>(
+                                                              context)
+                                                          .add(DeleteContactEvent(
+                                                              emergencyContact1
+                                                                  .uniqueid,
+                                                              state.userID));
+                                                    });
                                                   },
                                                   child: Icon(Icons.delete))
                                             ],
@@ -216,17 +228,29 @@ class ContactsPageState extends State<ContactsPage> {
                                                               idUser: state
                                                                   .userID)),
                                                     ));
+                                                    setState(() {
+                                                      BlocProvider.of<
+                                                                  ContactsblocBloc>(
+                                                              context)
+                                                          .add(
+                                                              GetUserContactsEvent(
+                                                                  state
+                                                                      .userID));
+                                                    });
                                                   },
                                                   child: Icon(Icons.edit)),
                                               SizedBox(width: 10),
                                               ElevatedButton(
                                                   onPressed: () {
-                                                    BlocProvider.of<
-                                                                ContactsblocBloc>(
-                                                            context)
-                                                        .add(DeleteContactEvent(
-                                                            emergencyContact2
-                                                                .uniqueid));
+                                                    setState(() {
+                                                      BlocProvider.of<
+                                                                  ContactsblocBloc>(
+                                                              context)
+                                                          .add(DeleteContactEvent(
+                                                              emergencyContact1
+                                                                  .uniqueid,
+                                                              state.userID));
+                                                    });
                                                   },
                                                   child: Icon(Icons.delete))
                                             ],
@@ -275,17 +299,29 @@ class ContactsPageState extends State<ContactsPage> {
                                                               idUser: state
                                                                   .userID)),
                                                     ));
+                                                    setState(() {
+                                                      BlocProvider.of<
+                                                                  ContactsblocBloc>(
+                                                              context)
+                                                          .add(
+                                                              GetUserContactsEvent(
+                                                                  state
+                                                                      .userID));
+                                                    });
                                                   },
                                                   child: Icon(Icons.edit)),
                                               SizedBox(width: 10),
                                               ElevatedButton(
                                                   onPressed: () {
-                                                    BlocProvider.of<
-                                                                ContactsblocBloc>(
-                                                            context)
-                                                        .add(DeleteContactEvent(
-                                                            emergencyContact3
-                                                                .uniqueid));
+                                                    setState(() {
+                                                      BlocProvider.of<
+                                                                  ContactsblocBloc>(
+                                                              context)
+                                                          .add(DeleteContactEvent(
+                                                              emergencyContact1
+                                                                  .uniqueid,
+                                                              state.userID));
+                                                    });
                                                   },
                                                   child: Icon(Icons.delete)),
                                             ],

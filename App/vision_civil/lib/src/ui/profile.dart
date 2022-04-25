@@ -32,6 +32,7 @@ class ProfileState extends State<Profile> {
       password = "",
       confirmPassword = "";
   double phone = 0;
+  String realPhone = "";
   ProfileState(String widgetEmail, String widgetName, String widgetBirthDate,
       String widgetGender, double widgetPhone) {
     this.email = widgetEmail;
@@ -59,6 +60,8 @@ class ProfileState extends State<Profile> {
           backgroundColor: Colors.transparent,
           body: BlocBuilder<UserBloc, UserblocState>(
             builder: (context, state) {
+              realPhone = state.userPhone.toString().split(".")[0];
+
               return SingleChildScrollView(
                 child: Column(
                   children: [
@@ -150,7 +153,7 @@ class ProfileState extends State<Profile> {
                     ),
                     state.userRole == "CIUDADANO"
                         ? TextFieldFuntion(
-                            hintText: state.userPhone.toString(),
+                            hintText: realPhone,
                             onChanged: (value) {
                               setState(() {
                                 this.phone = double.parse(value.trim());
@@ -160,7 +163,7 @@ class ProfileState extends State<Profile> {
                             icon: Icons.aod,
                             obsText: false)
                         : TextFieldFuntion(
-                            hintText: state.userPhone.toString(),
+                            hintText: realPhone,
                             enablded: false,
                             onChanged: (value) {},
                             tipo: TextInputType.number,

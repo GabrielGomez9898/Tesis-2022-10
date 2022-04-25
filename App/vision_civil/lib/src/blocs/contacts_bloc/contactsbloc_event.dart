@@ -47,9 +47,11 @@ class AddContactEvent extends ContactsblocEvent {
 // ignore: must_be_immutable
 class DeleteContactEvent extends ContactsblocEvent {
   String uniqueID = " ";
+  String idUser = " ";
 
-  DeleteContactEvent(String _uniqueID) {
+  DeleteContactEvent(String _uniqueID, String _idUser) {
     this.uniqueID = _uniqueID;
+    this.idUser = _idUser;
   }
 }
 

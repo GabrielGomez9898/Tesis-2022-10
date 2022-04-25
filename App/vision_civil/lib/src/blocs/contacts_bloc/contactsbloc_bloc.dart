@@ -27,8 +27,28 @@ class ContactsblocBloc extends Bloc<ContactsblocEvent, ContactsblocState> {
       } else if (event is AddContactEvent) {
         contactsdb.addContact(
             event.contactName, event.contactPhone, event.idUser);
+        List<EmergencyContact> emergencyContacts = [];
+        Future<QuerySnapshot> contacts =
+            contactsdb.getEmergencyContacts(event.idUser);
+        await contacts.then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            emergencyContacts.add(EmergencyContact(
+                doc.id, doc["contact_name"], doc["contact_phone"]));
+            emit(ContactsblocState(emergencyUserContacts: emergencyContacts));
+          });
+        });
       } else if (event is DeleteContactEvent) {
         contactsdb.deleteContact(event.uniqueID);
+        List<EmergencyContact> emergencyContacts = [];
+        Future<QuerySnapshot> contacts =
+            contactsdb.getEmergencyContacts(event.idUser);
+        await contacts.then((QuerySnapshot querySnapshot) {
+          querySnapshot.docs.forEach((doc) {
+            emergencyContacts.add(EmergencyContact(
+                doc.id, doc["contact_name"], doc["contact_phone"]));
+          });
+        });
+        emit(ContactsblocState(emergencyUserContacts: emergencyContacts));
       } else if (event is SendEmergencyAlertEvent) {
         print("quiere alertar a sus contactos");
 
