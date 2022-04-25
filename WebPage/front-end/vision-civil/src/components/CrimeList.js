@@ -228,8 +228,13 @@ const getListadoByFilter = () => {
         setTimeout(() => {  
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
-            alert("Se realizo un nuevo reporte");     
+            getListadoData();
+            setShowLoading(true);
           });
+          if(showLoading){
+            alert("Se realizo un nuevo reporte"); 
+            setShowLoading(false);
+          }
         }, 3000);
         
         
