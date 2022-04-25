@@ -7,7 +7,7 @@ const AreaChartCard = () => {
 
     const data = timeChartsData;
 
-    const COLORS = ['#3498DB', '#5132FF', '#27AE60', '#8E44AD', "#FD66FF", "#FF4848", "#F39C12", "#1ABC9C"];
+    const COLORS = ['#3498DB', '#0059FF', '#24a124', '#1ABC9C', "#FD66FF", "#FF4848", "#FF7B00", "#808080"];
 
     return (
         <div className="card-areachart-container">

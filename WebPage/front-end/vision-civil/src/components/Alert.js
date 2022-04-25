@@ -27,7 +27,7 @@ const Alert = (props) => {
     useEffect(() => {
         const timer = setTimeout(() => {
             setIsShown(false);
-        }, 3000);
+        }, 4000);
 
         return () => clearTimeout()
     }, [])

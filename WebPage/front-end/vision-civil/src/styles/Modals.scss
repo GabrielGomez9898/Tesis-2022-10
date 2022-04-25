@@ -56,6 +56,13 @@
     gap: 1rem;
     
     background-color: rgba(255, 255, 255, 0.267);
+
+    a {
+        font-family: 'Manjari', sans-serif;
+        font-size: 0.85rem;
+
+        cursor: pointer;
+    }
 }
 
 .modal-description {

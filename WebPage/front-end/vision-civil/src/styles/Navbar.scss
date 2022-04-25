@@ -53,6 +53,9 @@
 .nav-link svg {
     min-width: 2rem;
     margin: 0 1.5rem;
+    overflow: hidden;
+    max-width: 32px;
+    max-height: 32px;
 }
 
 .fa-primary {

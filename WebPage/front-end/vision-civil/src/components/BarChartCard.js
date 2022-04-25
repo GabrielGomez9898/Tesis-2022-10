@@ -5,58 +5,57 @@ import { ResponsiveContainer, Bar, BarChart, CartesianGrid, Legend, Tooltip, XAx
 const BarChartCard = () => {
     const typeChartsData = useSelector((state) => state.typeChartsData.value);
 
-    // const sampleData = {
-    //     hurtoViviendaNum: 8,
-    //     hurtoPersonaNum: 39,
-    //     hurtoVehiculoNum: 20,
-    //     vandalismoNum: 12,
-    //     violacionNum: 27,
-    //     homicidioNum: 12,
-    //     agresionNum: 68,
-    //     otroNum: 7
-    // }
-
-    const data = [
+    let data = [
         {
             reportType: "Hurto de viviendas",
-            A: typeChartsData.hurtoViviendaNum
+            A: typeChartsData.hurtoViviendaNum,
+            color: "#3498DB"
         },
         {
             reportType: "Hurto a personas",
-            A: typeChartsData.hurtoPersonaNum
+            A: typeChartsData.hurtoPersonaNum,
+            color: "#0059FF"
         },
         {
             reportType: "Hurto de vehículos",
-            A: typeChartsData.hurtoVehiculoNum
+            A: typeChartsData.hurtoVehiculoNum,
+            color: "#24a124"
         },
         {
             reportType: "Vandalismo",
-            A: typeChartsData.vandalismoNum
+            A: typeChartsData.vandalismoNum,
+            color: "#1ABC9C"
         },
         {
             reportType: "Violación",
-            A: typeChartsData.violacionNum
+            A: typeChartsData.violacionNum,
+            color: "#FD66FF"
         },
         {
             reportType: "Homicidio",
-            A: typeChartsData.homicidioNum
+            A: typeChartsData.homicidioNum,
+            color: "#FF4848"
         },
         {
             reportType: "Agresión",
-            A: typeChartsData.agresionNum
+            A: typeChartsData.agresionNum,
+            color: "#FF7B00"
         },
         {
             reportType: "Otro",
-            A: typeChartsData.otroNum
+            A: typeChartsData.otroNum,
+            color: "#808080"
         }
     ]
+
+    data = data.sort((a, b) => a.A - b.A).filter(({A}) => A != 0);
 
     const COLORS = ['#3498DB', '#5132FF', '#27AE60', '#8E44AD', "#FD66FF", "#FF4848", "#F39C12", "#1ABC9C"];
 
     return (
         <div className="card-barchart-container">
             <ResponsiveContainer width="100%" height="100%" >
-                <BarChart data={data.sort((a, b) => a.A - b.A)} width={730} height={250} barCategoryGap="0%" margin={{ top: 35, right: 35, left: 0, bottom: 10 }}>
+                <BarChart data={data} width={730} height={250} barCategoryGap="0%" margin={{ top: 35, right: 35, left: 0, bottom: 10 }}>
                     <CartesianGrid vertical={false} strokeDasharray="3 3" />
                     <XAxis 
                         dataKey="reportType" 
@@ -75,10 +74,10 @@ const BarChartCard = () => {
                                 Numero de reportes
                         </Label>
                     </YAxis>
-                    <Bar dataKey="A" fill="#8884d8">
+                    <Bar dataKey="A" fill="#8884d8" animationDuration={1000} >
                         <LabelList dataKey="A" style={{fill: "white", stroke: "white", strokeWidth: 0}}/>
                         {data.map((val, i) => (
-                            <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                            <Cell key={`cell-${i}`} fill={data[i % data.length].color} />
                         ))}
                     </Bar>
                 </BarChart>

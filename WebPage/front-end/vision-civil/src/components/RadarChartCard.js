@@ -5,17 +5,6 @@ import { PolarAngleAxis, PolarGrid, RadarChart, ResponsiveContainer, Radar, Lege
 const RadarChartCard = () => {
     const typeChartsData = useSelector((state) => state.typeChartsData.value);
 
-    // const sampleData = {
-    //     hurtoViviendaNum: 8,
-    //     hurtoPersonaNum: 39,
-    //     hurtoVehiculoNum: 20,
-    //     vandalismoNum: 12,
-    //     violacionNum: 27,
-    //     homicidioNum: 12,
-    //     agresionNum: 68,
-    //     otroNum: 7
-    // }
-
     const biggest = Math.max(...Object.values(typeChartsData))
 
     const round5 = (x) => {
@@ -72,7 +61,7 @@ const RadarChartCard = () => {
                 <PolarGrid/>
                 <PolarAngleAxis dataKey="reportType" style={{fontFamily: ["Manjari", "sansSerif"], fontSize: "0.9rem"}}/>
                 <PolarRadiusAxis angle={90} domain={[0, round5(biggest)]} style={{fontSize: "0.8rem"}} tick={false}/>
-                <Radar name="Reportes" dataKey="A" stroke="#82ca9d" fill="#82ca9d" fillOpacity={0.6}/>
+                <Radar name="Reportes" dataKey="A" stroke="#FFCC00" fill="#FFCC00" fillOpacity={0.3} animationDuration={1000} />
                 <Tooltip/>
             </RadarChart>
         </ResponsiveContainer>

@@ -1,65 +1,70 @@
 import "../styles/Dashboard.scss";
 import { useSelector, useDispatch } from "react-redux";
 import { refreshData } from "../features/FunctionaryList";
-import React, { PureComponent } from "react";
+import React, { PureComponent, useCallback } from "react";
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer, Legend , LabelList, Tooltip, Customized} from 'recharts';
 
 const PieChartCard = () => {
     const dispatch = useDispatch();
     const typeChartsData = useSelector((state) => state.typeChartsData.value)
 
-    // const sampleData = {
-    //     hurtoViviendaNum: 8,
-    //     hurtoPersonaNum: 39,
-    //     hurtoVehiculoNum: 20,
-    //     vandalismoNum: 12,
-    //     violacionNum: 27,
-    //     homicidioNum: 12,
-    //     agresionNum: 68,
-    //     otroNum: 7
-    // }
-
-    const data = [
+    let data = [
         {
             name: "Hurto de viviendas",
-            value: typeChartsData.hurtoViviendaNum
+            value: typeChartsData.hurtoViviendaNum,
+            color: "#3498DB"
         },
         {
             name: "Hurto a personas",
-            value: typeChartsData.hurtoPersonaNum
+            value: typeChartsData.hurtoPersonaNum,
+            color: "#0059FF"
         },
         {
             name: "Hurto de vehículos",
-            value: typeChartsData.hurtoVehiculoNum
+            value: typeChartsData.hurtoVehiculoNum,
+            color: "#24a124"
         },
         {
             name: "Vandalismo",
-            value: typeChartsData.vandalismoNum
+            value: typeChartsData.vandalismoNum,
+            color: "#1ABC9C"
         },
         {
             name: "Violación",
-            value: typeChartsData.violacionNum
+            value: typeChartsData.violacionNum,
+            color: "#FD66FF"
         },
         {
             name: "Homicidio",
-            value: typeChartsData.homicidioNum
+            value: typeChartsData.homicidioNum,
+            color: "#FF4848"
         },
         {
             name: "Agresión",
-            value: typeChartsData.agresionNum
+            value: typeChartsData.agresionNum,
+            color: "#FF7B00"
         },
         {
             name: "Otro",
-            value: typeChartsData.otroNum
+            value: typeChartsData.otroNum,
+            color: "#808080"
         }
     ]
 
-    const COLORS = ['#3498DB', '#5132FF', '#27AE60', '#8E44AD', "#FD66FF", "#FF4848", "#F39C12", "#1ABC9C"];
+    const numberOfReports = data.reduce((acc, obj) => acc += obj.value, data[0].value);
+
+    data = data.sort((a, b) => a.value - b.value).filter(({value}) => value != 0);
+
+    console.log(numberOfReports);
+
+    const formatToPercentage = useCallback((value) => `${((value / numberOfReports) * 100).toFixed(0)}%`, []);
+
+    const COLORS = ['#00C3FF', '#0059FF', '#006800', '#00FF62', "#FF00FF", "#FF0000", "#FF7B00", "#000000"];
 
     return (
         <ResponsiveContainer className="card-piechart-container" width="100%" height="100%" >
             <PieChart>
-                <Pie data={data.sort((a, b) => a.value - b.value)} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={100} outerRadius={150} fill="#8884d8" >
+                <Pie data={data} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={100} outerRadius={150} fill="#8884d8" animationDuration={1000} >
                     <LabelList 
                         dataKey="name" 
                         angle="0" 
@@ -70,11 +75,11 @@ const PieChartCard = () => {
                     <LabelList 
                         dataKey="value" 
                         angle="0" 
-                        formatter={(value) => `${((value / 193) * 100).toFixed(0)}%`} 
+                        formatter={(value) => `${((value / numberOfReports) * 100).toFixed(0)}%`} 
                         style={{fill: "white", stroke: "white", strokeWidth: 0}} 
                     />
                     {data.map((val, i) => (
-                        <Cell key={`cell-${i}`} fill={COLORS[i % COLORS.length]} />
+                        <Cell key={`cell-${i}`} fill={data[i % data.length].color} />
                     ))}
                 </Pie>
                 {/* <Legend verticalAlign="bottom" iconType="square"></Legend> */}

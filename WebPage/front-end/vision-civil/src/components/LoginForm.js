@@ -26,7 +26,7 @@ const LoginForm = () => {
         try {
             setMessage("");
             setIsLoading(true);
-            setButtonClassName("button-loading")
+            setButtonClassName("button-loading");
             
             const isSuccessful = await signIn(email, password);
             if(isSuccessful) {

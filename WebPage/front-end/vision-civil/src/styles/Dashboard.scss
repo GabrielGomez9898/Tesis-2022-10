@@ -20,34 +20,34 @@
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
 }
 
-.yellow-circle,
+.cyan-circle,
 .blue-circle,
 .green-circle,
-.purple-circle,
+.mint-circle,
 .pink-circle,
 .red-circle,
-.orange-circle {
+.orange-circle,
+.other-circle {
     width: 1.2rem;
     height: 1.2rem;
     border-radius: 50px;
-    margin-left: 1rem;
     display: inline-block;
 }
 
-.yellow-circle {
-    background-color: rgba(0, 183, 255, 0.4);
+.cyan-circle {
+    background-color: rgba(0, 195, 255, 0.4);
 }
 
 .blue-circle {
-    background-color: rgba(0, 26, 255, 0.4);
+    background-color: rgba(0, 89, 255, 0.4);
 }
 
 .green-circle {
-    background-color: rgba(0, 128, 0, 0.4);
+    background-color: rgba(0, 104, 0, 0.4);
 }
 
-.purple-circle {
-    background-color: rgba(77, 0, 128, 0.4);
+.mint-circle {
+    background-color: rgba(0, 255, 98, 0.4);
 }
 
 .pink-circle {
@@ -59,7 +59,11 @@
 }
 
 .orange-circle {
-    background-color: rgba(255, 136, 0, 0.4);
+    background-color: rgba(255, 123, 0, 0.4);
+}
+
+.other-circle {
+    background-color: rgba(0, 0, 0, 0.4);
 }
 
 .card-mapfilter-container,
@@ -102,9 +106,17 @@
     grid-row: 2/6;
     grid-column: 5/7;
 
-    h1 {
-        font-size: 1.4rem;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+
+    h2 {
         text-align: center;
+        margin-bottom: 20px;
     }
 
     p {
@@ -150,4 +162,10 @@
 .card-areachart-container {
     grid-row: 12/16;
     grid-column: 4/7;
+}
+
+.legend-item-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
 }

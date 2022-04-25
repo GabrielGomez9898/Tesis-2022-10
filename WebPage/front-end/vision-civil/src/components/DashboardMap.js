@@ -34,25 +34,25 @@ const DashboardMap = (props) => {
                 let CircleOpacity = 0.0;
 
                 if(mapData[i].reportType === "HURTO_VIVIENDA") {
-                    circleColor = "#00b7ff";
+                    circleColor = "#00C3FF";
                 }
                 else if(mapData[i].reportType === "HURTO_PERSONA") {
-                    circleColor = "#001aff";
+                    circleColor = "#0059FF";
                 }
                 else if(mapData[i].reportType === "HURTO_VEHICULO") {
-                    circleColor = "#008000";
+                    circleColor = "#006800";
                 }
                 else if(mapData[i].reportType === "VANDALISMO") {
-                    circleColor = "#4d0080";
+                    circleColor = "#00FF62";
                 }
                 else if(mapData[i].reportType === "VIOLACION") {
-                    circleColor = "#ff00ff";
+                    circleColor = "#FF00FF";
                 }
                 else if(mapData[i].reportType === "HOMICIDIO") {
-                    circleColor = "#ff0000";
+                    circleColor = "#FF0000";
                 }
                 else if(mapData[i].reportType === "AGRESION") {
-                    circleColor = "#ff8800";
+                    circleColor = "#FF7B00";
                 }
                 else if(mapData[i].reportType === "OTRO") {
                     circleColor = "#000000";

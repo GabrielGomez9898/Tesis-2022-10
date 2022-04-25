@@ -32,6 +32,7 @@ const TypeChartsFilterCard = () => {
     }
 
     useEffect(() => {
+        dispatch(refreshData({}));
         getTypeChartsData();
     }, [])
 
