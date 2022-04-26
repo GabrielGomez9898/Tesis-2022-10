@@ -109,7 +109,7 @@ class _ProcessReportState extends State<ProcessReport> {
                               child: Text(state.report.asunto),
                             ),
                             SizedBox(height: size.height * 0.01),
-                            Text("Descripcion: ",
+                            Text("Descripción: ",
                                 style: TextStyle(
                                   fontSize: 18.0,
                                   color: Color.fromARGB(255, 0, 0, 0),
@@ -335,13 +335,13 @@ class _ProcessReportState extends State<ProcessReport> {
                                   child: CircularProgressIndicator());
                             }
                           } else {
-                            return Text("El reporte no cueta con imagenes",
+                            return Text("El reporte no cuenta con imagenes",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: Color.fromARGB(255, 255, 255, 255),
                                     fontSize: 15));
                           }
-                          return Text("El reporte no cueta con imagenes",
+                          return Text("El reporte no cuenta con imagenes",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                   color: Color.fromARGB(255, 255, 255, 255),
