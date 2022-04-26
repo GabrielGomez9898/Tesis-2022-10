@@ -404,7 +404,7 @@ class CreateReportState extends State<CreateReport> {
                     ),
                   ),
                   SizedBox(height: 30),
-                  Text("Escribe una breve descripcion de los hechos (OPCIONAL)",
+                  Text("Escribe una breve descripción de los hechos (OPCIONAL)",
                       style: TextStyle(fontSize: 16.0, color: Colors.grey)),
                   SizedBox(height: 10),
                   Center(
@@ -465,7 +465,7 @@ class CreateReportState extends State<CreateReport> {
                       Container(
                         child: FittedBox(
                           child: Text(
-                            "¿ Deseo adjuntar mi numero celular ?",
+                            "¿ Deseo adjuntar mi número celular ?",
                             style: TextStyle(color: Colors.grey),
                           ),
                         ),

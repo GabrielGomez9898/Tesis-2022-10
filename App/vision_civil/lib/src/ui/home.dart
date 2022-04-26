@@ -1,3 +1,4 @@
+import 'dart:io' show Platform;
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -186,6 +187,9 @@ class HomeState extends State<HomePage> {
                                                       userstate.userName,
                                                       _latitude,
                                                       _longitude));
+                                              if (Platform.isAndroid) {
+                                                AlertSend(context);
+                                              }
                                             },
                                             child: Column(
                                               mainAxisAlignment:
@@ -723,4 +727,22 @@ class HomeState extends State<HomePage> {
       },
     );
   }
+}
+
+AlertSend(BuildContext context) {
+  AlertDialog alert = AlertDialog(
+    title: Text('Alerta enviada'),
+    content:
+        Text('tus contactos de confinza recibiran un mensaje con tu ubicación'),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }
