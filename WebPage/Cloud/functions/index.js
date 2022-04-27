@@ -37,6 +37,7 @@ const printError = (error) => {
 };
 
 // getMapData
+const getMapData = express();
 app.get("/mapData", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -70,8 +71,10 @@ app.get("/mapData", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getMapData = functions.https.onRequest(getMapData);
 
 // getTypeChartsData
+const getTypeChartsData = express();
 app.get("/typeChartsData", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -112,8 +115,10 @@ app.get("/typeChartsData", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getTypeChartsData = functions.https.onRequest(getTypeChartsData);
 
 // getTimeChartsData
+const getTimeChartsData = express();
 app.get("/timeChartsData", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -145,8 +150,10 @@ app.get("/timeChartsData", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getTimeChartsData = functions.https.onRequest(getTimeChartsData);
 
 // getReportById
+const getReportById = express();
 app.get("/report/:reportId", async (request, response) => {
   try {
     const doc = await db.collection("reports").doc(request.params.reportId).get();
@@ -159,8 +166,10 @@ app.get("/report/:reportId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getReportById = functions.https.onRequest(getReportById);
 
-// getAllFunctionaries
+// getFunctionaries
+const getFunctionaries = express();
 app.get("/functionaries", async (request, response) => {
   try {
     const querySnapshot = await db.collection("functionaries").get();
@@ -177,8 +186,10 @@ app.get("/functionaries", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getFunctionaries = functions.https.onRequest(getFunctionaries);
 
 // createFunctionary
+const createFunctionary = express();
 app.post("/functionaries", async (request, response) => {
   try {
     const requestBody = request.body;
@@ -198,8 +209,10 @@ app.post("/functionaries", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.createFunctionary = functions.https.onRequest(createFunctionary);
 
 // updateFunctionary
+const updateFunctionary = express();
 app.patch("/functionaries/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
@@ -219,8 +232,10 @@ app.patch("/functionaries/:functionaryId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.updateFunctionary = functions.https.onRequest(updateFunctionary);
 
 // deleteFunctionary
+const deleteFunctionary = express();
 app.delete("/functionaries/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
@@ -247,8 +262,10 @@ app.delete("/functionaries/:functionaryId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.deleteFunctionary = functions.https.onRequest(deleteFunctionary);
 
-// getAllReports
+// getReports
+const getReports = express();
 app.get("/reports", async (request, response) => {
   try {
     const doc = await db.collection("reports").get();
@@ -321,8 +338,10 @@ app.get("/reports", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getReports = functions.https.onRequest(getReports);
 
 // getAllCops
+const getCops = express();
 app.get("/cops", async (request, response) => {
   try {
     const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
@@ -339,8 +358,10 @@ app.get("/cops", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.getCops = functions.https.onRequest(getCops);
 
 // createCop
+const createCop = express();
 app.post("/cops", async (request, response) => {
   try {
     const requestBody = request.body;
@@ -360,8 +381,10 @@ app.post("/cops", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.createCop = functions.https.onRequest(createCop);
 
 // updateCop
+const updateCop = express();
 app.patch("/cops/:copId", async (request, response) => {
   try {
     const id = request.params.copId;
@@ -379,8 +402,10 @@ app.patch("/cops/:copId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.updateCop = functions.https.onRequest(updateCop);
 
 // deleteCop
+const deleteCop = express();
 app.delete("/cops/:copId", async (request, response) => {
   try {
     const id = request.params.copId;
@@ -407,8 +432,10 @@ app.delete("/cops/:copId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.deleteCop = functions.https.onRequest(deleteCop);
 
 // notification
+const sendNotification = express();
 app.post("/notification", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -452,8 +479,10 @@ app.post("/notification", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.sendNotification = functions.https.onRequest(sendNotification);
 
 // getReportsByFilter
+const getReportsByFilter = express();
 app.get("/reportByFilter", async (request, response) => {
   try {
     const queryParams = request.query;
@@ -545,8 +574,7 @@ app.get("/reportByFilter", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-
-exports.app = functions.https.onRequest(app);
+exports.getReportsByFilter = functions.https.onRequest(getReportsByFilter);
 
 exports.getAllReports = functions.https.onRequest((request, response) => {
   const events = admin.firestore().collection("reports");
@@ -604,6 +632,8 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
   }
 });
 
+// generatePassword
+const generatePassword = express();
 app.get("/password", (request, response) => {
   try {
     const password = generator.generate({
@@ -617,11 +647,13 @@ app.get("/password", (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.generatePassword = functions.https.onRequest(generatePassword);
 
 const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL);
 oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
 
 // notifyFunctionaryPassword
+const notifyFunctionaryPassword = express();
 app.post("/functionaries/:email", async (request, response) => {
   try {
     const email = request.params.email;
@@ -674,8 +706,10 @@ app.post("/functionaries/:email", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.notifyFunctionaryPassword = functions.https.onRequest(notifyFunctionaryPassword);
 
 // notifyCopPassword
+const notifyCopPassword = express();
 app.post("/cops/:email", async (request, response) => {
   try {
     const email = request.params.email;
@@ -728,3 +762,6 @@ app.post("/cops/:email", async (request, response) => {
     return response.status(500).send(error);
   }
 });
+exports.notifyCopPassword = functions.https.onRequest(notifyCopPassword);
+
+exports.app = functions.https.onRequest(app);
