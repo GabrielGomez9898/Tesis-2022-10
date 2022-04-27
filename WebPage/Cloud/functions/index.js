@@ -262,25 +262,25 @@ app.get("/reports", async (request, response) => {
       reporte = item.data();
       reporte["id"] = id;
       if (reporte["tipo_reporte"] === "HURTO_VIVIENDA") {
-        color = "#00b7ff";
+        color = "#00C3FF";
       }
       else if (reporte["tipo_reporte"] === "HURTO_PERSONA") {
-        color = "#001aff";
+        color = "#0059FF";
       }
       else if (reporte["tipo_reporte"] === "HURTO_VEHICULO") {
-        color = "#008000";
+        color = "#006800";
       }
       else if (reporte["tipo_reporte"] === "VANDALISMO") {
-        color = "#4d0080";
+        color = "#00FF62";
       }
       else if (reporte["tipo_reporte"] === "VIOLACION") {
-        color = "#ff00ff";
+        color = "#FF00FF";
       }
       else if (reporte["tipo_reporte"] === "HOMICIDIO") {
-        color = "#ff0000";
+        color = "#FF0000";
       }
       else if (reporte["tipo_reporte"] === "AGRESION") {
-        color = "#ff8800";
+        color = "#FF7B00";
       }
       else if (reporte["tipo_reporte"] === "OTRO") {
         color = "#000000";
@@ -433,7 +433,7 @@ app.post("/notification", async (request, response) => {
     };
     var options = {
       priority: "high",
-      //timeToLive: 60 * 60 *24
+      timeToLive: 60 * 60 *24
     };
     try {
       tokens.map((item, i) => {
@@ -443,6 +443,7 @@ app.post("/notification", async (request, response) => {
           console.log("no sirvio", error)
         })
       })
+      return response.status(200).send();
     } catch (error) {
       printError(error)
     }
@@ -566,7 +567,7 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
     ({ title } = request.body)
 
     title.replace("_", " ");
-    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", "true").get();
+    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", true).get();
     let user = undefined;
     let tokens = [];
     usersRef.forEach((item) => {
