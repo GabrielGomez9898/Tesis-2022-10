@@ -32,11 +32,13 @@ const UsersTable = () => {
     const [lastCopDoc, setLastCopDoc] = useState();
 
     useEffect(() => {
+        setNotMoreFuncsToBring(false);
         dispatch(refreshFuncData([]));
         getFuncsDataBatch(true);
     }, [functionaryFiltersData.functionaryType]);
 
     useEffect(() => {
+        setNotMoreCopsToBring(false);
         dispatch(refreshCopData([]));
         getCopsDataBatch(true);
     }, [copFiltersData.genero, copFiltersData.disponibilidad, copFiltersData.estado]);
@@ -104,9 +106,9 @@ const UsersTable = () => {
                 dispatch(refreshFuncData([...functionaryList, ...functionaries]));
             }
         }
-        // else {
-        //     setNotMoreFuncsToBring(true);
-        // }
+        else {
+            setNotMoreFuncsToBring(true);
+        }
 
         setIsLoadingFuncs(false);
         setFuncsButtonClassName("");
@@ -360,9 +362,9 @@ const UsersTable = () => {
                 dispatch(refreshCopData([...copList, ...cops]));
             }
         }
-        // else {
-        //     setNotMoreCopsToBring(true);
-        // }
+        else {
+            setNotMoreCopsToBring(true);
+        }
 
         setIsLoadingCops(false);
         setCopsButtonClassName("");
@@ -401,7 +403,7 @@ const UsersTable = () => {
                         null 
                         :
                         (notMoreFuncsToBring ? 
-                        <h1>No hay más funcionarios</h1> :
+                        <span className="not-more-docs-text">No hay más funcionarios</span> :
                         <button className={funcsButtonClassName} disabled={isLoadingFuncs} onClick={handleMoreFuncsClick}>
                             {isLoadingFuncs ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más funcionarios"}
                         </button>)
@@ -441,7 +443,7 @@ const UsersTable = () => {
                         null
                         :
                         (notMoreCopsToBring ? 
-                        <h1>No hay más policías</h1> :
+                        <span className="not-more-docs-text">No hay más policías</span> :
                         <button className={copsButtonClassName} disabled={isLoadingCops} onClick={handleMoreCopsClick}>
                             {isLoadingCops ? <ClipLoader css={style} color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más policías"}
                         </button>)
