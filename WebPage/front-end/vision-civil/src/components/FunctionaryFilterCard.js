@@ -6,7 +6,7 @@ import ReactTooltip from "react-tooltip";
 const FunctionaryFilterCard = (props) => {
     const dispatch = useDispatch();
 
-    const [functionaryType, setFunctionaryType] = useState("TODOS");
+    const [functionaryType, setFunctionaryType] = useState(props.functionaryType);
 
     const handleSubmit = (e) => {
         e.preventDefault();
