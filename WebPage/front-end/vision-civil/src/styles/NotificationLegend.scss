@@ -1,0 +1,45 @@
+.card-maplegend-container-notification {
+    grid-row: 2/6;
+    grid-column: 5/7;
+
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 10px;
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 1.1rem;
+        margin-left: 1rem;
+        display: inline-block;
+
+        font-family: 'Manjari', sans-serif;
+        font-weight: lighter;
+    }
+}
+.card-maplegend-container-notification {
+    z-index: 1000;
+    max-height: 80vh;
+    width: 58%;
+    height: 67vh;
+}
+.legend-item-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    text-align: justify;
+}
+.card-maplegend-container-notification {
+
+border-radius: 15px;
+
+background-color: white;
+box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+}

@@ -25,6 +25,7 @@ const CrimeList = () => {
   const [isFilterLoading, setIsFilterLoading] = useState(false);
   const [filterButtonClassName, setFilterButtonClassName] = useState("");
   const [isFilterEmpty, setIsFilterEmpty] = useState(false);
+  const [notMoreList, setNotMoreList] = useState(false);
   const [reportList, setReportList] = useState([]);
   const initialRenderDone = useRef(false);
 
@@ -33,6 +34,7 @@ const CrimeList = () => {
     setListado([]);
     setReportList([]);
     getListadoByFilter();
+
 }
 
   //funcion para sacar los reportes del back
@@ -45,13 +47,13 @@ const CrimeList = () => {
   }
   //funcion para obtener los siguientes 3 reportes
   function getMoreReports(){
-    setIsFilterLoading(true);
-    setFilterButtonClassName("button-loading");  
-    setTimeout(() => {
-      setIsFilterLoading(false)
-      setFilterButtonClassName("");  
-    }, 1000);  
-    getReports();
+      setIsFilterLoading(true);
+      setFilterButtonClassName("button-loading");  
+      setTimeout(() => {
+        setIsFilterLoading(false)
+        setFilterButtonClassName("");  
+      }, 1000);  
+      getReports();
   }
   //funcion para paginacion de reportes de 3 en 3
   function getReports(){
@@ -77,10 +79,19 @@ const CrimeList = () => {
         let contador = 0;
         for (indice ; indice < listado.length; indice++) {
           if(contador < 3)
-            tem.push(listado[indice])
-            contador += 1;        
+            tem.push(listado[indice]);
+          if(contador == 3)
+            break;
+            contador += 1;    
         }
         setReportList([...reportList ,...tem])
+
+        if(reportList.length == listado.length){
+          setNotMoreList(true);
+          setIsFilterLoading(false);
+        }else{
+          setNotMoreList(false);
+        }
       }
     }else{
       setReportList([])
@@ -91,6 +102,8 @@ const getListadoByFilter = () => {
   setListado([]);
   setReportList([]);
   setIsFilterEmpty(false)
+  setNotMoreList(false);
+
   let tem = []
   let contR = 0
   Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
@@ -225,25 +238,15 @@ const getListadoByFilter = () => {
             <br></br>
       
       {useEffect(() => {
-        setTimeout(() => {  
           const ref = collection(db , "reports");
           onSnapshot(ref , (snapshot) => {
-            getListadoData();
-            setShowLoading(true);
-          });
-          if(showLoading){
-            alert("Se realizo un nuevo reporte"); 
-            setShowLoading(false);
-          }
-        }, 3000);
-        
-        
+          });        
       }, [])}
       
       {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  reportList.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
       <ul className="list-menu">
         {reportList.map((item) => (
-          <div className="Container-crime" style={{borderColor : item.color}}>
+          <div className="Container-crime" style={{borderColor : item.color}} key={item.id}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
             <br></br>
             <br></br>
@@ -271,7 +274,7 @@ const getListadoByFilter = () => {
       </ul>
       <br></br>
       <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "42%"}}>
-      {isFilterLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
+      {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
       </button>
 
 
