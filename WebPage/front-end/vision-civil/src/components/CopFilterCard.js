@@ -6,9 +6,9 @@ import ReactTooltip from "react-tooltip";
 const CopFilterCard = (props) => {
     const dispatch = useDispatch();
 
-    const [genero, setGenero] = useState("TODOS");
-    const [disponibilidad, setDisponibilidad] = useState("TODOS");
-    const [estado, setEstado] = useState("TODOS");
+    const [genero, setGenero] = useState(props.genero);
+    const [disponibilidad, setDisponibilidad] = useState(props.disponibilidad);
+    const [estado, setEstado] = useState(props.estado);
 
     const obj = {
         genero: genero,

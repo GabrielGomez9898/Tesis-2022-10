@@ -106,7 +106,7 @@ const UsersTable = () => {
                 dispatch(refreshFuncData([...functionaryList, ...functionaries]));
             }
         }
-        else {
+        if(querySnapshot.docs.length < 3) {
             setNotMoreFuncsToBring(true);
         }
 
@@ -362,7 +362,7 @@ const UsersTable = () => {
                 dispatch(refreshCopData([...copList, ...cops]));
             }
         }
-        else {
+        if(querySnapshot.docs.length < 3){
             setNotMoreCopsToBring(true);
         }
 
