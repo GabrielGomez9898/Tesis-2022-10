@@ -436,7 +436,7 @@ app.post("/notification", async (request, response) => {
     };
     var options = {
       priority: "high",
-      //timeToLive: 60 * 60 *24
+      timeToLive: 60 * 60 *24
     };
     try {
       tokens.map((item, i) => {
@@ -446,6 +446,7 @@ app.post("/notification", async (request, response) => {
           console.log("no sirvio", error)
         })
       })
+      return response.status(200).send();
     } catch (error) {
       printError(error)
     }
@@ -569,7 +570,7 @@ exports.sendNotification = functions.https.onRequest(async (request, response) =
     ({ title } = request.body)
 
     title.replace("_", " ");
-    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", "true").get();
+    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", true).get();
     let user = undefined;
     let tokens = [];
     usersRef.forEach((item) => {
