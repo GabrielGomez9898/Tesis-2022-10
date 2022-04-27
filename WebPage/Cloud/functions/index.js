@@ -136,9 +136,6 @@ app.get("/timeChartsData", async (request, response) => {
       case "ESTE_AÑO":
         timeChartsData = await totalReportsByYear(db);
         break;
-      case "DE_POR_VIDA":
-        timeChartsData = await totalReportsForever(db);
-        break;
     }
 
     return response.status(200).json(timeChartsData);

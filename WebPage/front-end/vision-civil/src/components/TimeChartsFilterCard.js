@@ -22,7 +22,7 @@ const TimeChartsFilterCard = () => {
     }
 
     const getTimeChartsData = () => {
-        Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/timeChartsData?period=${period}`).then((response) => {
+        Axios.get(`http://localhost:5001/miproyecto-5cf83/us-central1/app/timeChartsData?period=${period}`).then((response) => {
             dispatch(refreshData(response.data));
             setIsLoading(false);
             setButtonClassName("");
@@ -45,10 +45,9 @@ const TimeChartsFilterCard = () => {
                 <select className="filter-card-input" id="period" required onChange={(e) => {setPeriod(e.target.value)}}>
                     <option key="ultimos7dias" value="ESTA_SEMANA">Últimos 7 días</option>
                     <option key="ultimos30dias" value="ESTE_MES">Últimos 30 días</option>
-                    <option key="esteTrimestre" value="ESTE_TRIMESTRE" selected>Este trimestre</option>
-                    <option key="esteSemestre" value="ESTE_SEMESTRE">Este semestre</option>
-                    <option key="esteAnio" value="ESTE_AÑO">Este año</option>
-                    <option key="dePorVida" value="DE_POR_VIDA">De por vida</option>
+                    <option key="esteTrimestre" value="ESTE_TRIMESTRE" selected>Último trimestre</option>
+                    <option key="esteSemestre" value="ESTE_SEMESTRE">Último semestre</option>
+                    <option key="esteAnio" value="ESTE_AÑO">Último año</option>
                 </select>
             </div>
             <button type="submit" className={buttonClassName} disabled={isLoading}>
