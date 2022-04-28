@@ -75,7 +75,7 @@ const ChangePasswordForm = () => {
     `;
 
     return createPortal(
-        <div className="login-modal-background">
+        <div className="password-modal-background">
             <form className="login-modal-content" onSubmit={handleSubmit}>
                 <h2>Cambia tu contraseña</h2>
                 {message && <Alert text={message} alertType="danger" isDeletable={false} />}
