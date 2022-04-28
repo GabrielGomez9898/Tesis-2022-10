@@ -14,7 +14,7 @@ const DeleteCopModal = (props) => {
     const [hideCancelButton, setHideCancelButton] = useState(false);
 
     const deleteCop = () => {
-        return Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/cops/${props.copIdText}`);
+        return Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/cops/${props.copIdText}`);
         
     };
 

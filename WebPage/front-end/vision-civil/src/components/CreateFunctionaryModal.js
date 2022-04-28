@@ -85,15 +85,15 @@ const CreateFunctionaryModal = ({ onClose }) => {
     }, [id]);
 
     const createFunctionary = () => {
-        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries`, functionary);
+        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/functionaries`, functionary);
     };
 
     const getPassword = () => {
-        return Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/password`);
+        return Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/password`);
     };
 
     const notifyPasswordByEmail = () => {
-        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries/${email}`, {password: password});
+        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/password/functionaries/${email}`, {password: password});
     };
 
     const register = async (e) => {

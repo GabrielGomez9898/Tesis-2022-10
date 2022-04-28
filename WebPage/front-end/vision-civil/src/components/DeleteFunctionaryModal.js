@@ -15,7 +15,7 @@ const DeleteFunctionaryModal = (props) => {
     const [hideCancelButton, setHideCancelButton] = useState(false);
 
     const deleteFunctionary = () => {
-        return Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries/${props.functionaryId}`);
+        return Axios.delete(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/functionaries/${props.functionaryId}`);
     };
 
     const handleClick = async () => {

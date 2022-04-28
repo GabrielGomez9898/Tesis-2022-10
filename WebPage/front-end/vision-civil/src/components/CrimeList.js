@@ -4,8 +4,8 @@ import { Map, GoogleApiWrapper, InfoWindow, Marker } from "google-maps-react"
 import Axios from "axios";
 import { getStorage, ref, getDownloadURL } from "firebase/storage";
 import { collection, doc, onSnapshot } from "firebase/firestore";
-import {db, storage} from "../firebase"
-import {LazyLoadImage} from "react-lazy-load-image-component"
+import { db, storage } from "../firebase"
+import { LazyLoadImage } from "react-lazy-load-image-component"
 import 'react-lazy-load-image-component/src/effects/blur.css'
 import { SyncLoader, ClipLoader } from "react-spinners";
 import { async } from "@firebase/util";
@@ -35,100 +35,100 @@ const CrimeList = () => {
     setReportList([]);
     getListadoByFilter();
 
-}
+  }
 
   //funcion para sacar los reportes del back
   async function getListadoData() {
-     Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reports')
-    .then((response) => {
-      setListado(response.data)
-      console.log(response)
-    })
+    Axios.get('https://us-central1-miproyecto-5cf83.cloudfunctions.net/reports')
+      .then((response) => {
+        setListado(response.data)
+        console.log(response)
+      })
   }
   //funcion para obtener los siguientes 3 reportes
-  function getMoreReports(){
-      setIsFilterLoading(true);
-      setFilterButtonClassName("button-loading");  
-      setTimeout(() => {
-        setIsFilterLoading(false)
-        setFilterButtonClassName("");  
-      }, 1000);  
-      getReports();
+  function getMoreReports() {
+    setIsFilterLoading(true);
+    setFilterButtonClassName("button-loading");
+    setTimeout(() => {
+      setIsFilterLoading(false)
+      setFilterButtonClassName("");
+    }, 1000);
+    getReports();
   }
   //funcion para paginacion de reportes de 3 en 3
-  function getReports(){
+  function getReports() {
     let indice = reportList.length;
     let tem = [];
-    if(listado.length != 0){
+    if (listado.length != 0) {
       setReportList([])
-      if(reportList.length == 0 || reportList == null || indice == 0){
-        if(listado.length >= 3) {
+      if (reportList.length == 0 || reportList == null || indice == 0) {
+        if (listado.length >= 3) {
 
-          for (let i = 0; i < 3 ; i++) {
+          for (let i = 0; i < 3; i++) {
             tem.push(listado[i])
           }
-        }else{
-          for (let i = 0; i < listado.length ; i++) {
+        } else {
+          for (let i = 0; i < listado.length; i++) {
             tem.push(listado[i])
           }
         }
-        
+
         setReportList(tem);
       }
-      else{
+      else {
         let contador = 0;
-        for (indice ; indice < listado.length; indice++) {
-          if(contador < 3)
+        for (indice; indice < listado.length; indice++) {
+          if (contador < 3)
             tem.push(listado[indice]);
-          if(contador == 3)
+          if (contador == 3)
             break;
-            contador += 1;    
+          contador += 1;
         }
-        setReportList([...reportList ,...tem])
+        setReportList([...reportList, ...tem])
 
-        if(reportList.length == listado.length){
+        if (reportList.length == listado.length) {
           setNotMoreList(true);
           setIsFilterLoading(false);
-        }else{
+        } else {
           setNotMoreList(false);
         }
       }
-    }else{
+    } else {
       setReportList([])
     }
   }
-//funcion para obtener los reportes por filtro
-const getListadoByFilter = () => {
-  setListado([]);
-  setReportList([]);
-  setIsFilterEmpty(false)
-  setNotMoreList(false);
+  //funcion para obtener los reportes por filtro
+  const getListadoByFilter = () => {
+    setListado([]);
+    setReportList([]);
+    setIsFilterEmpty(false)
+    setNotMoreList(false);
 
-  let tem = []
-  let contR = 0
-  Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/reportByFilter?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
-    if(response.data.length == 0)
-    setIsFilterEmpty(true)
-    if(contR < 3)
-    tem.push(response.data)
-    contR += 1
-    setListado(response.data)
-    if(contR > 2 || reportList.length <= 0)
-    setReportList(tem)
-  }).catch((error) => console.log(error));
-}
-  useEffect(() =>  {
-   getListadoData();
-   
-  }, []);
-    
+    let tem = []
+    let contR = 0
+    Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/reports/filters?lowerDate=${lowerDate}&upperDate=${upperDate}&reportType=${reportType}`).then((response) => {
+      if (response.data.length == 0)
+        setIsFilterEmpty(true)
+      if (contR < 3)
+        tem.push(response.data)
+      contR += 1
+      setListado(response.data)
+      if (contR > 2 || reportList.length <= 0)
+        setReportList(tem)
+    }).catch((error) => console.log(error));
+  }
   useEffect(() => {
-    if(!initialRenderDone.current){
+    getListadoData();
+
+  }, []);
+
+  useEffect(() => {
+    if (!initialRenderDone.current) {
       initialRenderDone.current = true
-    }else{
+    } else {
       getReports();
     }
-},[listado]);  
+  }, [listado]);
 
   function getClass(index) {
     return index === activeObject?.id ? "active" : "inactive";
@@ -166,28 +166,28 @@ const getListadoByFilter = () => {
 
     return (
       <div id="CrimeListtModal" className="active modal" >
-        <div className={props.container} style={{borderColor: props.object.color}}>
+        <div className={props.container} style={{ borderColor: props.object.color }}>
           <div className="fotos" >
-            {props.object.hasFotos && listadofotos.length == 0 ?  <div style={{marginTop : "75%"}}><SyncLoader sizeUnit={'px'} size={40} color={props.object.color} loading={true} /> </div>: "" }
-                
+            {props.object.hasFotos && listadofotos.length == 0 ? <div style={{ marginTop: "75%" }}><SyncLoader sizeUnit={'px'} size={40} color={props.object.color} loading={true} /> </div> : ""}
+
             {listadofotos.length == 1 ?
               <LazyLoadImage src={listadofotos[0]} effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" className="imgu" style={{ width: 300, height: 300 }}></LazyLoadImage>
-             :
-             (listadofotos.map((image,i) => (
-              <LazyLoadImage src={listadofotos[i]} className="img" effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" style={{ width: 300, height: 300 }}></LazyLoadImage>
-            ) ))  
+              :
+              (listadofotos.map((image, i) => (
+                <LazyLoadImage src={listadofotos[i]} className="img" effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" style={{ width: 300, height: 300 }}></LazyLoadImage>
+              )))
             }
           </div>
           <div className="report">
-            <span className="close-btn" onClick={() => setShowModal(false)}>&times;</span> 
+            <span className="close-btn" onClick={() => setShowModal(false)}>&times;</span>
             <br></br>
             <br></br>
-            <h1 className="asunto">{ props.object.asunto != " " ? props.object.asunto.charAt(0).toUpperCase() +props.object.asunto.slice(1) : "No hay asunto"}</h1>
-            <span>Tipo reporte: </span> <span className="TipoAlerta">{props.object.tipo_reporte.charAt(0).toUpperCase() + (props.object.tipo_reporte.toLowerCase().replace("_" ," ")).slice(1)}</span>
+            <h1 className="asunto">{props.object.asunto != " " ? props.object.asunto.charAt(0).toUpperCase() + props.object.asunto.slice(1) : "No hay asunto"}</h1>
+            <span>Tipo reporte: </span> <span className="TipoAlerta">{props.object.tipo_reporte.charAt(0).toUpperCase() + (props.object.tipo_reporte.toLowerCase().replace("_", " ")).slice(1)}</span>
             <br></br>
-            <span>{props.object.descripcion != " " ? <span>Descripción : </span> : ""}</span><span className="Descripcion">{props.object.descripcion != " " ? props.object.descripcion.charAt(0).toUpperCase() +props.object.descripcion.slice(1) : "No hay descripción"}</span>
+            <span>{props.object.descripcion != " " ? <span>Descripción : </span> : ""}</span><span className="Descripcion">{props.object.descripcion != " " ? props.object.descripcion.charAt(0).toUpperCase() + props.object.descripcion.slice(1) : "No hay descripción"}</span>
             <br></br>
-            <span>Fecha : </span> <span className="fecha">{props.object.fecha}</span> 
+            <span>Fecha : </span> <span className="fecha">{props.object.fecha}</span>
             <br></br>
             <span>Hora : </span> <span className="horamodal">{props.object.hora}</span>
             <br></br>
@@ -209,56 +209,56 @@ const getListadoByFilter = () => {
       <h1 className="title"> Listado de crimenes</h1>
       <br></br>
       <form className="card-mapfilter-container" onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="lowerDate">Desde</label><br/>
-                    <input id="lowerDate" type="date" required onChange={(e) => {setLowerDate(e.target.value)}} />
-                </div>
-                <div>
-                    <label htmlFor="upperDate">Hasta</label><br/>
-                    <input id="upperDate" type="date" required onChange={(e) => {setUpperDate(e.target.value)}}/>
-                </div>
-                <div>
-                    <label htmlFor="reportType">Tipo de reporte</label><br/>
-                    <select id="reportType" required onChange={(e) => {setReportType(e.target.value)}}>
-                        <option key="todos" value="TODOS">Todos</option>
-                        <option key="hurtoVivienda" value="HURTO_VIVIENDA">Hurto Vivienda</option>
-                        <option key="hurtoPersona" value="HURTO_PERSONA">Hurto Persona</option>
-                        <option key="hurtoVehiculo" value="HURTO_VEHICULO">Hurto Vehículo</option>
-                        <option key="vandalismo" value="VANDALISMO">Vandalismo</option>
-                        <option key="violacion" value="VIOLACION">Violación</option>
-                        <option key="homicidio" value="HOMICIDIO">Homicidio</option>
-                        <option key="agresion" value="AGRESION">Agresión</option>
-                        <option key="otro" value="OTRO">Otro</option>
-                    </select>
-                </div>
-                <button >
-                   Aplicar filtros a la lista
-                </button>
-            </form>
-            <br></br>
-      
+        <div>
+          <label htmlFor="lowerDate">Desde</label><br />
+          <input id="lowerDate" type="date" required onChange={(e) => { setLowerDate(e.target.value) }} />
+        </div>
+        <div>
+          <label htmlFor="upperDate">Hasta</label><br />
+          <input id="upperDate" type="date" required onChange={(e) => { setUpperDate(e.target.value) }} />
+        </div>
+        <div>
+          <label htmlFor="reportType">Tipo de reporte</label><br />
+          <select id="reportType" required onChange={(e) => { setReportType(e.target.value) }}>
+            <option key="todos" value="TODOS">Todos</option>
+            <option key="hurtoVivienda" value="HURTO_VIVIENDA">Hurto Vivienda</option>
+            <option key="hurtoPersona" value="HURTO_PERSONA">Hurto Persona</option>
+            <option key="hurtoVehiculo" value="HURTO_VEHICULO">Hurto Vehículo</option>
+            <option key="vandalismo" value="VANDALISMO">Vandalismo</option>
+            <option key="violacion" value="VIOLACION">Violación</option>
+            <option key="homicidio" value="HOMICIDIO">Homicidio</option>
+            <option key="agresion" value="AGRESION">Agresión</option>
+            <option key="otro" value="OTRO">Otro</option>
+          </select>
+        </div>
+        <button >
+          Aplicar filtros a la lista
+        </button>
+      </form>
+      <br></br>
+
       {useEffect(() => {
-          const ref = collection(db , "reports");
-          onSnapshot(ref , (snapshot) => {
-          });        
+        const ref = collection(db, "reports");
+        onSnapshot(ref, (snapshot) => {
+        });
       }, [])}
-      
-      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  reportList.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
+
+      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div> : reportList.length == 0 ? <div style={{ marginTop: "15%", display: "block", textAlign: "center" }}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga" /> </div> : ""}
       <ul className="list-menu">
         {reportList.map((item) => (
-          <div className="Container-crime" style={{borderColor : item.color}} key={item.id}>
+          <div className="Container-crime" style={{ borderColor: item.color }} key={item.id}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
             <br></br>
             <br></br>
             <h2 className="asunto">{item.asunto != " " ? item.asunto.charAt(0).toUpperCase() + item.asunto.slice(1) : "No hay asunto"}</h2>
             <br></br>
-            <span>{item.descripcion != " " ? <span>Descripción : </span> : ""}</span><span className="description">{item.descripcion != " " ? item.descripcion.charAt(0).toUpperCase() +item.descripcion.slice(1) : "No hay descripción"}</span>
+            <span>{item.descripcion != " " ? <span>Descripción : </span> : ""}</span><span className="description">{item.descripcion != " " ? item.descripcion.charAt(0).toUpperCase() + item.descripcion.slice(1) : "No hay descripción"}</span>
             <br></br>
             <br></br>
-            <div className="pill" style={{borderColor : item.color }}><p className="description" style={{color : item.color, fontFamily: "Spline Sans, sans-serif" }}> <i>{ item.tipo_reporte.toUpperCase().replace("_" , " ")}</i></p></div>
+            <div className="pill" style={{ borderColor: item.color }}><p className="description" style={{ color: item.color, fontFamily: "Spline Sans, sans-serif" }}> <i>{item.tipo_reporte.toUpperCase().replace("_", " ")}</i></p></div>
             <br></br>
             <button
-              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%" , marginTop : "-70px"}}
+              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%", marginTop: "-70px" }}
               className="crime-button"
               key={item.id}
               onClick={() => {
@@ -273,8 +273,8 @@ const getListadoByFilter = () => {
         {showModal ? <Modal object={activeObject} container={container} /> : null}
       </ul>
       <br></br>
-      <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "42%"}}>
-      {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader  color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
+      <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "42%" }}>
+        {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
       </button>
 
 

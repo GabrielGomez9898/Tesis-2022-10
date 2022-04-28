@@ -28,7 +28,7 @@ const handleSubmit = async (e) => {
 
   //funcion para enviar notificaciones
   const sendNotification= () => {
-    return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/notification?title=${title}&description=${description}`);
+    return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/notificationFromWeb?title=${title}&description=${description}`);
 }
 
   return (
