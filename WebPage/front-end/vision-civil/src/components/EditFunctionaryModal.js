@@ -33,7 +33,7 @@ const EditFunctionaryModal = (props) => {
     }, [isMaster])
 
     const updateFunctionary = () => {
-        return Axios.patch(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/functionaries/${props.functionaryId}`, {isMaster: isMaster});
+        return Axios.patch(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/functionaries/${props.functionaryId}`, {isMaster: isMaster});
     };
 
     const handleClick = (isMasterValue) => {

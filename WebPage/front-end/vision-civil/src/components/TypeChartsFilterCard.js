@@ -24,7 +24,7 @@ const TypeChartsFilterCard = () => {
     }
 
     const getTypeChartsData = () => {
-        Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/typeChartsData?lowerDate=${lowerDate}&upperDate=${upperDate}`).then((response) => {
+        Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/typeChartsData?lowerDate=${lowerDate}&upperDate=${upperDate}`).then((response) => {
             dispatch(refreshData(response.data));
             setIsLoading(false);
             setButtonClassName("");

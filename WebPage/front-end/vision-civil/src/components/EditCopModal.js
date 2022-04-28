@@ -27,7 +27,7 @@ const EditCopModal = (props) => {
     }
 
     const updateCop = () => {
-        return Axios.patch(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/cops/${props.copIdText}`, cop);
+        return Axios.patch(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/cops/${props.copIdText}`, cop);
     };
     
     const handleSubmit = async (e) => {

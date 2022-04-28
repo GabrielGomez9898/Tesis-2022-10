@@ -95,15 +95,15 @@ const CreateCopModal = ({onClose}) => {
     }, [id]);
 
     const createCop = () => {
-        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/cops`, cop);
+        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/cops`, cop);
     };
 
     const getPassword = () => {
-        return Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/password`);
+        return Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/password`);
     };
 
     const notifyPasswordByEmail = () => {
-        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/app/cops/${email}`, {password: password});
+        return Axios.post(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/password/cops/${email}`, {password: password});
     };
 
     const register = (async (e) => {
