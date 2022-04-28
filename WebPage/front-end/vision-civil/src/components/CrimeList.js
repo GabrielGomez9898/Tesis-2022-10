@@ -273,9 +273,11 @@ const CrimeList = () => {
         {showModal ? <Modal object={activeObject} container={container} /> : null}
       </ul>
       <br></br>
-      <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "42%" }}>
-        {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
-      </button>
+      <div style={{alignItems: "center"}}>
+        <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "43%" }}>
+          {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
+        </button>
+      </div>
 
 
     </>
