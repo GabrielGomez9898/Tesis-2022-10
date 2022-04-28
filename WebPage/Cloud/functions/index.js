@@ -14,12 +14,6 @@ const cors = require("cors");
 const nodemailer = require("nodemailer");
 var generator = require("generate-password");
 
-// Use Express.ja with cloud functions
-const app = express();
-
-// Enable Cross Origin to prevent CORS error when doing request from the front-end
-app.use(cors({ origin: true }));
-
 // Initialize the firebase app
 var serviceAccount = require("./miproyecto-5cf83-firebase-adminsdk-xu5ve-f682c370b5.json");
 const { google } = require("googleapis");
@@ -37,8 +31,9 @@ const printError = (error) => {
 };
 
 // getMapData
-const getMapData = express();
-app.get("/mapData", async (request, response) => {
+const mapData = express();
+mapData.use(cors({ origin: true }));
+mapData.get("/", async (request, response) => {
   try {
     const queryParams = request.query;
     const lowerDate = queryParams["lowerDate"].replaceAll("-", "/");
@@ -71,11 +66,12 @@ app.get("/mapData", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.getMapData = functions.https.onRequest(getMapData);
+exports.mapData = functions.https.onRequest(mapData);
 
 // getTypeChartsData
-const getTypeChartsData = express();
-app.get("/typeChartsData", async (request, response) => {
+const typeChartsData = express();
+typeChartsData.use(cors({ origin: true }));
+typeChartsData.get("/", async (request, response) => {
   try {
     const queryParams = request.query;
     const lowerDate = queryParams["lowerDate"].replaceAll("-", "/");
@@ -115,11 +111,12 @@ app.get("/typeChartsData", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.getTypeChartsData = functions.https.onRequest(getTypeChartsData);
+exports.typeChartsData = functions.https.onRequest(typeChartsData);
 
 // getTimeChartsData
-const getTimeChartsData = express();
-app.get("/timeChartsData", async (request, response) => {
+const timeChartsData = express();
+timeChartsData.use(cors({ origin: true }));
+timeChartsData.get("/", async (request, response) => {
   try {
     const queryParams = request.query;
     const period = queryParams["period"];
@@ -150,27 +147,15 @@ app.get("/timeChartsData", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.getTimeChartsData = functions.https.onRequest(getTimeChartsData);
+exports.timeChartsData = functions.https.onRequest(timeChartsData);
 
-// getReportById
-const getReportById = express();
-app.get("/report/:reportId", async (request, response) => {
-  try {
-    const doc = await db.collection("reports").doc(request.params.reportId).get();
-    const report = doc.data();
+// Functionaries CRUD
 
-    return response.status(200).json(report);
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.getReportById = functions.https.onRequest(getReportById);
+const functionaries = express();
+functionaries.use(cors({ origin: true }));
 
 // getFunctionaries
-const getFunctionaries = express();
-app.get("/functionaries", async (request, response) => {
+functionaries.get("/", async (request, response) => {
   try {
     const querySnapshot = await db.collection("functionaries").get();
 
@@ -186,11 +171,9 @@ app.get("/functionaries", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.getFunctionaries = functions.https.onRequest(getFunctionaries);
 
 // createFunctionary
-const createFunctionary = express();
-app.post("/functionaries", async (request, response) => {
+functionaries.post("/", async (request, response) => {
   try {
     const requestBody = request.body;
     const functionaryId = requestBody["id"];
@@ -209,21 +192,94 @@ app.post("/functionaries", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.createFunctionary = functions.https.onRequest(createFunctionary);
+
 
 // updateFunctionary
-const updateFunctionary = express();
-app.patch("/functionaries/:functionaryId", async (request, response) => {
+functionaries.patch("/:functionaryId", async (request, response) => {
   try {
     const id = request.params.functionaryId;
     const requestBody = request.body;
     const isMaster = requestBody["isMaster"];
-
+    
     // Create reference to the functionaries collection
     const functionariesRef = db.collection("functionaries");
     // Update the document by id
     const writeResult = await functionariesRef.doc(id).update({ isMaster: isMaster });
     console.log(writeResult);
+    
+    return response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+// deleteFunctionary
+functionaries.delete("/:functionaryId", async (request, response) => {
+  try {
+    const id = request.params.functionaryId;
+    
+    /* Delete the functionary from the functionaries Firestore collection */
+    
+    // Create reference to the functionaries collection
+    const functionariesRef = db.collection("functionaries");
+    // Delete the document by id
+    const writeResult = await functionariesRef.doc(id).delete();
+    
+    /* Delete the functionary from the authentication tier in Firebase */
+    
+    // Delete the user with the provided uid and managing success and failure with .then() and .catch()
+    admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
+      return response.status(200).send(writeResult);
+    }).catch((error) => {
+      printError(error);
+      return response.status(500).send(error);
+    });
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+exports.functionaries = functions.https.onRequest(functionaries);
+
+// Cops CRUD
+
+const cops = express();
+cops.use(cors({ origin: true }));
+
+// getCops
+cops.get("/", async (request, response) => {
+  try {
+    const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
+
+    return response.status(200).json(querySnapshot.docs.map((doc) => {
+      const copObj = doc.data();
+      copObj["id"] = doc.id;
+
+      return copObj;
+    }));
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+// createCop
+cops.post("/", async (request, response) => {
+  try {
+    const requestBody = request.body;
+    const copId = requestBody["id"];
+
+    // The id should not be a field of the new cop document
+    delete requestBody["id"];
+    // Create reference to the users collection
+    const usersRef = db.collection("users");
+    // Add a new document to the collection with the id obtained from the front-end
+    const writeResult = await usersRef.doc(copId).set(requestBody);
 
     return response.status(200).send(writeResult);
   }
@@ -232,22 +288,39 @@ app.patch("/functionaries/:functionaryId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.updateFunctionary = functions.https.onRequest(updateFunctionary);
 
-// deleteFunctionary
-const deleteFunctionary = express();
-app.delete("/functionaries/:functionaryId", async (request, response) => {
+// updateCop
+cops.patch("/:copId", async (request, response) => {
   try {
-    const id = request.params.functionaryId;
+    const id = request.params.copId;
+    const requestBody = request.body;
 
-    /* Delete the functionary from the functionaries Firestore collection */
+    // Create reference to the users collection
+    const usersRef = db.collection("users");
+    // Update the document by id
+    const writeResult = await usersRef.doc(id).update(requestBody);
 
-    // Create reference to the functionaries collection
-    const functionariesRef = db.collection("functionaries");
+    response.status(200).send(writeResult);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+// deleteCop
+cops.delete("/:copId", async (request, response) => {
+  try {
+    const id = request.params.copId;
+
+    /* Delete the cop from the cops Firestore collection */
+
+    // Create reference to the users collection
+    const usersRef = db.collection("users");
     // Delete the document by id
-    const writeResult = await functionariesRef.doc(id).delete();
+    const writeResult = await usersRef.doc(id).delete();
 
-    /* Delete the functionary from the authentication tier in Firebase */
+    /* Delete the cop from the authentication tier in Firebase */
 
     // Delete the user with the provided uid and managing success and failure with .then() and .catch()
     admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
@@ -262,11 +335,243 @@ app.delete("/functionaries/:functionaryId", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.deleteFunctionary = functions.https.onRequest(deleteFunctionary);
+
+exports.cops = functions.https.onRequest(cops);
+
+// notificationFromWeb
+const notificationFromWeb = express();
+notificationFromWeb.use(cors({ origin: true }));
+notificationFromWeb.post("/", async (request, response) => {
+  try {
+    const queryParams = request.query;
+    const title = queryParams["title"];
+    const description = queryParams["description"];
+
+    const usersRef = await db.collection("users").get();
+    let user = undefined;
+    let tokens = [];
+    usersRef.forEach((item) => {
+      user = item.data();
+      if (user["phoneToken"] != null) {
+        tokens.push(user["phoneToken"]);
+      }
+    })
+
+    var payload = {
+      notification: {
+        title: title,
+        body: description
+      }
+    };
+    var options = {
+      priority: "high",
+      timeToLive: 60 * 60 *24
+    };
+    try {
+      tokens.map((item, i) => {
+        admin.messaging().sendToDevice(item, payload, options).then(function (response) {
+          console.log("sirvio", response)
+        }).catch(function (error) {
+          console.log("no sirvio", error)
+        })
+      })
+      return response.status(200).send();
+    } catch (error) {
+      printError(error)
+    }
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+exports.notificationFromWeb = functions.https.onRequest(notificationFromWeb);
+
+// sendNotification
+exports.notificationFromMobile = functions.https.onRequest(async (request, response) => {
+  try {
+    let title = null;
+    ({ title } = request.body)
+
+    title.replace("_", " ");
+    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", true).get();
+    let user = undefined;
+    let tokens = [];
+    usersRef.forEach((item) => {
+      user = item.data();
+      if (user["phoneToken"] != null) {
+        tokens.push(user["phoneToken"]);
+      }
+    })
+
+    var payload = {
+      notification: {
+        title: "Nuevo reporte!",
+        body: "De tipo : " + title
+      }
+    };
+    var options = {
+      priority: "high",
+      //timeToLive: 60 * 60 *24
+    };
+    try {
+      tokens.map((item, i) => {
+        admin.messaging().sendToDevice(item, payload, options).then(function (response) {
+          console.log("sirvio", response)
+        }).catch(function (error) {
+          console.log("no sirvio", error)
+        })
+      })
+    } catch (error) {
+      printError(error)
+    }
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+// Password section
+
+const password = express();
+password.use(cors({ origin: true }));
+
+// generatePassword
+password.get("/", (request, response) => {
+  try {
+    const password = generator.generate({
+      length: 15,
+      numbers: true
+    });
+
+    return response.status(200).json({password: password});
+  }
+  catch (error) {
+    return response.status(500).send(error);
+  }
+});
+
+const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL);
+oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
+
+// notifyFunctionaryPassword
+password.post("/functionaries/:email", async (request, response) => {
+  try {
+    const email = request.params.email;
+    const password = request.body.password;
+
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.EMAIL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken
+      },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Visión Civil - Cuentas" <visioncivilweb@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "¡Bienvenido a Visión Civil Web!", // Subject line
+      text: `Estimado funcionario ${email}
+              Usted acaba de ser registrado en la plataforma de Visión Civil Web. Para ingresar a la plataforma utilice la siguiente contraseña: ${password}
+              Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de Visión Civil Web.
+              Cordialmente, el equipo de Visión Civil`,
+      html: `<p align="center"><img src="cid:img1" width="300"/></p>
+              <h2>Estimado funcionario <i>${email}</i></h2>
+              <p>Usted acaba de ser registrado en la plataforma Visión Civil Web. Para ingresar a la plataforma utilice la siguiente contraseña: <b>${password}</b></p>
+              <p>Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de Visión Civil Web.</p>
+              <p>Cordialmente, el equipo de Visión Civil</p>`,
+      attachments: [
+        {
+          filename: "logoAndText.png",
+          path: "https://raw.githubusercontent.com/VisionCivil/Tesis-2022-10/main/images/logoAndText.png",
+          cid: "img1"
+        }
+      ]
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    return response.status(200).json(info);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+// notifyCopPassword
+password.post("/cops/:email", async (request, response) => {
+  try {
+    const email = request.params.email;
+    const password = request.body.password;
+
+    const accessToken = await oAuth2Client.getAccessToken();
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        type: "OAuth2",
+        user: process.env.EMAIL,
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        refreshToken: process.env.REFRESH_TOKEN,
+        accessToken: accessToken
+      },
+    });
+
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: '"Visión Civil - Cuentas" <visioncivilweb@gmail.com>', // sender address
+      to: email, // list of receivers
+      subject: "¡Bienvenido a Visión Civil Mobile!", // Subject line
+      text: `Estimado policía ${email}
+              Usted acaba de ser registrado en la aplicación móvil de Visión Civil. Para ingresar a la app utilice la siguiente contraseña: ${password}
+              Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de la aplicación.
+              Cordialmente, el equipo de Visión Civil`,
+      html: `<p align="center"><img src="cid:img1" width="300"/></p>
+              <h2>Estimado policía <i>${email}</i></h2>
+              <p>Usted acaba de ser registrado en la aplicación móvil de Visión Civil. Para ingresar a la app utilice la siguiente contraseña: <b>${password}</b></p>
+              <p>Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de la aplicación.</p>
+              <p>Cordialmente, el equipo de Visión Civil</p>`,
+      attachments: [
+        {
+          filename: "logoAndText.png",
+          path: "https://raw.githubusercontent.com/VisionCivil/Tesis-2022-10/main/images/logoAndText.png",
+          cid: "img1"
+        }
+      ]
+    });
+
+    console.log("Message sent: %s", info.messageId);
+
+    return response.status(200).json(info);
+  }
+  catch (error) {
+    printError(error);
+    return response.status(500).send(error);
+  }
+});
+
+exports.password = functions.https.onRequest(password);
+
+// Reports section
+
+const reports = express();
+reports.use(cors({ origin: true }));
 
 // getReports
-const getReports = express();
-app.get("/reports", async (request, response) => {
+reports.get("/", async (request, response) => {
   try {
     const doc = await db.collection("reports").get();
     const reports = [];
@@ -338,153 +643,9 @@ app.get("/reports", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.getReports = functions.https.onRequest(getReports);
-
-// getAllCops
-const getCops = express();
-app.get("/cops", async (request, response) => {
-  try {
-    const querySnapshot = await db.collection("users").where("role", "==", "POLICIA").get();
-
-    return response.status(200).json(querySnapshot.docs.map((doc) => {
-      const copObj = doc.data();
-      copObj["id"] = doc.id;
-
-      return copObj;
-    }));
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.getCops = functions.https.onRequest(getCops);
-
-// createCop
-const createCop = express();
-app.post("/cops", async (request, response) => {
-  try {
-    const requestBody = request.body;
-    const copId = requestBody["id"];
-
-    // The id should not be a field of the new cop document
-    delete requestBody["id"];
-    // Create reference to the users collection
-    const usersRef = db.collection("users");
-    // Add a new document to the collection with the id obtained from the front-end
-    const writeResult = await usersRef.doc(copId).set(requestBody);
-
-    return response.status(200).send(writeResult);
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.createCop = functions.https.onRequest(createCop);
-
-// updateCop
-const updateCop = express();
-app.patch("/cops/:copId", async (request, response) => {
-  try {
-    const id = request.params.copId;
-    const requestBody = request.body;
-
-    // Create reference to the users collection
-    const usersRef = db.collection("users");
-    // Update the document by id
-    const writeResult = await usersRef.doc(id).update(requestBody);
-
-    response.status(200).send(writeResult);
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.updateCop = functions.https.onRequest(updateCop);
-
-// deleteCop
-const deleteCop = express();
-app.delete("/cops/:copId", async (request, response) => {
-  try {
-    const id = request.params.copId;
-
-    /* Delete the cop from the cops Firestore collection */
-
-    // Create reference to the users collection
-    const usersRef = db.collection("users");
-    // Delete the document by id
-    const writeResult = await usersRef.doc(id).delete();
-
-    /* Delete the cop from the authentication tier in Firebase */
-
-    // Delete the user with the provided uid and managing success and failure with .then() and .catch()
-    admin.auth(firebaseApp).deleteUser(id).then((promiseResponse) => {
-      return response.status(200).send(writeResult);
-    }).catch((error) => {
-      printError(error);
-      return response.status(500).send(error);
-    });
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.deleteCop = functions.https.onRequest(deleteCop);
-
-// notification
-const sendNotification = express();
-app.post("/notification", async (request, response) => {
-  try {
-    const queryParams = request.query;
-    const title = queryParams["title"];
-    const description = queryParams["description"];
-
-    const usersRef = await db.collection("users").get();
-    let user = undefined;
-    let tokens = [];
-    usersRef.forEach((item) => {
-      user = item.data();
-      if (user["phoneToken"] != null) {
-        tokens.push(user["phoneToken"]);
-      }
-    })
-
-    var payload = {
-      notification: {
-        title: title,
-        body: description
-      }
-    };
-    var options = {
-      priority: "high",
-      timeToLive: 60 * 60 *24
-    };
-    try {
-      tokens.map((item, i) => {
-        admin.messaging().sendToDevice(item, payload, options).then(function (response) {
-          console.log("sirvio", response)
-        }).catch(function (error) {
-          console.log("no sirvio", error)
-        })
-      })
-      return response.status(200).send();
-    } catch (error) {
-      printError(error)
-    }
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.sendNotification = functions.https.onRequest(sendNotification);
 
 // getReportsByFilter
-const getReportsByFilter = express();
-app.get("/reportByFilter", async (request, response) => {
+reports.get("/filters", async (request, response) => {
   try {
     const queryParams = request.query;
     const lowerDate = queryParams["lowerDate"].replace("-", "/");
@@ -575,194 +736,5 @@ app.get("/reportByFilter", async (request, response) => {
     return response.status(500).send(error);
   }
 });
-exports.getReportsByFilter = functions.https.onRequest(getReportsByFilter);
 
-exports.getAllReports = functions.https.onRequest((request, response) => {
-  const events = admin.firestore().collection("reports");
-  events.get().then((querySnapshot) => {
-    const tempDoc = [];
-    querySnapshot.forEach((doc) => {
-      tempDoc.push(doc);
-    });
-    response.set("Access-Control-Allow-Origin", "*");
-    response.send(tempDoc);
-  });
-});
-
-exports.sendNotification = functions.https.onRequest(async (request, response) => {
-  try {
-    let title = null;
-    ({ title } = request.body)
-
-    title.replace("_", " ");
-    const usersRef = await db.collection("users").where("role", "==", "POLICIA").where("enServicio", "==", true).get();
-    let user = undefined;
-    let tokens = [];
-    usersRef.forEach((item) => {
-      user = item.data();
-      if (user["phoneToken"] != null) {
-        tokens.push(user["phoneToken"]);
-      }
-    })
-
-    var payload = {
-      notification: {
-        title: "Nuevo reporte!",
-        body: "De tipo : " + title
-      }
-    };
-    var options = {
-      priority: "high",
-      //timeToLive: 60 * 60 *24
-    };
-    try {
-      tokens.map((item, i) => {
-        admin.messaging().sendToDevice(item, payload, options).then(function (response) {
-          console.log("sirvio", response)
-        }).catch(function (error) {
-          console.log("no sirvio", error)
-        })
-      })
-    } catch (error) {
-      printError(error)
-    }
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-
-// generatePassword
-const generatePassword = express();
-app.get("/password", (request, response) => {
-  try {
-    const password = generator.generate({
-      length: 15,
-      numbers: true
-    });
-
-    return response.status(200).json({password: password});
-  }
-  catch (error) {
-    return response.status(500).send(error);
-  }
-});
-exports.generatePassword = functions.https.onRequest(generatePassword);
-
-const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URL);
-oAuth2Client.setCredentials({refresh_token: process.env.REFRESH_TOKEN})
-
-// notifyFunctionaryPassword
-const notifyFunctionaryPassword = express();
-app.post("/functionaries/:email", async (request, response) => {
-  try {
-    const email = request.params.email;
-    const password = request.body.password;
-
-    const accessToken = await oAuth2Client.getAccessToken();
-
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: process.env.EMAIL,
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFRESH_TOKEN,
-        accessToken: accessToken
-      },
-    });
-
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from: '"Visión Civil - Cuentas" <visioncivilweb@gmail.com>', // sender address
-      to: email, // list of receivers
-      subject: "¡Bienvenido a Visión Civil Web!", // Subject line
-      text: `Estimado funcionario ${email}
-              Usted acaba de ser registrado en la plataforma de Visión Civil Web. Para ingresar a la plataforma utilice la siguiente contraseña: ${password}
-              Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de Visión Civil Web.
-              Cordialmente, el equipo de Visión Civil`,
-      html: `<p align="center"><img src="cid:img1" width="300"/></p>
-              <h2>Estimado funcionario <i>${email}</i></h2>
-              <p>Usted acaba de ser registrado en la plataforma Visión Civil Web. Para ingresar a la plataforma utilice la siguiente contraseña: <b>${password}</b></p>
-              <p>Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de Visión Civil Web.</p>
-              <p>Cordialmente, el equipo de Visión Civil</p>`,
-      attachments: [
-        {
-          filename: "logoAndText.png",
-          path: "https://raw.githubusercontent.com/VisionCivil/Tesis-2022-10/main/images/logoAndText.png",
-          cid: "img1"
-        }
-      ]
-    });
-
-    console.log("Message sent: %s", info.messageId);
-
-    return response.status(200).json(info);
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.notifyFunctionaryPassword = functions.https.onRequest(notifyFunctionaryPassword);
-
-// notifyCopPassword
-const notifyCopPassword = express();
-app.post("/cops/:email", async (request, response) => {
-  try {
-    const email = request.params.email;
-    const password = request.body.password;
-
-    const accessToken = await oAuth2Client.getAccessToken();
-
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-      service: "gmail",
-      auth: {
-        type: "OAuth2",
-        user: process.env.EMAIL,
-        clientId: process.env.CLIENT_ID,
-        clientSecret: process.env.CLIENT_SECRET,
-        refreshToken: process.env.REFRESH_TOKEN,
-        accessToken: accessToken
-      },
-    });
-
-    // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from: '"Visión Civil - Cuentas" <visioncivilweb@gmail.com>', // sender address
-      to: email, // list of receivers
-      subject: "¡Bienvenido a Visión Civil Mobile!", // Subject line
-      text: `Estimado policía ${email}
-              Usted acaba de ser registrado en la aplicación móvil de Visión Civil. Para ingresar a la app utilice la siguiente contraseña: ${password}
-              Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de la aplicación.
-              Cordialmente, el equipo de Visión Civil`,
-      html: `<p align="center"><img src="cid:img1" width="300"/></p>
-              <h2>Estimado policía <i>${email}</i></h2>
-              <p>Usted acaba de ser registrado en la aplicación móvil de Visión Civil. Para ingresar a la app utilice la siguiente contraseña: <b>${password}</b></p>
-              <p>Le recomendamos encarecidamente que una vez ya tenga acceso, cambie su contraseña por medio de la interfaz de la aplicación.</p>
-              <p>Cordialmente, el equipo de Visión Civil</p>`,
-      attachments: [
-        {
-          filename: "logoAndText.png",
-          path: "https://raw.githubusercontent.com/VisionCivil/Tesis-2022-10/main/images/logoAndText.png",
-          cid: "img1"
-        }
-      ]
-    });
-
-    console.log("Message sent: %s", info.messageId);
-
-    return response.status(200).json(info);
-  }
-  catch (error) {
-    printError(error);
-    return response.status(500).send(error);
-  }
-});
-exports.notifyCopPassword = functions.https.onRequest(notifyCopPassword);
-
-exports.app = functions.https.onRequest(app);
+exports.reports = functions.https.onRequest(reports);
