@@ -244,7 +244,7 @@ const getListadoByFilter = () => {
       }, [])}
       
       {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  reportList.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
-      <ul className="list-menu">
+      <ul className="list-menu" style={{alignItems: "center"}}>
         {reportList.map((item) => (
           <div className="Container-crime" style={{borderColor : item.color}} key={item.id}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
