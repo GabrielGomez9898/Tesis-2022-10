@@ -2,6 +2,7 @@ import "../styles/Modals.scss";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { addItem } from "../features/FunctionaryList";
+import { increment } from "../features/FunctionaryListAddedItems";
 import { useAuth } from "../contexts/AuthContext";
 import { createPortal } from "react-dom";
 import { ClipLoader } from "react-spinners";
@@ -80,7 +81,7 @@ const CreateFunctionaryModal = ({ onClose }) => {
             onClose();
             setIsLoading(false);
             setButtonClassName("");
-            dispatch(addItem(functionary));
+            dispatch(increment());
         }
     }, [id]);
 

@@ -11,6 +11,8 @@ import functionaryListReducer from './features/FunctionaryList';
 import copListReducer from "./features/CopList";
 import functionaryFiltersDataReducer from "./features/FunctionaryFiltersData";
 import copFiltersDataReducer from "./features/CopFiltersData";
+import functionaryListAddedItemsReducer from "./features/FunctionaryListAddedItems";
+import copListAddedItemsReducer from "./features/CopListAddedItems";
 
 const store = configureStore({
   reducer: {
@@ -20,7 +22,9 @@ const store = configureStore({
     functionaryList: functionaryListReducer,
     copList: copListReducer,
     functionaryFiltersData: functionaryFiltersDataReducer,
-    copFiltersData: copFiltersDataReducer
+    copFiltersData: copFiltersDataReducer,
+    functionaryListAddedItems: functionaryListAddedItemsReducer,
+    copListAddedItems: copListAddedItemsReducer
   }
 })
 

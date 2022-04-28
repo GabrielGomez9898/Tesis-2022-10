@@ -19,6 +19,7 @@ const UsersTable = () => {
     // Functionary state related variables
     const functionaryList = useSelector((state) => state.functionaryList.value);
     const functionaryFiltersData = useSelector((state) => state.functionaryFiltersData.value);
+    const functionaryListAddedItems = useSelector((state) => state.functionaryListAddedItems.value);
     const [isLoadingFuncs, setIsLoadingFuncs] = useState(false);
     const [funcsButtonClassName, setFuncsButtonClassName] = useState("");
     const [notMoreFuncsToBring, setNotMoreFuncsToBring] = useState(false);
@@ -26,6 +27,7 @@ const UsersTable = () => {
     // Cop state related variables
     const copList = useSelector((state) => state.copList.value);
     const copFiltersData = useSelector((state) => state.copFiltersData.value);
+    const copListAddedItems = useSelector((state) => state.copListAddedItems.value);
     const [isLoadingCops, setIsLoadingCops] = useState(false);
     const [copsButtonClassName, setCopsButtonClassName] = useState("");
     const [notMoreCopsToBring, setNotMoreCopsToBring] = useState(false);
@@ -42,6 +44,18 @@ const UsersTable = () => {
         dispatch(refreshCopData([]));
         getCopsDataBatch(true);
     }, [copFiltersData.genero, copFiltersData.disponibilidad, copFiltersData.estado]);
+
+    useEffect(() => {
+        setNotMoreFuncsToBring(false);
+        dispatch(refreshFuncData([]));
+        getFuncsDataBatch(true);
+    }, [functionaryListAddedItems]);
+
+    useEffect(() => {
+        setNotMoreCopsToBring(false);
+        dispatch(refreshCopData([]));
+        getCopsDataBatch(true);
+    }, [copListAddedItems]);
 
     const handleMoreFuncsClick = () => {
         setIsLoadingFuncs(true);

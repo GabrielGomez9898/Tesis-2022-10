@@ -5,6 +5,7 @@ import { ClipLoader } from "react-spinners";
 import { css } from "@emotion/react";
 import { useDispatch } from "react-redux";
 import { addItem } from "../features/CopList";
+import { increment } from "../features/CopListAddedItems";
 import Alert from "./Alert";
 import Axios from "axios";
 
@@ -90,7 +91,7 @@ const CreateCopModal = ({onClose}) => {
             onClose();
             setIsLoading(false);
             setButtonClassName("");
-            dispatch(addItem(cop));
+            dispatch(increment());
         }
     }, [id]);
 
