@@ -22,7 +22,7 @@ const TimeChartsFilterCard = () => {
     }
 
     const getTimeChartsData = () => {
-        Axios.get(`http://localhost:5001/miproyecto-5cf83/us-central1/timeChartsData?period=${period}`).then((response) => {
+        Axios.get(`https://us-central1-miproyecto-5cf83.cloudfunctions.net/timeChartsData?period=${period}`).then((response) => {
             dispatch(refreshData(response.data));
             setIsLoading(false);
             setButtonClassName("");
