@@ -272,7 +272,7 @@ const CrimeList = () => {
             <div className="pill" style={{ borderColor: item.color }}><p className="description" style={{ color: item.color, fontFamily: "Spline Sans, sans-serif" }}> <i>{item.tipo_reporte.toUpperCase().replace("_", " ")}</i></p></div>
             <br></br>
             <button
-              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "43%", marginTop: "-70px" }}
+              style={{ marginLeft: "70%", width: "150px", color: "white", borderRadius: "50px", marginTop: "-70px" }}
               className="crime-button"
               key={item.id}
               onClick={() => {
