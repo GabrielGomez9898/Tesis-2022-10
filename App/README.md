@@ -5,7 +5,7 @@ This section of the repository contains all the source code of the mobile app th
 ## **Compatibility**
 Vision Civil app works in IOS :heavy_check_mark: and Android :alien: :heavy_check_mark:
 
-### **IOS :green_apple: **
+### **IOS :green_apple:**
 
 ## **The technology stack**
 
