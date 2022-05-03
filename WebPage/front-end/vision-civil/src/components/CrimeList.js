@@ -133,9 +133,23 @@ const CrimeList = () => {
   function getClass(index) {
     return index === activeObject?.id ? "active" : "inactive";
   }
-  const mapStyles = {
-    width: "43.5%",
-    height: "46%"
+  let mapStyles = {
+  }
+
+  if(window.matchMedia("(max-width: 1600px)"))
+  {
+    console.log("entre al if");
+     mapStyles = {
+      width: "43.5%",
+      height: "46%"
+    }
+  }
+  if(window.matchMedia("(max-width: 1400px)")){
+    console.log("entre al else");
+     mapStyles = {
+      width: "41.5%",
+      height: "38%"
+    }
   }
   //funcion para obtener las fotos desde el storage de firebase
   async function getFotos(id, imagesids, setListadofotos) {
@@ -171,10 +185,10 @@ const CrimeList = () => {
             {props.object.hasFotos && listadofotos.length == 0 ? <div style={{ marginTop: "75%" }}><SyncLoader sizeUnit={'px'} size={40} color={props.object.color} loading={true} /> </div> : ""}
 
             {listadofotos.length == 1 ?
-              <LazyLoadImage src={listadofotos[0]} effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" className="imgu" style={{ width: 300, height: 300 }}></LazyLoadImage>
+              <LazyLoadImage src={listadofotos[0]} effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" className="imgu"></LazyLoadImage>
               :
               (listadofotos.map((image, i) => (
-                <LazyLoadImage src={listadofotos[i]} className="img" effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" style={{ width: 300, height: 300 }}></LazyLoadImage>
+                <LazyLoadImage src={listadofotos[i]} className="img" effect="blur" placeholderSrc="https://skillz4kidzmartialarts.com/wp-content/uploads/2017/04/default-image.jpg" ></LazyLoadImage>
               )))
             }
           </div>
@@ -242,9 +256,9 @@ const CrimeList = () => {
         onSnapshot(ref, (snapshot) => {
         });
       }, [])}
-
-      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div> : reportList.length == 0 ? <div style={{ marginTop: "15%", display: "block", textAlign: "center" }}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga" /> </div> : ""}
-      <ul className="list-menu">
+      
+      {isFilterEmpty ? <div className="not-reports"> No hay reportes </div>  :  reportList.length == 0 ? <div style={{marginTop : "15%", display: "block" , textAlign: "center"}}> <SyncLoader sizeUnit={'10px'} size={80} color="hsl(207, 100%, 50%)" loading={true} className="carga"/> </div> : ""}
+      <ul className="list-menu" style={{alignItems: "center"}}>
         {reportList.map((item) => (
           <div className="Container-crime" style={{ borderColor: item.color }} key={item.id}>
             <span className="time">{item.fecha}</span> <span className="hora">{item.hora}</span>
@@ -273,9 +287,11 @@ const CrimeList = () => {
         {showModal ? <Modal object={activeObject} container={container} /> : null}
       </ul>
       <br></br>
-      <button className={filterButtonClassName} onClick={getMoreReports} style={{ marginLeft: "42%" }}>
-        {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
-      </button>
+      <div style={{alignItems: "center"}}>
+        <button className={filterButtonClassName , "boton-p"} onClick={getMoreReports} >
+          {notMoreList ? "No hay mas reportes" : isFilterLoading ? <ClipLoader color="hsl(207, 100%, 50%)" size={20} loading /> : "Ver más reportes"}
+        </button>
+      </div>
 
 
     </>

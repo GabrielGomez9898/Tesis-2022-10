@@ -12,32 +12,7 @@
     justify-content: center;
 }
 
-.modal-container{
-    display: grid;
-    grid-template-columns: 30% 70%;
-    margin-left: 20%;
-    margin-top: 10%;
-    height: 625px;
-    width: 1150px;
-    min-height: 645px;
-    max-width: 1150px;
-    background-color: $unselected-color;
-    border-radius: 1%;
-    padding: 1rem;
-    border-style: solid;
-    border-width: 3px;
-}
-.modal-container-withoutphotos{
-    margin-left: 30%;
-    margin-top: 10%;
-    min-height: 645px;
-    max-width: 800px;
-    background-color: $unselected-color;
-    border-radius: 1%;
-    padding: 1rem;
-    border-style: solid;
-    border-width: 3px;
-}
+
 
 .report{
     align-items: center;
@@ -50,15 +25,7 @@
     display: block;
     text-align: center;
 }
-.img{
-    width: 400;
-    height: 800;
-}
-.imgu{
-    width: 400;
-    height: 800;
-    margin-top: 160px;
-}
+
 .modalboton{
     background-color:$btn-color ;
     color: $btn-text-color;
@@ -70,20 +37,6 @@
 .title{
     display: block;
     text-align: center;
-}
-.Container-crime{
-    display: block;
-    margin-top: 1rem;
-    width: 700px;
-    height: 70;
-    align-items: center;
-    margin-left: 25%;
-    background-color: white;
-    border-radius: 15px;
-    padding: 1rem;
-    border-style: solid;
-    border-width: 3px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
 }
 
 .button .crime-button{
@@ -169,5 +122,113 @@
     p {
         margin-top: 0;
         margin-bottom: 0;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .modal-container{
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin-left: 20%;
+        margin-top: 10%;
+        height: 530px;
+        width: 800px;
+        min-height: 500px;
+        max-width: 1000px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .modal-container-withoutphotos{
+        margin-left: 27%;
+        margin-top: 7%;
+        min-height: 535px;
+        max-width: 555px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .Container-crime{
+        display: block;
+        width: 600px;
+        height: 60;
+        align-items: center;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 15px;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+    }
+    .imgu{
+        width: 230px;
+        height: 250px;
+        margin-top: 160px;
+    }
+    .img{
+        width: 230px;
+        height: 230px;
+    }
+    .boton-p{
+        margin-left: 39%;
+    }
+}
+
+@media only screen and (min-width: 1600px) {
+    .modal-container{
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin-left: 20%;
+        margin-top: 10%;
+        height: 625px;
+        width: 1150px;
+        min-height: 645px;
+        max-width: 1150px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .modal-container-withoutphotos{
+        margin-left: 30%;
+        margin-top: 10%;
+        min-height: 645px;
+        max-width: 800px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .Container-crime{
+        display: block;
+        width: 700px;
+        height: 70;
+        align-items: center;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 15px;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+    }
+    .imgu{
+        width: 300px;
+        height: 300px;
+        margin-top: 160px;
+    }
+    .img{
+        width: 300px;
+        height: 300px;
+    }
+    .boton-p{
+        margin-left: 43%;
     }
 }
