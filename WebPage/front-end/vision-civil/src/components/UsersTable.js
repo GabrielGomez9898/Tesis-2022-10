@@ -34,24 +34,32 @@ const UsersTable = () => {
     const [lastCopDoc, setLastCopDoc] = useState();
 
     useEffect(() => {
+        setIsLoadingFuncs(true);
+        setFuncsButtonClassName("button-loading");
         setNotMoreFuncsToBring(false);
         dispatch(refreshFuncData([]));
         getFuncsDataBatch(true);
     }, [functionaryFiltersData.functionaryType]);
 
     useEffect(() => {
+        setIsLoadingCops(true);
+        setCopsButtonClassName("button-loading");
         setNotMoreCopsToBring(false);
         dispatch(refreshCopData([]));
         getCopsDataBatch(true);
     }, [copFiltersData.genero, copFiltersData.disponibilidad, copFiltersData.estado]);
 
     useEffect(() => {
+        setIsLoadingFuncs(true);
+        setFuncsButtonClassName("button-loading");
         setNotMoreFuncsToBring(false);
         dispatch(refreshFuncData([]));
         getFuncsDataBatch(true);
     }, [functionaryListAddedItems]);
 
     useEffect(() => {
+        setIsLoadingCops(true);
+        setCopsButtonClassName("button-loading");
         setNotMoreCopsToBring(false);
         dispatch(refreshCopData([]));
         getCopsDataBatch(true);
@@ -394,17 +402,15 @@ const UsersTable = () => {
                 <div className="users-table-column">
                     <ColumnHeader columnText="Funcionarios"/>
                     {
-                        (functionaryList.length === 0)
-                        ?
-                        null
-                        :
+                        (functionaryList.length === 0 && isLoadingFuncs) ?
+                        <SyncLoader color="hsl(207, 100%, 50%)" loading /> :
                         <FunctionaryFilterCard functionaryType={functionaryFiltersData.functionaryType} />
                         
                     }
                     {
-                        (functionaryList.length === 0) 
+                        (functionaryList.length === 0 && !isLoadingFuncs) 
                         ?
-                        <SyncLoader color="hsl(207, 100%, 50%)" loading /> 
+                        <span className="not-more-docs-text">No hay funcionarios que coincidan con los filtros</span>
                         :
                         functionaryList.map((functionary) => {
                             return <ColumnCell functionaryId={functionary["id"]} emailText={functionary["email"]} isMaster={functionary["isMaster"]}/>
@@ -427,16 +433,14 @@ const UsersTable = () => {
                 <div className="users-table-column">
                     <ColumnHeader columnText="Policías"/>
                     {
-                        (copList.length === 0)
-                        ?
-                        null
-                        :
+                        (copList.length === 0 && isLoadingCops) ? 
+                        <SyncLoader color="hsl(207, 100%, 50%)" loading /> :
                         <CopFilterCard genero={copFiltersData.genero} disponibilidad={copFiltersData.disponibilidad} estado={copFiltersData.estado}/>
                     }
                     {
-                        (copList.length === 0)
+                        (copList.length === 0 && !isLoadingCops)
                         ?
-                        <SyncLoader color="hsl(207, 100%, 50%)" loading />
+                        <span className="not-more-docs-text">No hay policías que coincidan con los filtros</span>
                         :
                         copList.map((cop) => {
                             return <ColumnCell 
