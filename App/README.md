@@ -5,8 +5,6 @@ This section of the repository contains all the source code of the mobile app th
 ## **Compatibility**
 Vision Civil app works in IOS :heavy_check_mark: and Android :heavy_check_mark:
 
-### **IOS Features :green_apple:**                                                       
-* **Version**: From version 10 onwards
 * **Permissions**:
   * Location
   * Camera
@@ -15,16 +13,14 @@ Vision Civil app works in IOS :heavy_check_mark: and Android :heavy_check_mark:
   * Phone contacts
   * SMS
 
+### **IOS Features :green_apple:**                                                       
+* **Version**: From version 10 onwards
+
+
 ### **Android Features :alien:** 
 * **Compile SDK Version**: 31
 * **Min SDK Version**: 21
-* **Permissions**:
-  * Location
-  * Camera
-  * Gallery
-  * Video
-  * Phone contacts
-  * SMS
+
 
 ## **The technology stack**
 
