@@ -2,8 +2,17 @@
 
 This section of the repository contains all the source code of the mobile app that is meant to be used by the citizens and the local police authorities. The mobile app was built using the BloC pattern, working under an a serverless arquitecture using Firebase Functions calls as the Back-end of the mobile app.
 
-## **Dependencies**
-* **`cloud_firestore@2.10.1`**
+## **Important Dependencies**
+* **`cloud_firestore@1.0.0`**
+* **`firebase_auth@1.0.0`**
+* **`firebase_core@1.14.0`**
+* **`firebase_storage@10.2.7`**
+* **`equatable@2.0.3`**
+* **`meta@1.3.0`**
+* **`provider@6.0.0`**
+* **`flutter_bloc@8.0.1`**
+* **`google_maps_flutter@2.1.1`**
+* **`location@4.2.0`**
 
 
 ## **Compatibility**
