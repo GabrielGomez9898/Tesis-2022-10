@@ -3,7 +3,7 @@
 This section of the repository contains all the source code of the mobile app that is meant to be used by the citizens and the local police authorities. The mobile app was built using the BloC pattern, working under an a serverless arquitecture using Firebase Functions calls as the Back-end of the mobile app.
 
 ## **Compatibility**
-Vision Civil app works in IOS :green_apple: and Android 
+Vision Civil app works in IOS :green_apple: :heavy_check_mark: and Android :heavy_check_mark: :alien:
 
 ## **The technology stack**
 
