@@ -50,3 +50,5 @@ The first thing you should do is to have installed Flutter in your computer. Onc
 
 To make sure you have all the Flutter settings up to date, run the following command: **`flutter doctor`**
 
+### **Run App**
+
