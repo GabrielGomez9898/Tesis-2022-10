@@ -66,7 +66,7 @@ const EditCopModal = (props) => {
                 <div className="modal-body-horizontal">
                     <div>
                         <label htmlFor="phoneInput">Teléfono</label><br/>
-                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" defaultValue={props["phoneText"]} required onChange={(e) => setPhone(e.target.value)} />
+                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" defaultValue={props["phoneText"]} required onChange={(e) => setPhone(parseInt(e.target.value))} />
                     </div>
                     <div>
                         <label htmlFor="policeIdInput">Número de placa</label><br/>

@@ -18,7 +18,7 @@ const CreateCopModal = ({onClose}) => {
     const [gender, setGender] = useState("");
     const [policeId, setPoliceId] = useState("");
     const [name, setName] = useState("");
-    const [phone, setPhone] = useState("");
+    const [phone, setPhone] = useState(0);
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
     const [isLoading, setIsLoading] = useState(false);
@@ -135,7 +135,7 @@ const CreateCopModal = ({onClose}) => {
                     </div>
                     <div>
                         <label htmlFor="phoneInput">Teléfono</label><br/>
-                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" required onChange={(e) => setPhone(e.target.value)} />
+                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" required onChange={(e) => setPhone(parseInt(e.target.value))} />
                     </div>
                 </div>
                 <div className="modal-body-horizontal">
