@@ -30,6 +30,7 @@ The policeman that downloads the app needs to be previously registered on the sy
 
 ## **Visión Civil Web**
 The technical details on the web app can be found on [the web app section of the repository](WebPage/)
+If you want to consume our API, in order to understand how all of our endpoints work, copy all the content of [the .yaml format API documentation file](VisionCivilAPI-Documentation.yml) and paste the content onto [the online Swagger Editor](https://editor.swagger.io/).
 
 ### **Web app users description**
 
