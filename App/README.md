@@ -64,5 +64,8 @@ Before following the steps, make sure have installed Xcode on your mac. You have
 *  On terminal, go to the path  **`/App/vision_civil/ios`**
 *  Run the following command: **`pod install`**
 *  Go to the ios folder of the project: **`Right click -> Open with Xcode`**
+*  Plug your device to your computer: :iphone: :computer:
+*  In your device, go to your iPhone settings: **`Developer -> trust "App name"`**
+*  Make sure Xcode is recognizing your device
 *  Click Build and run app button and that's it! the app will be running on your device! :heavy_check_mark:
 
