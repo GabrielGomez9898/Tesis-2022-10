@@ -45,3 +45,8 @@ Vision Civil app works in IOS :heavy_check_mark: and Android :heavy_check_mark:
 * Programming Language: **`Dart@2.16.1`**
 * Tools: **`Dart@2.16.1`**
 
+## **Run the project from a development point of view**
+The first thing you should do is to have installed Flutter in your computer. Once you have installed Flutter in your computer, you should install the dart package in your IDE.
+
+To make sure you have all the Flutter settings up to date, run the following command: **`flutter doctor`**
+
