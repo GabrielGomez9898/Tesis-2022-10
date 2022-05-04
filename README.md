@@ -46,7 +46,7 @@ Beside this 4 main functionalities, the functionary is able to login, logout and
 > Keep also in mind that when the software is going to be released to production we will create a genesis functionary that will start to add the other users to the system.
 
 ## **Visión Civil API**
-If you want to consume our API, in order to understand how all of our endpoints work, copy all the content of [the .yaml format API documentation file](VisionCivilAPI-Documentation.yml) and paste the content onto [the online Swagger Editor](https://editor.swagger.io/).
+If you want to consume our API, in order to understand how all of our endpoints work, copy all the content of [the API documentation file](VisionCivilAPI-Documentation.yml) and paste the content onto [the online Swagger Editor](https://editor.swagger.io/).
 
 ## **How to support the project**
 If you are interested in supporting the project start by reading the documentation in order to understand how both the Front-end and Back-end are structured, which languages and workflow do we work with and many other things.
