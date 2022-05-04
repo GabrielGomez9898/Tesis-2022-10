@@ -30,7 +30,6 @@ The policeman that downloads the app needs to be previously registered on the sy
 
 ## **Visión Civil Web**
 The technical details on the web app can be found on [the web app section of the repository](WebPage/)
-If you want to consume our API, in order to understand how all of our endpoints work, copy all the content of [the .yaml format API documentation file](VisionCivilAPI-Documentation.yml) and paste the content onto [the online Swagger Editor](https://editor.swagger.io/).
 
 ### **Web app users description**
 
@@ -45,6 +44,9 @@ Beside this 4 main functionalities, the functionary is able to login, logout and
 > Keep in mind that only the master functionaries are able to manage users
 
 > Keep also in mind that when the software is going to be released to production we will create a genesis functionary that will start to add the other users to the system.
+
+## **Visión Civil API**
+If you want to consume our API, in order to understand how all of our endpoints work, copy all the content of [the .yaml format API documentation file](VisionCivilAPI-Documentation.yml) and paste the content onto [the online Swagger Editor](https://editor.swagger.io/).
 
 ## **How to support the project**
 If you are interested in supporting the project start by reading the documentation in order to understand how both the Front-end and Back-end are structured, which languages and workflow do we work with and many other things.
