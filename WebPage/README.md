@@ -27,7 +27,7 @@ This section of the repository contains all the source code of the web app that 
 > You can check the full list of dependencies for the Back-end on [the package.json from the Cloud section](Cloud/package.json)
 
 ## **Run the project from a development point of view**
-> In order to access the web app from a production point of view open your favorite browser and go to ***miproyecto-5cf83.web.app***
+> In order to access the web app from a production point of view open your favorite browser and go to ***https://miproyecto-5cf83.web.app/***
 
 If you have already worked with the project and have already setup the Firebase CLI then [skip the below section](#running-and-testing-the-firebase-functions).
 
