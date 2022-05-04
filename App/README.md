@@ -50,9 +50,19 @@ The first thing you should do is to have installed Flutter in your computer. Onc
 
 To make sure you have all the Flutter settings up to date, run the following command: **`flutter doctor`**
 
-### **Run App**
-You have two choices for running the app, with an Android/IOS simulator or with a phyisical device. If your choice is physical please follow the steps (VS Code):
+### **Run App - Android**
+You have two choices for running the app, with an Android simulator or with a phyisical device. If your choice is physical device please follow the steps (VS Code):
+* On terminal, go to the root path of the project
+* Update flutter dependencies and packages, run the command: **`flutter pub get`**
 * Plug your device to your computer: :iphone: :computer:
 * Open de VS nav bar:   **`Ctrl + shift + p`**
 * Select: **`Flutter: Select Device`** and then click on your device of preference, make sure VS is recognizing your device. PD: Running the command **`flutter doctor`** also will tell you if your device is ready for running the app
 * Go to the file main.dart and click on the play button :play_or_pause_button: and that's it! the app will be running on your device! :heavy_check_mark:
+
+### **Run App - IOS**
+Before following the steps, make sure have installed Xcode on your mac. You have two choices for running the app, with an IOS simulator or with a phyisical device. If your choice is physical device please follow the steps (Xcode):
+*  On terminal, go to the path  **`/App/vision_civil/ios`**
+*  Run the following command: **`pod install`**
+*  Go to the ios folder of the project: **`Right click -> Open with Xcode`**
+*  Click Build and run app button and that's it! the app will be running on your device! :heavy_check_mark:
+
