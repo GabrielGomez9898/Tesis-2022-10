@@ -51,4 +51,6 @@ The first thing you should do is to have installed Flutter in your computer. Onc
 To make sure you have all the Flutter settings up to date, run the following command: **`flutter doctor`**
 
 ### **Run App**
-
+You have two choices for running the app, with an Android/IOS simulator or with a phyisical device. If your choice is physical please follow the steps (VS Code):
+* Plug your device to your computer: :iphone: :computer:
+* Open de VS nav bar:   **`Ctrl + shift + p`**
