@@ -1,0 +1,943 @@
+openapi: 3.0.0
+
+info:
+  title: Visión Civil API
+  description: An API that provides crime data and services that are needed by the Visión Civil web app. All the data provided by the Visión Civil API is harvested from all the users that use our mobile app. The users of the mobile app (citizens) are able to generate reports and feed our databases in order to centralize precious data. The provided data is valuable because it evidences aspects such as the locations where crime impacts the most, the crime types that are more common, the period of the year or the hour of the day where the crime peaks, and so on. The Visión Civil API is currently private and can't be consumed by other clients that are not our web application and our the mobile app.
+  version: 1.0.0
+  
+servers:
+- url: https://us-central1-miproyecto-5cf83.cloudfunctions.net
+
+tags:
+- 
+  name: functionaries
+  description: All the API services that are related with the government functionaries
+- 
+  name: cops
+  description: All the API services that are related with the cops
+- 
+  name: password
+  description: All the API services related with the auto generated passwords
+- 
+  name: reports
+  description: All the API services related with the reports
+-
+  name: notifications
+  description: All the API services related with the notifications sended to the mobile devices
+-
+  name: dashboardData
+  description: All the API services related with the map and charts found inside the dashboard page of the web application
+  
+paths:
+  /functionaries:
+    get:
+      tags:
+        - functionaries
+      summary: Gets an array containing all the functionaries from the database.
+      responses:
+        200:
+          description: (OK) All the functionaries were succesfully getted. 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getFunctionariesResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - functionaries
+      summary: Creates a new functionary. The functionary that is specified in the body of the request will be persisted into the Firestore database. (The front-end must manage the authentication of that user)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createFunctionaryBody'
+      responses:
+        200:
+          description: (OK) The functionary was succesfully saved into the database
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createFunctionaryResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /functionaries/{functionaryId}:
+    patch:
+      tags:
+        - functionaries
+      summary: Updates the data of the functionary specified by it's id passed as path parameter. Just the isMaster field of the functionary can be modified.
+      parameters:
+        - $ref: '#/components/parameters/functionaryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateFunctionaryBody'
+      responses:
+        200:
+          description: (OK) The functionary data was succesfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateFunctionaryResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - functionaries
+      summary: Deletes the functionary specified by it's id passed as path parameter.
+      parameters:
+        - $ref: '#/components/parameters/functionaryId'
+
+      responses:
+        200:
+          description: (OK) The functionary was succesfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleteFunctionaryResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /cops:
+    get:
+      tags:
+        - cops
+      summary: Gets an array containing all the cops from the database.
+      responses:
+        200:
+          description: (OK) All the cops were succesfully getted. 
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getCopsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      tags:
+        - cops
+      summary: Creates a new cop. The cop that is specified in the body of the request will be persisted into the Firestore database. (The front-end must manage the authentication of that user)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createCopBody'
+      responses:
+        200:
+          description: (OK) The cop was succesfully saved into the database.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createCopResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /cops/{copId}:
+    patch:
+      tags:
+        - cops
+      summary: Updates the data of the cop specified by it's id passed as path parameter.
+      parameters:
+        - $ref: '#/components/parameters/copId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/updateCopBody'
+      responses:
+        200:
+          description: (OK) The cop data was succesfully updated.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updateCopResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+    delete:
+      tags:
+        - cops
+      summary: Deletes the cop specified by it's id passed as path parameter.
+      parameters:
+        - $ref: '#/components/parameters/copId'
+
+      responses:
+        200:
+          description: (OK) The cop was succesfully deleted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/deleteCopResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /password:
+    get:
+      tags:
+        - password
+      summary: Gets a randomly generated password of 15 characters containing both letters and numbers.
+      responses:
+        200:
+          description: (OK) The password was succesfully generated and getted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/generatePasswordResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /password/functionaries/{functionaryEmail}:
+    post:
+      tags:
+        - password
+      summary: Sends an email to the functionary specified by it's email address passed as path parameter. The purpose of the email is to notify the functionary of it's new password.
+      parameters:
+        - $ref: '#/components/parameters/functionaryEmail'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/notifyFunctionaryPasswordBody'
+      responses:
+        200:
+          description: (OK) The password was successfully notified to the functionary.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notifyFunctionaryPasswordResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /password/cops/{copEmail}:
+    post:
+      tags:
+        - password
+      summary: Sends an email to the cop specified by it's email address passed as path parameter. The purpose of the email is to notify the cop of it's new password.
+      parameters:
+        - $ref: '#/components/parameters/copEmail'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/notifyCopPasswordBody'
+      responses:
+        200:
+          description: (OK) The password was successfully notified to the cop.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/notifyCopPasswordResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /reports:
+    get:
+      tags:
+        - reports
+      summary: Gets all the reports from the database.
+      responses:
+        200:
+          description: (OK) All the reports were succesfully getted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getReportsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /reports/filters:
+    get:
+      tags:
+        - reports
+      summary: Gets all the reports from the database that matches the selected filters.
+      parameters:
+        - $ref: '#/components/parameters/lowerDate'
+        - $ref: '#/components/parameters/upperDate'
+        - $ref: '#/components/parameters/reportType'
+      responses:
+        200:
+          description: (OK) All the reports matching with the filters were succesfully getted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getReportsResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /notificationFromWeb:
+    post:
+      tags:
+        - notifications
+      summary: Service that is used for sending OS notifications to the users of the mobile app. This endpoint should be consumed from the web app, it is used by the functionaries that wants to send notifications to the citizens.
+      parameters:
+        - $ref: '#/components/parameters/title'
+        - $ref: '#/components/parameters/description'
+      responses:
+        200:
+          description: (OK) The notification was succesfully sended.
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /notificationFromMobile:
+    post:
+      tags:
+        - notifications
+      summary: Service that is used for sending OS notifications to the users of the mobile app. This endpoint should be consumed from the mobile app, it is used by the cops that wants to send notifications to the citizens.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/sendNotificationFromMobileBody'
+      responses:
+        200:
+          description: (OK) The notification was succesfully sended.
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /mapData:
+    get:
+      tags:
+        - dashboardData
+      summary: Gets all the filtered data from the reports collection of the database that will be displayed on the map.
+      parameters:
+        - $ref: '#/components/parameters/lowerDate'
+        - $ref: '#/components/parameters/upperDate'
+        - $ref: '#/components/parameters/reportType'
+      responses:
+        200:
+          description: (OK) The map data was succesfully getted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getMapDataResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /typeChartsData:
+    get:
+      tags:
+        - dashboardData
+      summary: Gets all the filtered data from the reports collection of the database that is needed in order to build type charts with the React Recharts library.
+      parameters:
+        - $ref: '#/components/parameters/lowerDate'
+        - $ref: '#/components/parameters/upperDate'
+      responses:
+        200:
+          description: (OK) The type charts data was succesfully getted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTypeChartsDataResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /timeChartsData:
+    get:
+      tags:
+        - dashboardData
+      summary: Gets all the filtered data from the reports collection of the database that is needed in order to build time charts with the React Recharts library.
+      parameters:
+        - $ref: '#/components/parameters/period'
+      responses:
+        200:
+          description: (OK) The type charts data was succesfully getted.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/getTimeChartsDataResponse'
+        400:
+          $ref: '#/components/responses/BadRequest'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        404:
+          $ref: '#/components/responses/NotFound'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  
+components:
+  responses:
+    Unauthorized:
+      description: (Unauthorized) The client making the request is unauthorized to call and use the service
+    NotFound:
+      description: (Not Found) A request handler for the specified path does not exist
+    BadRequest:
+      description: (Bad Request) The received data is not correct
+    InternalServerError:
+      description: (Internal Server Error) A business logic error occurred, check the backend console or the log console to see more info about the error 
+  parameters:
+    functionaryId:
+      name: functionaryId
+      in: path
+      required: true
+      description: The unique identifier of the functionary. The functionaryId is an uid.
+      schema:
+        type: string
+    copId:
+      name: copId
+      in: path
+      required: true
+      description: The unique identifier of the cop. The copId is an uid.
+      schema:
+        type: string
+    functionaryEmail:
+      name: functionaryEmail
+      in: path
+      required: true
+      description: The email of the functionary.
+      schema:
+        type: string
+    copEmail:
+      name: copEmail
+      in: path
+      required: true
+      description: The email of the cop.
+      schema:
+        type: string
+    lowerDate:
+      name: lowerDate
+      in: query
+      required: true
+      description: The lower date of a range that is used for data filtering (e.g. 2022-03-03)
+      schema:
+        type: string
+    upperDate:
+      name: upperDate
+      in: query
+      required: true
+      description: The upper date of a range that is used for data filtering (e.g. 2022-05-02)
+      schema:
+        type: string
+    reportType:
+      name: reportType
+      in: query
+      required: true
+      description: The report type. The report type must have one of the following values -> "HURTO_VIVIENDA", "HURTO_PERSONA", "HURTO_VEHICULO", "VANDALISMO", "VIOLACION", "HOMICIDIO", "AGRESION", "OTRO".
+      schema:
+        type: string
+    title:
+      name: title
+      in: query
+      required: true
+      description: The title of the notification. The title will be displayed with a higher font size than the description.
+      schema:
+        type: string
+    description:
+      name: description
+      in: query
+      required: true
+      description: The description of the notification. The description will be displayed with a lower font size than the title.
+      schema:
+        type: string
+    period:
+      name: period
+      in: query
+      required: true
+      description: The period needed for displaying the time charts. The period must have one of the following values -> "ESTA_SEMANA", "ESTE_MES", "ESTE_TRIMESTRE", "ESTE_SEMESTRE", "ESTE_AÑO".
+      schema:
+        type: string
+  schemas:
+    getFunctionariesResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: The unique identifier of the functionary. The functionaryId is an uid.
+          email:
+            type: string
+            description: The email of the functionary that is going to be added as a new user.
+          isMaster:
+            type: boolean
+            description: Specifies if the functionary that is going to be added as a new user will have elevated privileges.
+    createFunctionaryResponse:
+      type: object
+      properties:
+        updateTime:
+          type: string
+          description: The last update time of the document after applying the write. Not set after a delete. If the write did not actually change the document, this will be the previous updateTime. Te value of this field is what is known as timestamp.
+        transformResults:
+          type: object
+          description: The results of applying each DocumentTransform.FieldTransform, in the same order.
+    updateFunctionaryResponse:
+      type: object
+      properties:
+        updateTime:
+          type: string
+          description: The last update time of the document after applying the write. Not set after a delete. If the write did not actually change the document, this will be the previous updateTime. Te value of this field is what is known as timestamp.
+        transformResults:
+          type: object
+          description: The results of applying each DocumentTransform.FieldTransform, in the same order.
+    deleteFunctionaryResponse:
+      type: object
+      properties:
+        updateTime:
+          type: string
+          description: The last update time of the document after applying the write. Not set after a delete. If the write did not actually change the document, this will be the previous updateTime. Te value of this field is what is known as timestamp.
+        transformResults:
+          type: object
+          description: The results of applying each DocumentTransform.FieldTransform, in the same order.
+    createFunctionaryBody:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the functionary. The functionaryId is an uid. This field should be an autogenerated uid generated by the createUserWithEmailAndPassword function from firebase/auth before sending this request.
+        email:
+          type: string
+          description: The email of the functionary that is going to be added as a new user.
+        isMaster:
+          type: boolean
+          description: Specifies if the functionary that is going to be added as a new user will have elevated privileges.
+    updateFunctionaryBody:
+      type: object
+      properties:
+        isMaster:
+          type: boolean
+          description: Specifies if the functionary that is going to be modified will have elevated privileges.
+    getCopsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: The unique identifier of the cop. The id is an uid.
+          birth_date:
+            type: string
+            description: The birth date of the cop.
+          disponible:
+            type: boolean
+            description: Specifies if the cop is currently working on a case or not.
+          email:
+            type: string
+            description: The email of the cop.
+          enServicio:
+            type: boolean
+            description: Specifies if the cop is on a working day or not.
+          gender:
+            type: string
+            description: The gender of the cop.
+          id_policia:
+            type: string
+            description: The Police license plate number of the cop. This field is an unique field.
+          name:
+            type: string
+            description: The full name of the cop.
+          phone:
+            type: number
+            description: The phone number of the cop.
+          role:
+            type: string
+            description: The role of the user. This field will always contain the value "POLICIA" because this request handler will get all the cops from the database.
+    createCopResponse:
+      type: object
+      properties:
+        updateTime:
+          type: string
+          description: The last update time of the document after applying the write. Not set after a delete. If the write did not actually change the document, this will be the previous updateTime. Te value of this field is what is known as timestamp.
+        transformResults:
+          type: object
+          description: The results of applying each DocumentTransform.FieldTransform, in the same order.
+    updateCopResponse:
+      type: object
+      properties:
+        updateTime:
+          type: string
+          description: The last update time of the document after applying the write. Not set after a delete. If the write did not actually change the document, this will be the previous updateTime. Te value of this field is what is known as timestamp.
+        transformResults:
+          type: object
+          description: The results of applying each DocumentTransform.FieldTransform, in the same order.
+    deleteCopResponse:
+      type: object
+      properties:
+        updateTime:
+          type: string
+          description: The last update time of the document after applying the write. Not set after a delete. If the write did not actually change the document, this will be the previous updateTime. Te value of this field is what is known as timestamp.
+        transformResults:
+          type: object
+          description: The results of applying each DocumentTransform.FieldTransform, in the same order.
+    createCopBody:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the cop. The id is an uid.
+        birth_date:
+          type: string
+          description: The birth date of the cop.
+        disponible:
+          type: boolean
+          description: Specifies if the cop is currently working on a case or not.
+        email:
+          type: string
+          description: The email of the cop.
+        enServicio:
+          type: boolean
+          description: Specifies if the cop is on a working day or not.
+        gender:
+          type: string
+          description: The gender of the cop.
+        id_policia:
+          type: string
+          description: The Police license plate number of the cop. This field is an unique field.
+        name:
+          type: string
+          description: The full name of the cop.
+        phone:
+          type: number
+          description: The phone number of the cop.
+        role:
+          type: string
+          description: The role of the user. This field will always contain the value "POLICIA" because the user that is being created is a cop.
+    updateCopBody:
+      type: object
+      properties:
+        birth_date:
+          type: string
+          description: The birth date of the cop.
+        gender:
+          type: string
+          description: The gender of the cop.
+        id_policia:
+          type: string
+          description: The Police license plate number of the cop. This field is an unique field.
+        name:
+          type: string
+          description: The full name of the cop.
+        phone:
+          type: number
+          description: The phone number of the cop.
+    generatePasswordResponse:
+      type: object
+      properties:
+        password:
+          type: string
+          description: The 15 characters long password that will be the temporary password for either a functionary that is being currently added or a cop that is being currently added.
+    notifyFunctionaryPasswordResponse:
+      type: object
+      properties:
+        accepted:
+          type: array
+          items:
+            type: string
+          description: An array containing the email addresses from all the destinataries that have accepted the email.
+        envelope:
+          type: object
+          properties:
+            from:
+              type: string
+              description: The email address of the sender.
+            to:
+              type: array
+              items:
+                type: string
+              description: An array containing the email addresses of all the choosen destinataries.
+        envelopeTime:
+          type: number
+          description: A field that is not specified by Nodemailer documentation.
+        messageId:
+          type: string
+          description: The id of the message generated by Nodemailer.
+        messageSize:
+          type: number
+          description: The total message size.
+        messageTime:
+          type: number
+          description: The amount of time in milliseconds that the message has taken in order to be delivered.
+        rejected:
+          type: array
+          items:
+            type: string
+          description: An array containing the email addresses of all the destinataries that have rejected the email.
+        response:
+          type: string
+          description: A field that is not specified by Nodemailer documentation.
+    notifyCopPasswordResponse:
+      type: object
+      properties:
+        accepted:
+          type: array
+          items:
+            type: string
+          description: An array containing the email addresses from all the destinataries that have accepted the email.
+        envelope:
+          type: object
+          properties:
+            from:
+              type: string
+              description: The email address of the sender.
+            to:
+              type: array
+              items:
+                type: string
+              description: An array containing the email addresses of all the choosen destinataries.
+        envelopeTime:
+          type: number
+          description: A field that is not specified by Nodemailer documentation.
+        messageId:
+          type: string
+          description: The id of the message generated by Nodemailer.
+        messageSize:
+          type: number
+          description: The total message size.
+        messageTime:
+          type: number
+          description: The amount of time in milliseconds that the message has taken in order to be delivered.
+        rejected:
+          type: array
+          items:
+            type: string
+          description: An array containing the email addresses of all the destinataries that have rejected the email.
+        response:
+          type: string
+          description: A field that is not specified by Nodemailer documentation.
+    notifyFunctionaryPasswordBody:
+      type: object
+      properties:
+        password:
+          type: string
+          description: The 15 characters long password that will be the temporary password for either a functionary that is being currently added or a cop that is being currently added.
+    notifyCopPasswordBody:
+      type: object
+      properties:
+        password:
+          type: string
+          description: The 15 characters long password that will be the temporary password for either a functionary that is being currently added or a cop that is being currently added.
+    getReportsResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          id:
+            type: string
+            description: The unique identifier of the report. The report id is an uid.
+          asunto:
+            type: string
+            description: The subject of the report. The purpose of the subject is to summarise the problem.
+          descripcion:
+            type: string
+            description: The description of the report. The description contains more details about the report generated by the citizen.
+          estado:
+            type: string
+            description: Specifies if the report is pending (The value will be "PENDIENTE"), in proccess of being resolved (The value will be "EN PROCESO") or FINALIZED (The value will be "FINALIZADO")
+          fecha_hora:
+            type: string
+            description: Field that contains the date and time of the report separated by a pipe character "|".
+          folder_path:
+            type: string
+            description: The path of the folder that contains all the media associated with this report.
+          images_ids:
+            type: string
+            description: The ids of the images associated with the report, each image id is separated by a comma.
+          latitude:
+            type: string
+            description: The latitude of the location point where the report was generated.
+          longitude:
+            type: string
+            description: The longitude of the location point where the report was generated.
+          tipo_reporte:
+            type: string
+            description: Specifies the report type. The report type must have one of the following values -> "HURTO_VIVIENDA", "HURTO_PERSONA", "HURTO_VEHICULO", "VANDALISMO", "VIOLACION", "HOMICIDIO", "AGRESION", "OTRO"
+          user_phone:
+            type: number
+            description: The phone number of the citizen that has generated the report.
+          video_id:
+            type: string
+            description: The id of the video associated with the report.
+          imagenes:
+            type: array
+            items:
+              type: string
+            description: An array containing all of the image ids associated with the current report.
+          hasFotos:
+            type: boolean
+            description: Specifies if the current report contains fotos or not.
+          fotourl:
+            type: string
+            description: PENDING
+          color:
+            type: string
+            description: The hexadecimal code for the color of the report that is going to be used in the web app.
+          fecha:
+            type: string
+            description: The date of the report.
+          hora:
+            type: string
+            description: The time of the report.
+    sendNotificationFromMobileBody:
+      type: object
+      properties:
+        title:
+          type: string
+          description: The title of the notification. The title will be displayed with a higher font size than the description.
+    getMapDataResponse:
+      type: array
+      items:
+        type: object
+        properties:
+          lat:
+            type: string
+            description: The latitude of the position point where the report was generated.
+          lng:
+            type: string
+            description: The longitude of the position point where the report was generated.
+          reportType:
+            type: string
+            description: The report type of the report that is used to give an especific color to each report based on it.
+    getTypeChartsDataResponse:
+      type: object
+      properties:
+        hurtoViviendaNum:
+          type: number
+          description: The amount of reports of type "HURTO_VIVIENDA" that falls inside the specified date range.
+        hurtoPersonaNum:
+          type: number
+          description: The amount of reports of type "HURTO_PERSONA" that falls inside the specified date range.
+        hurtoVehiculoNum:
+          type: number
+          description: The amount of reports of type "HURTO_VEHICULO" that falls inside the specified date range.
+        vandalismoNum:
+          type: number
+          description: The amount of reports of type "VANDALISMO" that falls inside the specified date range.
+        violacionNum:
+          type: number
+          description: The amount of reports of type "VIOLACION" that falls inside the specified date range.
+        homicidioNum:
+          type: number
+          description: The amount of reports of type "HOMICIDIO" that falls inside the specified date range.
+        agresionNum:
+          type: number
+          description: The amount of reports of type "AGRESION" that falls inside the specified date range.
+        otroNum:
+          type: number
+          description: The amount of reports of type "OTRO" that falls inside the specified date range.
+    getTimeChartsDataResponse:
+      type: object
+      properties:
+        reportes:
+          type: number
+          description: The total amount of reports of the current period.
+        Hurto de viviendas:
+          type: number
+          description: The amount of reports of type "HURTO_VIVIENDA" of the current period.
+        Hurto a personas:
+          type: number
+          description: The amount of reports of type "HURTO_PERSONA" of the current period.
+        Hurto de vehículos:
+          type: number
+          description: The amount of reports of type "HURTO_VEHICULO" of the current period.
+        Vandalismo:
+          type: number
+          description: The amount of reports of type "VANDALISMO" of the current period.
+        Violación:
+          type: number
+          description: The amount of reports of type "VIOLACION" of the current period.
+        Homicidio:
+          type: number
+          description: The amount of reports of type "HOMICIDIO" of the current period.
+        Agresión:
+          type: number
+          description: The amount of reports of type "AGRESION" of the current period.
+        Otro:
+          type: number
+          description: The amount of reports of type "OTRO" of the current period.
+        periodo:
+          type: string
+          description: The period label of the current period (e.g. "december", "november", etc.)
