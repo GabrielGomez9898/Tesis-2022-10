@@ -97,7 +97,7 @@ class EmergencyContactsPageState extends State<EmergencyContactsPage> {
 showNewEmergencyContact(BuildContext context, name, phone) {
   // set up the AlertDialog
   AlertDialog alert = AlertDialog(
-    title: Text('Contacto de emrgencia agregado'),
+    title: Text('Contacto de emergencia agregado'),
     content: Text('Nombre: ' + name + '\n' + 'Celular: ' + phone),
   );
 

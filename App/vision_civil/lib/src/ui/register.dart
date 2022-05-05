@@ -99,7 +99,7 @@ class _RegisterState extends State<Register> {
                     tipo: TextInputType.phone,
                     obsText: false),
                 TextFieldFuntion(
-                    hintText: "Correo electronico",
+                    hintText: "Correo electónico",
                     onChanged: (value) {
                       setState(() {
                         _email = value.trim();
@@ -186,7 +186,7 @@ class _RegisterState extends State<Register> {
                     Container(
                       padding: EdgeInsets.fromLTRB(35, 0, 0, 0),
                       child: Text(
-                        "Género: \n(presione la fecha para cambiar)",
+                        "Género: \n(presione el género para cambiar)",
                         style: TextStyle(color: Colors.white, fontSize: 14),
                       ),
                     ),
@@ -250,26 +250,33 @@ class _RegisterState extends State<Register> {
                     ButtoWidget(
                         text: "Registrarse",
                         press: () {
-                          BlocProvider.of<UserBloc>(context).add(RegisterEvent(
-                              _email,
-                              _name,
-                              _birthDate,
-                              _gender,
-                              _password,
-                              _phone,
-                              _document));
-                          Navigator.of(context).push(MaterialPageRoute(
-                            builder: (_) => MultiBlocProvider(providers: [
-                              BlocProvider.value(
-                                  value: BlocProvider.of<UserBloc>(context)),
-                              BlocProvider(
-                                  create: (BuildContext context) =>
-                                      ReportBloc()),
-                              BlocProvider(
-                                  create: (BuildContext context) =>
-                                      ContactsblocBloc())
-                            ], child: HomePage()),
-                          ));
+                          if (_email.length < 1 ||
+                              _name.length < 1 ||
+                              _phone.toString().length < 1 ||
+                              _document.length < 1) {
+                            emptyBox(context);
+                          } else {
+                            if (_password.length < 6) {
+                              sixCharactersPasswordAlert(context);
+                            } else {
+                              BlocProvider.of<UserBloc>(context).add(
+                                  RegisterEvent(_email, _name, _birthDate,
+                                      _gender, _password, _phone, _document));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => MultiBlocProvider(providers: [
+                                  BlocProvider.value(
+                                      value:
+                                          BlocProvider.of<UserBloc>(context)),
+                                  BlocProvider(
+                                      create: (BuildContext context) =>
+                                          ReportBloc()),
+                                  BlocProvider(
+                                      create: (BuildContext context) =>
+                                          ContactsblocBloc())
+                                ], child: HomePage()),
+                              ));
+                            }
+                          }
                         })
                   ],
                 ),
@@ -281,4 +288,40 @@ class _RegisterState extends State<Register> {
       ),
     );
   }
+}
+
+sixCharactersPasswordAlert(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Contraseña inválida"),
+    content: Text("La contraseña debe tener al menos 6 caracteres"),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
+}
+
+emptyBox(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Campos inválidos"),
+    content: Text("Por favor revise que todos los campos tengan valores"),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 3), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }

@@ -21,6 +21,9 @@ class TextFieldFuntion extends StatelessWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
       child: TextField(
+        cursorColor: Colors.black,
+        cursorHeight: 15,
+        cursorRadius: Radius.circular(5.0),
         textAlignVertical: TextAlignVertical.bottom,
         keyboardType: tipo,
         obscureText: obsText,

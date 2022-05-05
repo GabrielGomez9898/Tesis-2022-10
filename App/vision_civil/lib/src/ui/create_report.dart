@@ -18,7 +18,7 @@ class CreateReportState extends State<CreateReport> {
   Future<http.Response> sendNotification(String title) {
     return http.post(
       Uri.parse(
-          'https://us-central1-miproyecto-5cf83.cloudfunctions.net/sendNotification'),
+          'https://us-central1-miproyecto-5cf83.cloudfunctions.net/notificationFromMobile'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -396,9 +396,11 @@ class CreateReportState extends State<CreateReport> {
                                 color: Color.fromARGB(103, 0, 0, 0)),
                             hintText: 'Hombre fuertemente armado'),
                         onChanged: (value) {
-                          setState(() {
-                            _asunto = value.trim();
-                          });
+                          if (value.length < 50) {
+                            setState(() {
+                              _asunto = value.trim();
+                            });
+                          }
                         },
                       ),
                     ),
@@ -424,9 +426,11 @@ class CreateReportState extends State<CreateReport> {
                             hintText:
                                 'Un sujeto alto, esta intentando disparar a alguien'),
                         onChanged: (value) {
-                          setState(() {
-                            _descripcion = value.trim();
-                          });
+                          if (value.length < 50) {
+                            setState(() {
+                              _descripcion = value.trim();
+                            });
+                          }
                         },
                       ),
                     ),
@@ -586,32 +590,37 @@ class CreateReportState extends State<CreateReport> {
                       ElevatedButton(
                           style: ElevatedButton.styleFrom(primary: Colors.red),
                           onPressed: () async {
-                            var currentLocation = await location.getLocation();
-                            String _latitude =
-                                    currentLocation.latitude.toString(),
-                                _longitude =
-                                    currentLocation.longitude.toString();
+                            if (_tipoReporte == " ") {
+                              emptyReport(context);
+                            } else {
+                              var currentLocation =
+                                  await location.getLocation();
+                              String _latitude =
+                                      currentLocation.latitude.toString(),
+                                  _longitude =
+                                      currentLocation.longitude.toString();
 
-                            print("array list de imagenes");
-                            print(_arrayImages.length);
+                              print("array list de imagenes");
+                              print(_arrayImages.length);
 
-                            BlocProvider.of<ReportBloc>(context).add(
-                                CreateRepotEvent(
-                                    _tipoReporte,
-                                    _asunto,
-                                    _descripcion,
-                                    _fechaHora,
-                                    _latitude,
-                                    _longitude,
-                                    _arrayImages,
-                                    _video,
-                                    _userPhone));
-                            Navigator.of(context).push(MaterialPageRoute(
-                              builder: (_) => BlocProvider.value(
-                                  value: BlocProvider.of<UserBloc>(context),
-                                  child: ReportMessage()),
-                            ));
-                            sendNotification(_tipoReporte);
+                              BlocProvider.of<ReportBloc>(context).add(
+                                  CreateRepotEvent(
+                                      _tipoReporte,
+                                      _asunto,
+                                      _descripcion,
+                                      _fechaHora,
+                                      _latitude,
+                                      _longitude,
+                                      _arrayImages,
+                                      _video,
+                                      _userPhone));
+                              Navigator.of(context).push(MaterialPageRoute(
+                                builder: (_) => BlocProvider.value(
+                                    value: BlocProvider.of<UserBloc>(context),
+                                    child: ReportMessage()),
+                              ));
+                              sendNotification(_tipoReporte);
+                            }
                           },
                           child: Text(
                             "Generar reporte",
@@ -628,4 +637,23 @@ class CreateReportState extends State<CreateReport> {
       ),
     );
   }
+}
+
+emptyReport(BuildContext context) {
+  // set up the AlertDialog
+  AlertDialog alert = AlertDialog(
+    title: Text("Reporte vacío"),
+    content: Text(
+        "Por lo menos se debe seleccionar el tipo del reporte para que este sea enviado."),
+  );
+
+  // show the dialog
+  showDialog(
+      context: context,
+      builder: (context) {
+        Future.delayed(Duration(seconds: 5), () {
+          Navigator.of(context).pop(true);
+        });
+        return alert;
+      });
 }
