@@ -38,6 +38,8 @@ exports.notificationFromMobile = functions.https.onRequest(async (request, respo
                     console.log("no sirvio", error)
                 })
             })
+            response.set("Access-Control-Allow-Origin", "*");
+            return response.status(200).send();
         } catch (error) {
             printError(error)
         }
