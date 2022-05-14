@@ -27,7 +27,7 @@ This section of the repository contains all the source code of the web app that 
 > You can check the full list of dependencies for the Back-end on [the package.json from the Cloud section](Cloud/package.json)
 
 ## **Run the project from a development point of view**
-> In order to access the web app from a production point of view open your favorite browser and go to ***www.visioncivil.com***
+> In order to access the web app from a production point of view open your favorite browser and go to ***https://miproyecto-5cf83.web.app/***
 
 If you have already worked with the project and have already setup the Firebase CLI then [skip the below section](#running-and-testing-the-firebase-functions).
 
@@ -50,7 +50,7 @@ You can test your recently written functions in 2 ways. The first way is to use 
 1. type `firebase serve` or `firebase emulators:start --only functions`
 2. Once the emulator is running copy and paste the url of the function that you want to try and use a client application such as Postman or the Front-end application to send a request that will be handled by the function. 
 
-#### **Deploying the functions**
+#### **Deploying the functions (Back-end deployment)**
 1. type `firebase deploy` or `firebase deploy --only functions`
 2. Once the functions are deployed copy and paste the url of the function that you want to try and use a client application such as Postman or the Front-end application to send a request that will be handle by the function.
 
@@ -69,3 +69,10 @@ If you have already worked with the project and have all the Node modules that t
 Run the React application by typing `npm start`. 
 
 > The application will run on port **3000**.
+
+#### **Deploying the client side application (Front-end deployment)**
+In order to deploy the client side application you will need to have installed Firebase Tools globally on your system. The command used for installing Firebase Tools is showed in a previous section.
+
+1. Install all the node dependencies by typing `npm install`
+2. Prepare a npm build to be used in production by typing `npm run build`
+3. Deploy the client side application by typing `firebase deploy`
