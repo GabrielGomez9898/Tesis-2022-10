@@ -1,68 +1,20 @@
 import "../styles/Dashboard.scss";
 import { Map, GoogleApiWrapper, InfoWindow, Marker, Circle } from "google-maps-react"
 import mapStyles from "../styles/mapStyles.json";
+import { useSelector } from "react-redux";
 
 const DashboardMap = (props) => {
-    const reports = [
-        {
-            lat: 4.485874746123101,
-            lng: -74.25950614771615
-        },
-        {
-            lat: 4.490720944571992,
-            lng: -74.26168790389913
-        },
-        {
-            lat: 4.489296343642818,
-            lng: -74.26247895000056
-        },
-        {
-            lat: 4.488227891120813,
-            lng: -74.26455863571881
-        },
-        {
-            lat: 4.488151573023685,
-            lng: -74.25616333999723
-        },
-        {
-            lat: 4.486650648825253,
-            lng: -74.26261929688953
-        },
-        {
-            lat: 4.485365957009356,
-            lng: -74.26830972532757
-        },
-        {
-            lat: 4.48551859375208,
-            lng: -74.26904973619392
-        },
-        {
-            lat: 4.485899457190722,
-            lng: -74.26865083761105
-        },
-        {
-            lat: 4.485664142281751,
-            lng: -74.26997775366553
-        },
-        {
-            lat: 4.48903919838134,
-            lng: -74.25710859527027
-        },
-        {
-            lat: 4.49530349265277,
-            lng: -74.26244843936624
-        }
-    ];
+    const mapData = useSelector((state) => state.mapData.value);
 
     const mapDimensions = {
-        width: "46.5vw",
-        height: "40vh",
+        width: "62.5vw",
+        height: "48vh",
         borderRadius: "15px"
     }
 
     const initialCenter = {
-        lat: "4.4878791",
-        lng: "-74.2591367"
+        lat: "4.4893662",
+        lng: "-74.2591137"
     }
 
     const defaultMapOptions = {
@@ -76,12 +28,37 @@ const DashboardMap = (props) => {
     }
 
     return(
-        <Map google={props.google} style={mapDimensions} zoom={16} initialCenter={initialCenter} mapTypeControl={false} zoomControl={false} onReady={(mapProps, map) => mapLoaded(mapProps, map)}>
-            {[...Array(reports.length)].map((value, i) => {
-                return (
-                    props.hasCircleMarkers ? 
-                    <Circle center={reports[i]} radius={15} strokeColor="transparent" strokeOpacity={0} strokeWeight={5} fillColor="#FF0000" fillOpacity={0.35} /> : 
-                    <Marker position={reports[i]}/>);
+        <Map google={props.google} style={mapDimensions} zoom={15} initialCenter={initialCenter} mapTypeControl={false} zoomControl={false} onReady={(mapProps, map) => mapLoaded(mapProps, map)}>
+            {[...Array(mapData.length)].map((value, i) => {
+                let circleColor = "";
+                let CircleOpacity = 0.0;
+
+                if(mapData[i].reportType === "HURTO_VIVIENDA") {
+                    circleColor = "#00C3FF";
+                }
+                else if(mapData[i].reportType === "HURTO_PERSONA") {
+                    circleColor = "#0059FF";
+                }
+                else if(mapData[i].reportType === "HURTO_VEHICULO") {
+                    circleColor = "#006800";
+                }
+                else if(mapData[i].reportType === "VANDALISMO") {
+                    circleColor = "#00FF62";
+                }
+                else if(mapData[i].reportType === "VIOLACION") {
+                    circleColor = "#FF00FF";
+                }
+                else if(mapData[i].reportType === "HOMICIDIO") {
+                    circleColor = "#FF0000";
+                }
+                else if(mapData[i].reportType === "AGRESION") {
+                    circleColor = "#FF7B00";
+                }
+                else if(mapData[i].reportType === "OTRO") {
+                    circleColor = "#000000";
+                }
+
+                return <Circle center={{lat:parseFloat(mapData[i].lat), lng:parseFloat(mapData[i].lng)}} radius={15} strokeColor="transparent" strokeOpacity={0} strokeWeight={5} fillColor={circleColor} fillOpacity={0.4} />
             })}
         </Map>
     );

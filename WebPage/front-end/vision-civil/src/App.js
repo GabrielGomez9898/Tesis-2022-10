@@ -1,19 +1,23 @@
 import './App.scss';
 import {BrowserRouter as Router, Routes, Route} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import ForgottenPasswordPage from "./pages/ForgottenPasswordPage";
 import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
 import NotificationPage from "./pages/NotificationPage";
-import ControlPage from "./pages/ControlPage";
+import UsersPage from "./pages/UsersPage";
 import CrimeListPage from "./pages/CrimeListPage";
 import ErrorPage from "./pages/ErrorPage";
-import Navbar from './components/Navbar';
-import { AuthContextProvider, auth } from "./firebase";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
+import { AuthContextProvider } from './contexts/AuthContext';
 import AuthenticatedOutlet from './components/AuthenticatedOutlet';
+import MasterOutlet from './components/MasterOutlet';
+import { useEffect } from 'react';
 
 function App() {
+
+  useEffect(() => {
+    document.title = "Visión Civil";
+  }, []);
+
   return (
     <AuthContextProvider>
       <Router>
@@ -29,14 +33,13 @@ function App() {
           <Route path="/notification" element={<AuthenticatedOutlet/>}>
             <Route path="" element={<NotificationPage/>} />
           </Route>
-          <Route path="/profile" element={<AuthenticatedOutlet/>}>
-            <Route path="" element={<ProfilePage/>} />
+          <Route path="/users" element={<AuthenticatedOutlet/>}>
+            <Route path="" element={<MasterOutlet/>}>
+              <Route path="" element={<UsersPage/>} />
+            </Route>
           </Route>
-          <Route path="/control" element={<AuthenticatedOutlet/>}>
-            <Route path="" element={<ControlPage/>} />
-          </Route>
-          <Route path="/forgotten-password" element={<AuthenticatedOutlet/>}>
-            <Route path="" element={<ForgottenPasswordPage/>} />
+          <Route path="/password" element={<AuthenticatedOutlet/>}>
+            <Route path="" element={<ChangePasswordPage/>} />
           </Route>
 
           <Route path="*" element={<ErrorPage/>} />

@@ -1,43 +1,67 @@
-import React, { useContext, useState, useEffect } from "react";
-import {auth} from "../firebase";
+import {
+    onAuthStateChanged,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    updatePassword,
+    setPersistence,
+    browserLocalPersistence,
+    browserSessionPersistence
+} from "firebase/auth";
+import { useState, useEffect, useContext, createContext } from "react";
+import { auth, userCreationAuth } from "../firebase";
+import { db } from "../firebase";
+import { collection, query, where, getDocs, doc } from "firebase/firestore";
 
-/* Los context en React son los que resultan del uso del hook useContext().
-    Cuando se utilizan contextos todo se reparte en dos grandes secciones:
-    Se tiene el context provider (Abajo <AuthContext.Provider/>) que es donde
-    vas a colocar todo el código que necesita acceso a toda la información en el contexto.
-    La unica propiedad que debe tener el tag del context provider es value={}, la cual va
-    a ser igual al valor del contexto en ese momento. 
-    Utilizar contextos sirve para pasar props a los hijos de un elemento sin tener que pasar props
-    como parametro a cada rato. Al utilizar contextos todos los hijos van a tener acceso a esas props.
-    d  */
+export const authContext = createContext();
 
-const AuthContext = React.createContext();
-
-export const useAuth = () => { // Hook personalizado que retorna directamente el contexto de autenticación
-    return useContext(AuthContext);
-}
-
-export const AuthProvider = (props) => {
-    const [currentUser, setCurrentUser] = useState();
-
-    const signup = (email, password) => {
-        return auth.createUserWithEmailAndPassword(email, password);
-    }
-
+export const AuthContextProvider = (props) => {
+    const [user, setUser] = useState();
+    const [error, setError] = useState();
+    const [isLoading, setIsLoading] = useState(true);
+    
     useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            setCurrentUser(user);
-        });
-
-        return unsubscribe;
+        const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+            setUser(currentUser);
+            setIsLoading(false);
+        }, setError)
+        return () => unsubscribe()
     }, []);
 
-    const value = {
-        currentUser,
-        signup
+    const signup = (email, password) => {
+        return createUserWithEmailAndPassword(userCreationAuth, email, password);
+    };
+
+    const signIn = async (email, password, rememberMe = true) => {
+        // Create a reference to the functionaries collection
+        const functionariesRef = collection(db, "functionaries");
+        // Create a query to retrieve all the documents in the collection
+        const q = query(functionariesRef);
+        // Execute the query
+        const querySnapshot = await getDocs(q);
+        // SignIn to retrieve the userCredential obj
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        //Check if the user that wants to access is a functionary
+        const index = querySnapshot.docs.findIndex((doc) => doc.id === userCredential.user.uid);
+        if(index !== -1) {
+            const functionaryObj = querySnapshot.docs[index].data();
+            localStorage.setItem("isMaster", functionaryObj["isMaster"]);
+            return true;
+        }
+        else {
+            await logout();
+            throw {code: "auth/user-not-functionary"};
+        }
     }
 
-    return (
-        <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>
-    );
+    const changePassword = (password) => updatePassword(user, password);
+
+    const logout = () => signOut(auth);
+
+    return <authContext.Provider value={{ user, error, isLoading, signup, signIn, changePassword, logout }} {...props} />
+}
+
+export const useAuth = () => {
+    const auth = useContext(authContext);
+    return { ...auth, isAuthenticated: auth.user != null };
 }

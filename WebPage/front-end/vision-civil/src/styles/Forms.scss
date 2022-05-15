@@ -1,39 +1,112 @@
 @import "./Variables.module.scss";
 
-.form {
+form {
+    div {
+        label {
+            margin-left: 1rem;
+        }
+    }
+}
+
+[type=text],
+[type=email],
+[type=password],
+[type=date],
+[type=tel],
+select {
+    width: 15rem;
+    height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+    padding-left: 1rem;
+
+    font-size: 100%;
+    font-family: 'Manjari', sans-serif;
+    background-color: $unselected-color;
+}
+
+.filter-card-input {
+    width: 15rem;
+    height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+    padding-left: 1rem;
+
+    font-size: 100%;
+    font-family: 'Manjari', sans-serif;
+    background-color: white;
+}
+
+.users-filter-input {
+    width: 9rem;
+    height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+    padding-left: 1rem;
+
+    font-size: 100%;
+    font-family: 'Manjari', sans-serif;
+    background-color: white;
+}
+
+.radio-group {
+    label {
+        font-family: 'Manjari', sans-serif;
+    }
+}
+
+input:hover, 
+input:focus,
+select:hover,
+select:focus {
+    background-color: #E8F0FE;
+}
+
+button {
+    width: 16rem;
+    height: 3rem;
+    min-height: 3rem;
+    border-width: 0px;
+    border-radius: 5px;
+
+    font-weight: bold;
+    font-family: 'Spline Sans', sans-serif;
+    color: $btn-text-color;
+    background-color: $btn-color;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+.button-loading {
+    background-color: lightgray;
+}
+
+.login-form {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
 
-    input {
-        width: auto;
-        height: 3rem;
-        border-width: 0px;
-        border-radius: 5px;
-        padding-left: 1rem;
+    gap: 2rem;
+}
 
-        font-size: 100%;
-        font-family: 'Manjari', sans-serif;
-        background-color: $unselected-color;
-    }
+.filtercard-body-horizontal {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    gap: 2.5rem;
 
-    input:hover, input:focus {
-        background-color: $light-theme-select-color;
-    }
+    margin-bottom: 10px;
+}
 
-    button {
-        height: 2rem;
-        border-width: 0px;
-        border-radius: 5px;
+.filtercard-button {
+    width: 10rem;
+    height: 3rem;
 
-        font-weight: bold;
-        font-family: 'Spline Sans', sans-serif;
-        color: $btn-text-color;
-        background-color: $btn-color;
-    }
-
-    button:hover {
-        cursor: pointer;
+    svg {
+        width: 1.8rem;
+        height: 1.8rem;
     }
 }

@@ -3,17 +3,16 @@
 .navbar {
     width: 5rem; //El ancho de la barra de navegación debe ser igual al margen que se dejó a la izquierda
     height: 100vh; //vh es una unidad relativa al alto del viewport. 100vh va a ser 100% del alto del viewport
-    z-index: 1000; //Para que la barra de navegación se muestre al frente de cualquier otro elemento
+    z-index: 1001; //Para que la barra de navegación se muestre al frente de cualquier otro elemento
     position: fixed; //Para que la barra de navegación quede fija cuando se hace scroll
 
-    background-color: $unselected-color;
+    background-color: white;
     transition: width 200ms ease;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.6);
 }
 
 .navbar:hover {
     width: 18rem;
-
-    box-shadow: 2px 2px 8px grey;
 }
 
 .nav-list {
@@ -47,13 +46,16 @@
 
 .nav-link:hover {
     filter: grayscale(0%) opacity(1);
-    background-color: $light-theme-select-color;
+    background-color: $unselected-color;
     color: $svg-color2-alt1;
 }
 
 .nav-link svg {
     min-width: 2rem;
     margin: 0 1.5rem;
+    overflow: hidden;
+    max-width: 32px;
+    max-height: 32px;
 }
 
 .fa-primary {

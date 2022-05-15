@@ -1,0 +1,19 @@
+const { mapData } = require("./resources/mapData.js");
+const { typeChartsData } = require("./resources/typeChartsData.js");
+const { timeChartsData } = require("./resources/timeChartsData.js");
+const { functionaries } = require("./resources/functionaries.js");
+const { cops } = require("./resources/cops.js");
+const { notificationFromWeb } = require("./resources/notificationFromWeb.js");
+const { notificationFromMobile } = require("./resources/notificationFromMobile.js");
+const { password } = require("./resources/password.js");
+const { reports } = require("./resources/reports.js");
+
+exports.mapData = mapData;
+exports.typeChartsData = typeChartsData;
+exports.timeChartsData = timeChartsData;
+exports.functionaries = functionaries;
+exports.cops = cops;
+exports.notificationFromWeb = notificationFromWeb;
+exports.notificationFromMobile = notificationFromMobile;
+exports.password = password;
+exports.reports = reports;

@@ -8,28 +8,42 @@
   overflow-x: hidden;
 }
 
-body {
+html, body {
   color: $text-primary-color;
-  background-color: $light-theme-bg-color;
+  background-color: transparent;
   margin: 0;
   padding: 0;
+
+  height: 100%;
 }
 
 body::-webkit-scrollbar {
-  width: 0.25rem;
+  width: 0.5rem;
 }
 
 body::-webkit-scrollbar-track {
-  background: $unselected-color;
+  background: lightgray;
+  border-radius: 50px;
 }
 
 body::-webkit-scrollbar-thumb {
   background: $selected-color;
+  border-radius: 50px;
 }
 
 .content-container {
   margin-left: 5rem; //rem es una unidad relativa al tamaño de la fuente seleccionado en el tag root, en este caso sería 5 * 16px = 85px
   padding: 1rem;
+
+  min-height: 900px;
+  max-height: 100%;
+
+  background: #e6e9f0; //bccbde
+  // background: rgb(255,94,249);
+  // background: -moz-linear-gradient(225deg, rgba(255,94,249,1) 0%, rgba(125,172,251,1) 50%, rgba(104,185,251,1) 100%);
+  // background: -webkit-linear-gradient(225deg, rgba(255,94,249,1) 0%, rgba(125,172,251,1) 50%, rgba(104,185,251,1) 100%);
+  // background: linear-gradient(225deg, rgba(255,94,249,1) 0%, rgba(125,172,251,1) 50%, rgba(104,185,251,1) 100%);
+  // filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ff5ef9",endColorstr="#68b9fb",GradientType=1);
 }
 
 .center-children-container {
@@ -37,4 +51,24 @@ body::-webkit-scrollbar-thumb {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.login-logo {
+  width: 180px;
+  height: auto;
+}
+
+.background-image {
+  width: 100%;
+  height: 1080px;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+p {
+  margin: 2px;
 }

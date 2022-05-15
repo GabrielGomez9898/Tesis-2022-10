@@ -1,0 +1,27 @@
+@import "./Variables.module.scss";
+
+.error-page-container {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+
+    h1, span {
+        font-size: 200px;
+    }
+
+    span {
+        color: $btn-color;
+    }
+
+    p {
+        font-family: 'Manjari', sans-serif;
+    }
+
+    img {
+        width: 360px;
+        height: auto;
+    }
+}

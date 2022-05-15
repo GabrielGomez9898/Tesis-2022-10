@@ -1,0 +1,236 @@
+@import "./Variables.module.scss";
+
+.modal{
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100vh;
+    background-color: rgba(0,0,0,0.7);
+    align-items: center;
+    justify-content: center;
+}
+
+ul {
+    padding-inline-start: 0px;
+}
+
+.report{
+    align-items: center;
+    justify-content: center;
+}
+.fotos{
+    align-items: center;
+    overflow: auto;
+    justify-content: center;
+    display: block;
+    text-align: center;
+}
+
+.modalboton{
+    background-color:$btn-color ;
+    color: $btn-text-color;
+    margin-left: 95%;
+    border-radius: 15%;
+    width: 40px;
+    height: 30px;
+}
+.title{
+    display: block;
+    text-align: center;
+}
+
+.button .crime-button{
+    margin-left: 50%;
+    width: 100px;
+}
+.description{
+    color: black;
+    font-family: 'Manjari', sans-serif;
+}
+.time{
+    color: gray;
+}
+.hora{
+    color: gray;
+    margin-left: 83%;
+}
+.asunto{
+    align-items: flex-start;
+    justify-content: flex-start;
+    text-align: left;
+}
+.TipoAlerta{
+    color: black;
+    font-family: 'Manjari', sans-serif;
+}
+.fecha{
+    color: black;
+    font-family: 'Manjari', sans-serif;
+}
+.Descripcion{
+    color: black;
+    font-family: 'Manjari', sans-serif;
+}
+
+.telefono{
+    color: black;
+    font-family: 'Manjari', sans-serif;
+}
+.horamodal{
+    color: black;
+    font-family: 'Manjari', sans-serif;
+}
+.carga{
+    width: 300;
+    height: 300; 
+    margin-top: 150px; 
+    margin-left : 40%;
+    display: block;
+    text-align: center;
+}
+.loader{
+    margin-top: 150 px;
+}
+.circulo {
+    width: 1.2rem;
+    height: 1.2rem;
+    -moz-border-radius: 50%;
+    -webkit-border-radius: 50%;
+    border-radius: 50%;
+    display: inline-block;
+}
+.not-reports{
+    display: block;
+    text-align: center;
+    margin-top: 20%;
+    text-size-adjust: 50%;
+    color: hsl(207, 100%, 50%);
+    font-size: 60px;
+}
+
+.pill {
+    border-width: 2px;
+    border-radius: 50px;
+    padding-top: 2.5px;
+    padding-bottom: 2.5px;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-style: solid;
+    width: fit-content;
+    font-family: 'Spline Sans', sans-serif;
+
+    p {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .modal-container{
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin-left: 20%;
+        margin-top: 10%;
+        height: 530px;
+        width: 800px;
+        min-height: 500px;
+        max-width: 1000px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .modal-container-withoutphotos{
+        margin-left: 27%;
+        margin-top: 7%;
+        min-height: 535px;
+        max-width: 555px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .Container-crime{
+        display: block;
+        width: 600px;
+        height: 60;
+        align-items: center;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 15px;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+    }
+    .imgu{
+        width: 230px;
+        height: 250px;
+        margin-top: 160px;
+    }
+    .img{
+        width: 230px;
+        height: 230px;
+    }
+    .boton-p{
+        margin-left: 39%;
+    }
+}
+
+@media only screen and (min-width: 1600px) {
+    .modal-container{
+        display: grid;
+        grid-template-columns: 30% 70%;
+        margin-left: 20%;
+        margin-top: 10%;
+        height: 625px;
+        width: 1150px;
+        min-height: 645px;
+        max-width: 1150px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .modal-container-withoutphotos{
+        margin-left: 30%;
+        margin-top: 10%;
+        min-height: 645px;
+        max-width: 800px;
+        background-color: $unselected-color;
+        border-radius: 1%;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+    }
+    .Container-crime{
+        display: block;
+        width: 700px;
+        height: 70;
+        align-items: center;
+        margin: 20px auto;
+        background-color: white;
+        border-radius: 15px;
+        padding: 1rem;
+        border-style: solid;
+        border-width: 3px;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.3);
+    }
+    .imgu{
+        width: 300px;
+        height: 300px;
+        margin-top: 160px;
+    }
+    .img{
+        width: 300px;
+        height: 300px;
+    }
+    .boton-p{
+        margin-left: 43%;
+    }
+}
