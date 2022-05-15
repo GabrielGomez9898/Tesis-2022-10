@@ -88,11 +88,8 @@ reports.get("/filters", async (request, response) => {
     try {
         const queryParams = request.query;
         const lowerDate = queryParams["lowerDate"].replace("-", "/");
-        printError(lowerDate)
         const upperDate = queryParams["upperDate"].replace("-", "/");
-        printError(upperDate)
         const tipo_reporte = queryParams["reportType"];
-        printError(tipo_reporte)
 
         const lowerDateObject = new Date(lowerDate);
         const upperDateObject = new Date(upperDate);
@@ -176,4 +173,5 @@ reports.get("/filters", async (request, response) => {
     }
 });
 
+exports.reportsTest = reports;
 exports.reports = functions.https.onRequest(reports);

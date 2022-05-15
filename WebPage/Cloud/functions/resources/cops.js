@@ -10,6 +10,9 @@ const functions = require("firebase-functions");
 
 const cops = express();
 cops.use(cors({ origin: true }));
+const bodyParser = require('body-parser');
+cops.use(bodyParser.json());
+cops.use(bodyParser.urlencoded({extended:true}));
 
 // getCops
 cops.get("/", async (request, response) => {
@@ -97,4 +100,5 @@ cops.delete("/:copId", async (request, response) => {
     }
 });
 
+exports.copsTest = cops;
 exports.cops = functions.https.onRequest(cops);

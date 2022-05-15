@@ -37,9 +37,9 @@ notificationFromWeb.post("/", async (request, response) => {
         try {
             tokens.map((item, i) => {
                 admin.messaging().sendToDevice(item, payload, options).then(function (response) {
-                    console.log("sirvio", response)
+                    // console.log("sirvio", response)
                 }).catch(function (error) {
-                    console.log("no sirvio", error)
+                    // console.log("no sirvio", error)
                 })
             })
             return response.status(200).send();
@@ -53,4 +53,5 @@ notificationFromWeb.post("/", async (request, response) => {
     }
 });
 
+exports.notificationFromWebTest = notificationFromWeb;
 exports.notificationFromWeb = functions.https.onRequest(notificationFromWeb);

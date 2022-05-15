@@ -10,6 +10,10 @@ const functions = require("firebase-functions");
 
 const functionaries = express();
 functionaries.use(cors({ origin: true }));
+const bodyParser = require('body-parser');
+functionaries.use(bodyParser.json());
+functionaries.use(bodyParser.urlencoded({extended:true}));
+
 
 // getFunctionaries
 functionaries.get("/", async (request, response) => {
@@ -100,4 +104,5 @@ functionaries.delete("/:functionaryId", async (request, response) => {
     }
 });
 
+exports.functionariesTest = functionaries; 
 exports.functionaries = functions.https.onRequest(functionaries);

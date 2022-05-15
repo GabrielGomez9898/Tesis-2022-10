@@ -46,4 +46,5 @@ timeChartsData.get("/", async (request, response) => {
     }
 });
 
+exports.timeChartsDataTest = timeChartsData;
 exports.timeChartsData = functions.https.onRequest(timeChartsData);

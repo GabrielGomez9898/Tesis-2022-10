@@ -48,4 +48,5 @@ typeChartsData.get("/", async (request, response) => {
     }
 });
 
+exports.typeChartsDataTest = typeChartsData;
 exports.typeChartsData = functions.https.onRequest(typeChartsData);

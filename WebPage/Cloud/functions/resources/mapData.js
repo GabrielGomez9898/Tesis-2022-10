@@ -40,4 +40,5 @@ mapData.get("/", async (request, response) => {
     }
 });
 
+exports.mapDataTest = mapData;
 exports.mapData = functions.https.onRequest(mapData);

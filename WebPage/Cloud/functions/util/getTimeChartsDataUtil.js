@@ -269,16 +269,16 @@ generateMonthGroupedReports = async (db, numberOfMonths) => {
             lowerDateObject.setMonth(lowerDateObject.getMonth() - 1);
             lowerDateObject.setDate(1);
 
-            console.log("\n");
-            console.log(lowerDateObject.toLocaleDateString("es-CO", { "month": "numeric" }));
-            console.log("\n");
+            // console.log("\n");
+            // console.log(lowerDateObject.toLocaleDateString("es-CO", { "month": "numeric" }));
+            // console.log("\n");
             docs.forEach((doc, i) => {
                 report = doc.data();
                 reportDateStr = report["fecha_hora"].slice(0, report["fecha_hora"].indexOf(" "));
                 reportDateObject = new Date(reportDateStr);
 
-                console.log(`${reportDateObject.toLocaleDateString("es-CO", { "day": "numeric", "month": "numeric", "year": "numeric", "hour": "numeric", "minute": "numeric", "second": "numeric" })} ENTRA ABAJO? -> ${reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject}`);
-                console.log(`[${lowerDateObject.toLocaleDateString("es-CO", { "day": "numeric", "month": "numeric", "year": "numeric", "hour": "numeric", "minute": "numeric", "second": "numeric" })}-${currentDateInRangeObject.toLocaleDateString("es-CO", { "day": "numeric", "month": "numeric", "year": "numeric", "hour": "numeric", "minute": "numeric", "second": "numeric" })}]`)
+                // console.log(`${reportDateObject.toLocaleDateString("es-CO", { "day": "numeric", "month": "numeric", "year": "numeric", "hour": "numeric", "minute": "numeric", "second": "numeric" })} ENTRA ABAJO? -> ${reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject}`);
+                // console.log(`[${lowerDateObject.toLocaleDateString("es-CO", { "day": "numeric", "month": "numeric", "year": "numeric", "hour": "numeric", "minute": "numeric", "second": "numeric" })}-${currentDateInRangeObject.toLocaleDateString("es-CO", { "day": "numeric", "month": "numeric", "year": "numeric", "hour": "numeric", "minute": "numeric", "second": "numeric" })}]`)
 
                 if (reportDateObject >= lowerDateObject && reportDateObject <= currentDateInRangeObject) {
                     obj["reportes"]++;
