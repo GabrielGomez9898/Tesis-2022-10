@@ -39,6 +39,8 @@ const CreateCopModal = ({onClose}) => {
         role: "POLICIA"
     }
 
+    console.log("el numero ",cop.phone);
+
     const initialRenderDone1 = useRef(false);
     useEffect(async () => {
         if(!initialRenderDone1.current) {
@@ -135,7 +137,7 @@ const CreateCopModal = ({onClose}) => {
                     </div>
                     <div>
                         <label htmlFor="phoneInput">Teléfono</label><br/>
-                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" required onChange={(e) => setPhone(parseInt(e.target.value))} />
+                        <input type="tel" id="phoneInput" placeholder="Ingrese el teléfono" required onChange={(e) => setPhone(parseFloat(e.target.value)+0.1)} />
                     </div>
                 </div>
                 <div className="modal-body-horizontal">
