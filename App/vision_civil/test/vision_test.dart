@@ -57,7 +57,7 @@ void main() {
             email: "gabriel@gmail.com", password: "123456");
         response = "success";
       } catch (e) {
-        response = "success";
+        response = "not success";
       }
 
       expect(response, "success");
@@ -116,7 +116,7 @@ void main() {
         QuerySnapshot getReports = await mockReports.getReports();
         response = "success";
       } catch (e) {
-        response = "success";
+        response = "not success";
       }
 
       expect(response, "success");
