@@ -220,7 +220,7 @@ const CrimeList = () => {
   return (
     <>
 
-      <h1 className="title"> Listado de crimenes</h1>
+      <h1 className="title"> Listado de crímenes</h1>
       <br></br>
       <form className="card-mapfilter-container" onSubmit={handleSubmit}>
         <div>
